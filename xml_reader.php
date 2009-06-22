@@ -165,7 +165,7 @@ Force or automatically select an implemenation
 		if ((USE_xml_implementation == "autoselect")&&($this->data_parser == NULL)||(USE_xml_implementation == "XMLReader"))
 		{
 			if (!defined ("CLASS_direct_xml_parser_XMLReader")) { @include_once ($f_ext_xml_path."xml_parser_XMLReader.php"); }
-			if ((class_exists ("XMLReader"))&&(defined ("CLASS_direct_xml_parser_XMLReader"))) { $this->data_parser = new direct_xml_parser_XMLReader ($this,$f_time,$f_timeout_count,$f_debug); }
+			if ((class_exists ("XMLReader",/*#ifndef(PHP4) */false/* #*/))&&(defined ("CLASS_direct_xml_parser_XMLReader"))) { $this->data_parser = new direct_xml_parser_XMLReader ($this,$f_time,$f_timeout_count,$f_debug); }
 		}
 
 /* -------------------------------------------------------------------------
@@ -219,7 +219,7 @@ Initiate the array tree cache
 */
 	/*#ifndef(PHP4) */public /* #*/function array2xml (&$f_swgxml_array,$f_strict_standard = true)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_reader->array2xml (+f_swg_xmltree,+f_strict_standard)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_reader->array2xml (+f_swgxml_array,+f_strict_standard)- (#echo(__LINE__)#)"; }
 		$f_return = "";
 
 		if ((is_array ($f_swgxml_array))&&(!empty ($f_swgxml_array)))
@@ -355,7 +355,7 @@ Initiate the array tree cache
 */
 	/*#ifndef(PHP4) */public /* #*/function define_parse_only ($f_parse_only = true)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -direct_xml_reader->define_parse_only (+f_parse_only)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_reader->define_parse_only (+f_parse_only)- (#echo(__LINE__)#)"; }
 
 		if (((is_bool ($f_parse_only))||(is_string ($f_parse_only)))&&($f_parse_only)) { $this->data_parse_only = true; }
 		elseif (($f_parse_only === NULL)&&(!$this->data_parse_only)) { $this->data_parse_only = true; }
@@ -421,7 +421,7 @@ Initiate the array tree cache
 				$f_continue_check = false;
 				$f_node_name = array_shift ($f_nodes_array);
 
-				if (preg_match ("#^(.+?)\.(\d+)$#",$f_node_name,$f_result_array))
+				if (preg_match ("#^(.+?)\#(\d+)$#",$f_node_name,$f_result_array))
 				{
 					$f_node_name = $f_result_array[1];
 					$f_node_position = $f_result_array[2];
@@ -706,11 +706,11 @@ $f_node_array = array (
 */
 	/*#ifndef(PHP4) */public /* #*/function set ($f_swgxml_array,$f_overwrite = false)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_reader->set (+f_swg_xmltree,+f_overwrite)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_reader->set (+f_swgxml_array,+f_overwrite)- (#echo(__LINE__)#)"; }
 
 		$f_return = false;
 
-		if ((empty ($this->data))||($f_overwrite))
+		if (((!isset ($this->data))||($f_overwrite))&&(is_array ($f_swgxml_array)))
 		{
 			$this->data = $f_swgxml_array;
 			$f_return = true;

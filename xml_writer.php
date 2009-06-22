@@ -394,7 +394,9 @@ Get the parent node of the target.
 			}
 			else { $f_node_pointer =& $this->data; }
 
-			$f_node_path_array = explode (" ",$f_node_path);
+			if (strlen ($f_node_path)) { $f_node_path_array = explode (" ",$f_node_path); }
+			else { $f_node_path_array = array (); }
+
 			$f_continue_check = true;
 
 			while (($f_continue_check)&&(!empty ($f_node_path_array)))
@@ -402,7 +404,7 @@ Get the parent node of the target.
 				$f_continue_check = false;
 				$f_node_name = array_shift ($f_node_path_array);
 
-				if (preg_match ("#^(.+?)\.(\d+)$#",$f_node_name,$f_result_array))
+				if (preg_match ("#^(.+?)\#(\d+)$#",$f_node_name,$f_result_array))
 				{
 					$f_node_name = $f_result_array[1];
 					$f_node_position = $f_result_array[2];
@@ -442,7 +444,7 @@ Get the parent node of the target.
 /**
 	* Remove a node and all children if applicable.
 	*
-	* @param  string $f_node_path Path to the new node - delimiter is space
+	* @param  string $f_node_path Path to the node - delimiter is space
 	* @uses   direct_xml_reader::ns_translate_path()
 	* @uses   direct_xml_writer::node_get_pointer()
 	* @return boolean False on error
@@ -485,7 +487,7 @@ Get the parent node of the target.
 
 			if ($f_node_pointer)
 			{
-				if (preg_match ("#^(.+?)\.(\d+)$#",$f_node_name,$f_result_array))
+				if (preg_match ("#^(.+?)\#(\d+)$#",$f_node_name,$f_result_array))
 				{
 					$f_node_name = $f_result_array[1];
 					$f_node_position = $f_result_array[2];
