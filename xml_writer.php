@@ -49,8 +49,7 @@ all development packets)
 Testing for required classes
 ------------------------------------------------------------------------- */
 
-$g_continue_check = true;
-if (defined ("CLASS_direct_xml_writer")) { $g_continue_check = false; }
+$g_continue_check = ((defined ("CLASS_direct_xml_writer")) ? false : true);
 if (!defined ("CLASS_direct_xml_reader")) { $g_continue_check = false; }
 
 if ($g_continue_check)
@@ -393,10 +392,8 @@ Get the parent node of the target.
 			}
 			else { $f_node_pointer =& $this->data; }
 
-			if (strlen ($f_node_path)) { $f_node_path_array = explode (" ",$f_node_path); }
-			else { $f_node_path_array = array (); }
-
 			$f_continue_check = true;
+			$f_node_path_array = ((strlen ($f_node_path)) ? explode (" ",$f_node_path) : array ());
 
 			while (($f_continue_check)&&(!empty ($f_node_path_array)))
 			{

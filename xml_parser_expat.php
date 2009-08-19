@@ -165,12 +165,7 @@ Connect to the PHP container for the XML document
 	{
 		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->define_mode ($f_mode)- (#echo(__LINE__)#)"; }
 
-		if ((!$this->parser_active)&&(is_string ($f_mode)))
-		{
-			if ($f_mode == "merged") { $this->data_merged_mode = true; }
-			else { $this->data_merged_mode = false; }
-		}
-
+		if ((!$this->parser_active)&&(is_string ($f_mode))) { $this->data_merged_mode = (($f_mode == "merged") ? true : false); }
 		return $this->data_merged_mode;
 	}
 

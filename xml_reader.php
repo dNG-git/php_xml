@@ -469,11 +469,7 @@ $f_node_array = array (
 							{
 								$f_ns_name = substr ($f_key,6);
 
-								if (strlen ($f_value))
-								{
-									if (isset ($this->data_ns_default[$f_value])) { $f_node_array['xmlns'][$f_ns_name] = $this->data_ns_default[$f_value]; }
-									else { $f_node_array['xmlns'][$f_ns_name] = $f_value; }
-								}
+								if (strlen ($f_value)) { $f_node_array['xmlns'][$f_ns_name] = ((isset ($this->data_ns_default[$f_value])) ? $this->data_ns_default[$f_value] : $f_value); }
 								elseif (isset ($f_node_array['xmlns'][$f_ns_name])) { unset ($f_node_array['xmlns'][$f_ns_name]); }
 							}
 						}
@@ -560,18 +556,15 @@ $f_node_array = array (
 					}
 					elseif (isset ($f_node_pointer[$f_node_name]))
 					{
-						if (isset ($f_node_pointer['xml.item']['level'])) { $f_node_pointer[$f_node_name]['level'] = (1 + $f_node_pointer['xml.item']['level']); }
-						else { $f_node_pointer[$f_node_name]['level'] = 1; }
-
 						$f_continue_check = true;
+						$f_node_pointer[$f_node_name]['level'] = ((isset ($f_node_pointer['xml.item']['level'])) ? (1 + $f_node_pointer['xml.item']['level']) : 1);
 						$f_node_pointer[$f_node_name] = array ("xml.item" => $f_node_pointer[$f_node_name]);
 						$f_node_pointer =& $f_node_pointer[$f_node_name];
 					}
 
 					if ((!$f_continue_check)&&($f_add_recursively))
 					{
-						if (isset ($f_node_pointer['xml.item']['level'])) { $f_node_level = (1 + $f_node_pointer['xml.item']['level']); }
-						else { $f_node_level = 1; }
+						$f_node_level = ((isset ($f_node_pointer['xml.item']['level'])) ? (1 + $f_node_pointer['xml.item']['level']) : 1);
 
 $f_node_array = array (
 "tag" => $f_node_name,
@@ -644,11 +637,7 @@ $f_node_array = array (
 			{
 				if (preg_match ("#^(.+?):(\w+)$#",$f_node_name,$f_result_array))
 				{
-					if (isset ($this->data_ns[$f_result_array[1]]))
-					{
-						if (isset ($this->data_ns_default[$this->data_ns[$f_result_array[1]]])) { $f_node_path .= $this->data_ns_default[$this->data_ns[$f_result_array[1]]].":".$f_result_array[2]; }
-						else { $f_node_path .= $f_result_array[1].":".$f_result_array[2]; }
-					}
+					if (isset ($this->data_ns[$f_result_array[1]])) { $f_node_path .= ((isset ($this->data_ns_default[$this->data_ns[$f_result_array[1]]])) ? $this->data_ns_default[$this->data_ns[$f_result_array[1]]].":".$f_result_array[2] : $f_result_array[1].":".$f_result_array[2]); }
 					else { $f_node_path .= $f_result_array[1].":".$f_result_array[2]; }
 				}
 				else { $f_node_path .= $f_node_name; }
@@ -741,12 +730,7 @@ $f_node_array = array (
 		{
 			$f_parser_object = new XMLReader ();
 			$f_parser_object->XML ($f_data);
-
-			if (is_object ($f_parser_object))
-			{
-				if ($f_treemode) { $f_return = $this->data_parser->xml2array_XMLReader ($f_parser_object,$f_strict_standard); }
-				else { $f_return = $this->data_parser->xml2array_XMLReader_merged ($f_parser_object); }
-			}
+			if (is_object ($f_parser_object)) { $f_return = ($f_treemode ? $this->data_parser->xml2array_XMLReader ($f_parser_object,$f_strict_standard) : $this->data_parser->xml2array_XMLReader_merged ($f_parser_object)); }
 		}
 
 		if (defined ("CLASS_direct_xml_parser_expat"))

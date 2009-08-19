@@ -106,10 +106,7 @@ Connect to the PHP container for the XML document
 ------------------------------------------------------------------------- */
 
 		$this->parser = $f_parser;
-
-		if ($f_time < 0) { $this->time = time (); }
-		else { $this->time = $f_time; }
-
+		$this->time = (($f_time < 0) ? time () : $f_time);
 		$this->timeout_count = $f_timeout_count;
 
 		if (defined ("XMLREADER_ELEMENT"))
@@ -266,12 +263,7 @@ $this->node_types = array (
 				{
 				case $this->node_types['cdata']:
 				{
-					if (isset ($f_nodes_array[$f_node_path]['value']))
-					{
-						if ((isset ($f_nodes_array[$f_node_path]['attributes']['xml:space']))&&($f_nodes_array[$f_node_path]['attributes']['xml:space'] == "preserve")) { $f_nodes_array[$f_node_path]['value'] .= $f_xmlreader->value; }
-						else { $f_nodes_array[$f_node_path]['value'] .= trim ($f_xmlreader->value); }
-					}
-
+					if (isset ($f_nodes_array[$f_node_path]['value'])) { $f_nodes_array[$f_node_path]['value'] .= (((isset ($f_nodes_array[$f_node_path]['attributes']['xml:space']))&&($f_nodes_array[$f_node_path]['attributes']['xml:space'] == "preserve")) ? $f_xmlreader->value : trim ($f_xmlreader->value)); }
 					break 1;
 				}
 				case $this->node_types['element']:
@@ -318,12 +310,7 @@ $this->node_types = array (
 				}
 				case $this->node_types['text']:
 				{
-					if (isset ($f_nodes_array[$f_node_path]['value']))
-					{
-						if ((isset ($f_nodes_array[$f_node_path]['attributes']['xml:space']))&&($f_nodes_array[$f_node_path]['attributes']['xml:space'] == "preserve")) { $f_nodes_array[$f_node_path]['value'] .= $f_xmlreader->value; }
-						else { $f_nodes_array[$f_node_path]['value'] .= trim ($f_xmlreader->value); }
-					}
-
+					if (isset ($f_nodes_array[$f_node_path]['value'])) { $f_nodes_array[$f_node_path]['value'] .= (((isset ($f_nodes_array[$f_node_path]['attributes']['xml:space']))&&($f_nodes_array[$f_node_path]['attributes']['xml:space'] == "preserve")) ? $f_xmlreader->value : trim ($f_xmlreader->value)); }
 					break 1;
 				}
 				}
@@ -459,9 +446,7 @@ $this->node_types = array (
 					{
 					case $this->node_types['cdata']:
 					{
-						if ($f_preserve_check) { $f_node_content .= $f_xmlreader->value; }
-						else { $f_node_content .= trim ($f_xmlreader->value); }
-
+						$f_node_content .= (($f_preserve_check) ? $f_xmlreader->value : trim ($f_xmlreader->value));
 						break 1;
 					}
 					case $this->node_types['element']:
@@ -478,9 +463,7 @@ $this->node_types = array (
 					}
 					case $this->node_types['text']:
 					{
-						if ($f_preserve_check) { $f_node_content .= $f_xmlreader->value; }
-						else { $f_node_content .= trim ($f_xmlreader->value); }
-
+						$f_node_content .= (($f_preserve_check) ? $f_xmlreader->value : trim ($f_xmlreader->value));
 						break 1;
 					}
 					default:
