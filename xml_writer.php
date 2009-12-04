@@ -230,7 +230,7 @@ My parent should be on my side to get the work done
 
 	//f// direct_xml_writer->node_change_attributes ($f_node_path,$f_attributes)
 /**
-	* Change the attributes of a specified node. Note: XLMNS updates must be
+	* Change the attributes of a specified node. Note: XMLNS updates must be
 	* handled by the calling code.
 	*
 	* @param  string $f_node_path Path to the new node - delimiter is space
@@ -251,10 +251,9 @@ My parent should be on my side to get the work done
 
 			if ($f_node_pointer)
 			{
-				$f_return = true;
-
 				if (isset ($f_node_pointer['xml.item'])) { $f_node_pointer =& $f_node_pointer['xml.item']; }
 				$f_node_pointer['attributes'] = $f_attributes;
+				$f_return = true;
 			}
 		}
 
@@ -330,10 +329,10 @@ Get the parent node of the target.
 				$f_node_pointer =& $this->data;
 			}
 
-			if ($f_node_pointer)
+			if (($f_node_pointer)&&(isset ($f_node_pointer[$f_node_name])))
 			{
 				if (isset ($f_node_pointer[$f_node_name]['xml.mtree'])) { $f_return = ((count ($f_node_pointer[$f_node_name])) - 1); }
-				elseif (isset ($f_node_pointer[$f_node_name])) { $f_return = 1; }
+				else { $f_return = 1; }
 			}
 		}
 
