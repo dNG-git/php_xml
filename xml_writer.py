@@ -231,7 +231,7 @@ handled by the calling code.
 
 			if (type (f_node_pointer) == dict):
 			#
-				if (f_node_pointer.has_key ("xml.item")): f_node_pointer = f_node_pointer['xml.item']
+				if ("xml.item" in f_node_pointer): f_node_pointer = f_node_pointer['xml.item']
 				f_node_pointer['attributes'] = f_attributes
 				f_return = True
 			#
@@ -264,7 +264,7 @@ Change the value of a specified node.
 
 			if (type (f_node_pointer) == dict):
 			#
-				if (f_node_pointer.has_key ("xml.item")): f_node_pointer['xml.item']['value'] = f_value
+				if ("xml.item" in f_node_pointer): f_node_pointer['xml.item']['value'] = f_value
 				else: f_node_pointer['value'] = f_value
 
 				f_return = True
@@ -312,9 +312,9 @@ Get the parent node of the target.
 				f_node_pointer = self.data
 			#
 
-			if ((type (f_node_pointer) == dict) and (f_node_pointer.has_key (f_node_name))):
+			if ((type (f_node_pointer) == dict) and (f_node_name in f_node_pointer)):
 			#
-				if (f_node_pointer[f_node_name].has_key ("xml.mtree")): f_return = ((len (f_node_pointer[f_node_name])) - 1)
+				if ("xml.mtree" in f_node_pointer[f_node_name]): f_return = ((len (f_node_pointer[f_node_name])) - 1)
 				else: f_return = 1
 			#
 		#
@@ -345,7 +345,7 @@ Read a specified node including all children if applicable.
 			if (type (f_node_pointer) == dict):
 			#
 				f_return = f_node_pointer
-				if (f_return.has_key ("xml.item")): del (f_return['xml.item'])
+				if ("xml.item" in f_return): del (f_return['xml.item'])
 			#
 		#
 
@@ -369,7 +369,7 @@ Returns the pointer to a specific node.
 
 		if ((f_type == str) or (f_type == unicode)):
 		#
-			if ((len (self.data_cache_node) == 0) or (re.compile("^%s" % f_node_path,re.I).match (self.data_cache_node) == None)): f_node_pointer = self.data
+			if ((len (self.data_cache_node) == 0) or (re.compile("%s" % (re.escape (f_node_path)),re.I).match (self.data_cache_node) == None)): f_node_pointer = self.data
 			else:
 			#
 				f_node_path = f_node_path[len (self.data_cache_node):].strip ()
@@ -381,13 +381,13 @@ Returns the pointer to a specific node.
 			if (len (f_node_path)): f_node_path_array = f_node_path.split (" ")
 			else: f_node_path_array = [ ]
 
-			f_re_node_position = re.compile ("^(.+?)\#(\d+)$")
+			f_re_node_position = re.compile ("^(.+?)\\#(\\d+)$")
 
 			while ((f_continue_check) and (len (f_node_path_array) > 0)):
 			#
 				f_continue_check = False
 				f_node_name = f_node_path_array.pop (0)
-				f_result_object = f_re_node_position.match (f_node_name)
+				f_result_object = f_re_node_position.search (f_node_name)
 
 				if (f_result_object == None): f_node_position = -1
 				else:
@@ -396,19 +396,19 @@ Returns the pointer to a specific node.
 					f_node_position = f_result_object.group (2)
 				#
 
-				if (f_node_pointer.has_key (f_node_name)):
+				if (f_node_name in f_node_pointer):
 				#
-					if (f_node_pointer[f_node_name].has_key ("xml.mtree")):
+					if ("xml.mtree" in f_node_pointer[f_node_name]):
 					#
 						if (f_node_position >= 0):
 						#
-							if (f_node_pointer[f_node_name].has_key (f_node_position)):
+							if (f_node_position in f_node_pointer[f_node_name]):
 							#
 								f_continue_check = True
 								f_node_pointer = f_node_pointer[f_node_name][f_node_position]
 							#
 						#
-						elif (f_node_pointer[f_node_name].has_key (f_node_pointer[f_node_name]['xml.mtree'])):
+						elif (f_node_pointer[f_node_name]['xml.mtree'] in f_node_pointer[f_node_name]):
 						#
 							f_continue_check = True
 							f_node_pointer = f_node_pointer[f_node_name][f_node_pointer[f_node_name]['xml.mtree']]
@@ -477,7 +477,7 @@ Get the parent node of the target.
 
 			if (type (f_node_pointer) == dict):
 			#
-				f_result_object = re.compile("^(.+?)\#(\d+)$").match (f_node_name)
+				f_result_object = re.compile("^(.+?)\\#(\\d+)$").search (f_node_name)
 
 				if (f_result_object == None): f_node_position = -1
 				else:
@@ -486,19 +486,19 @@ Get the parent node of the target.
 					f_node_position = f_result_object.group (2)
 				#
 
-				if (f_node_pointer.has_key (f_node_name)):
+				if (f_node_name in f_node_pointer):
 				#
-					if (f_node_pointer[f_node_name].has_key ("xml.mtree")):
+					if ("xml.mtree" in f_node_pointer[f_node_name]):
 					#
 						if (f_node_position >= 0):
 						#
-							if (f_node_pointer[f_node_name].has_key (f_node_position)):
+							if (f_node_position in f_node_pointer[f_node_name]):
 							#
 								del (f_node_pointer[f_node_name][f_node_position])
 								f_return = True
 							#
 						#
-						elif (f_node_pointer[f_node_name].has_key (f_node_pointer[f_node_name]['xml.mtree'])):
+						elif (f_node_pointer[f_node_name]['xml.mtree'] in f_node_pointer[f_node_name]):
 						#
 							del (f_node_pointer[f_node_name][f_node_pointer[f_node_name]['xml.mtree']])
 							f_return = True
@@ -561,13 +561,13 @@ containing the registered XML NS.
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_handler->ns_get_uri (%s)- (#echo(__LINE__)#)" % f_input)
 		f_return = ""
 
-		f_result_object = re.compile("^(\w+):(\w+)$").match (f_input)
+		f_result_object = re.compile("^(\\w+):(\\w+)$").search (f_input)
 
 		if (f_result_object != None):
 		#
-			if (self.data_ns.has_key (f_result_object.group (1))): f_return = self.data_ns[f_result_object.group (1)]
+			if (f_result_object.group (1) in self.data_ns): f_return = self.data_ns[f_result_object.group (1)]
 		#
-		elif (self.data_ns.has_key (f_input)): f_return = self.data_ns[f_input]
+		elif (f_input in self.data_ns): f_return = self.data_ns[f_input]
 
 		return f_return
 	#

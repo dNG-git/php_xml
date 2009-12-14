@@ -188,20 +188,22 @@ Builds recursively a valid XML ouput reflecting the given XML array tree.
 
 		if ((type (f_swgxml_array) == dict) and (len (f_swgxml_array) > 0)):
 		#
-			for f_swgxml_node_array in f_swgxml_array:
+			for f_swgxml_node in f_swgxml_array:
 			#
-				if (f_swgxml_node_array.has_key ("xml.mtree")):
+				f_swgxml_node_array = f_swgxml_array[f_swgxml_node]
+
+				if ("xml.mtree" in f_swgxml_node_array):
 				#
 					del (f_swgxml_node_array['xml.mtree'])
 					f_return += self.array2xml (f_swgxml_node_array,f_strict_standard)
 				#
-				elif (f_swgxml_node_array.has_key ("xml.item")):
+				elif ("xml.item" in f_swgxml_node_array):
 				#
 					if (self.debug != None): f_return += "\n"
 					f_return += self.array2xml_item_encoder (f_swgxml_node_array['xml.item'],False,f_strict_standard)
 					if (self.debug != None): f_return += "\n"
 
-					if (re.compile("^\d").match (f_swgxml_node_array['xml.item']['tag']) == None): f_swgxml_node_tag = f_swgxml_node_array['xml.item']['tag']
+					if (re.compile("\\d").match (f_swgxml_node_array['xml.item']['tag']) == None): f_swgxml_node_tag = f_swgxml_node_array['xml.item']['tag']
 					else: f_swgxml_node_tag = "digitstart__%s" % f_swgxml_node_array['xml.item']['tag']
 
 					del (f_swgxml_node_array['xml.item'])
@@ -243,10 +245,10 @@ Builds recursively a valid XML ouput reflecting the given XML array tree.
 		#
 			if (len (f_data['tag']) > 0):
 			#
-				if (re.compile("^\d").match (f_data['tag']) != None): f_data['tag'] = "digitstart__%s" % f_data['tag']
+				if (re.compile("\\d").match (f_data['tag']) != None): f_data['tag'] = "digitstart__%s" % f_data['tag']
 				f_return += "<%s" % f_data['tag']
 
-				if (f_data.has_key ("attributes")):
+				if ("attributes" in f_data):
 				#
 					for f_key in f_data['attributes']:
 					#
@@ -266,18 +268,18 @@ Builds recursively a valid XML ouput reflecting the given XML array tree.
 					#
 				#
 
-				if ((f_data.has_key ("value")) and ((f_strict_standard) or (len (f_data['value'])> 0))):
+				if (("value" in f_data) and ((f_strict_standard) or (len (f_data['value'])> 0))):
 				#
 					if (f_data['value'].find ("&") != -1): f_value_attribute_check = False
 					if (f_data['value'].find ("<") != -1): f_value_attribute_check = False
 					if (f_data['value'].find (">") != -1): f_value_attribute_check = False
 					if (f_data['value'].find ('"') != -1): f_value_attribute_check = False
-					if (re.compile("\s").match (f_data['value'].replace (" ","_")) != None): f_value_attribute_check = False
+					if (re.compile("\\s").search (f_data['value'].replace (" ","_")) != None): f_value_attribute_check = False
 
 					if (f_value_attribute_check):
 					#
-						if (self.data_charset != "UTF-8"): f_value = f_value.encode (self.data_charset)
-						f_return += " value=\"%s\"" % f_data[value]
+						if (self.data_charset != "UTF-8"): f_data['value'] = f_data['value'].encode (self.data_charset)
+						f_return += " value=\"%s\"" % f_data['value']
 					#
 				#
 
@@ -286,12 +288,12 @@ Builds recursively a valid XML ouput reflecting the given XML array tree.
 				#
 					f_return += ">"
 
-					if ((f_data.has_key ("value")) and (not f_value_attribute_check)):
+					if (("value" in f_data) and (not f_value_attribute_check)):
 					#
 						if ((f_data['value'].find ("<") < 0) and (f_data['value'].find (">") < 0)):
 						#
 							f_data['value'] = f_data['value'].replace ("&","&amp;")
-							if (self.data_charset != "UTF-8"): f_value = f_value.encode (self.data_charset)
+							if (self.data_charset != "UTF-8"): f_data['value'] = f_data['value'].encode (self.data_charset)
 
 							f_return += f_data['value']
 						#
@@ -398,7 +400,7 @@ Adds a XML node with content - recursively if required.
 		#
 			f_node_path = self.ns_translate_path (f_node_path)
 
-			if ((len (self.data_cache_node) == 0) or (re.compile("^%s" % f_node_path,re.I).match (self.data_cache_node) == None)):
+			if ((len (self.data_cache_node) == 0) or (re.compile("%s" % (re.escape (f_node_path)),re.I).match (self.data_cache_node) == None)):
 			#
 				f_node_path_done = ""
 				f_node_pointer = self.data
@@ -412,15 +414,15 @@ Adds a XML node with content - recursively if required.
 
 			f_nodes_array = f_node_path.split (" ")
 			f_continue_check = True
-			f_re_attributes_xmlns = re.compile ("^xmlns\:",re.I)
-			f_re_node_name_xmlns = re.compile ("^(.+?):(\w+)$")
-			f_re_node_position = re.compile ("^(.+?)\#(\d+)$")
+			f_re_attributes_xmlns = re.compile ("xmlns\\:",re.I)
+			f_re_node_name_xmlns = re.compile ("^(.+?):(\\w+)$")
+			f_re_node_position = re.compile ("^(.+?)\\#(\\d+)$")
 
 			while ((f_continue_check) and (len (f_nodes_array) > 0)):
 			#
 				f_continue_check = False
 				f_node_name = f_nodes_array.pop (0)
-				f_result_object = f_re_node_position.match (f_node_name)
+				f_result_object = f_re_node_position.search (f_node_name)
 
 				if (f_result_object == None): f_node_position = -1
 				else:
@@ -431,32 +433,32 @@ Adds a XML node with content - recursively if required.
 
 				if (len (f_nodes_array) > 0):
 				#
-					if (f_node_pointer.has_key (f_node_name)):
+					if (f_node_name in f_node_pointer):
 					#
-						if (f_node_pointer[f_node_name].has_key ("xml.mtree")):
+						if ("xml.mtree" in f_node_pointer[f_node_name]):
 						#
 							if (f_node_position >= 0):
 							#
-								if (f_node_pointer[f_node_name].has_key (f_node_position)):
+								if (f_node_position in f_node_pointer[f_node_name]):
 								#
 									f_return = True
 									f_continue_check = True
 
-									if ((type (f_node_pointer[f_node_name][f_node_position]) != dict) or (not f_node_pointer[f_node_name][f_node_position].has_key ("xml.item"))): f_node_pointer[f_node_name][f_node_position] = { "xml.item": f_node_pointer[f_node_name][f_node_position] }
+									if ((type (f_node_pointer[f_node_name][f_node_position]) != dict) or (not "xml.item" in f_node_pointer[f_node_name][f_node_position])): f_node_pointer[f_node_name][f_node_position] = { "xml.item": f_node_pointer[f_node_name][f_node_position] }
 									f_node_pointer = f_node_pointer[f_node_name][f_node_position]
 								#
 							#
-							elif (f_node_pointer[f_node_name].has_key (f_node_pointer[f_node_name]['xml.mtree'])):
+							elif (f_node_pointer[f_node_name]['xml.mtree'] in f_node_pointer[f_node_name]):
 							#
 								f_return = True
 								f_continue_check = True
 								f_node_position = f_node_pointer[f_node_name]['xml.mtree']
 
-								if ((type (f_node_pointer[f_node_name][f_node_position]) != dict) or (not f_node_pointer[f_node_name][f_node_position].has_key ("xml.item"))): f_node_pointer[f_node_name][f_node_position] = { "xml.item": f_node_pointer[f_node_name][f_node_position] }
+								if ((type (f_node_pointer[f_node_name][f_node_position]) != dict) or (not "xml.item" in f_node_pointer[f_node_name][f_node_position])): f_node_pointer[f_node_name][f_node_position] = { "xml.item": f_node_pointer[f_node_name][f_node_position] }
 								f_node_pointer = f_node_pointer[f_node_name][f_node_position]
 							#
 						#
-						elif (f_node_pointer[f_node_name].has_key ("xml.item")):
+						elif ("xml.item" in f_node_pointer[f_node_name]):
 						#
 							f_continue_check = True
 							f_node_pointer = f_node_pointer[f_node_name]
@@ -465,7 +467,7 @@ Adds a XML node with content - recursively if required.
 						#
 							f_continue_check = True
 
-							if ((f_node_pointer.has_key ("xml.item")) and (f_node_pointer['xml.item'].has_key ("level"))): f_node_pointer[f_node_name]['level'] = (1 + f_node_pointer['xml.item']['level'])
+							if (("xml.item" in f_node_pointer) and ("level" in f_node_pointer['xml.item'])): f_node_pointer[f_node_name]['level'] = (1 + f_node_pointer['xml.item']['level'])
 							else: f_node_pointer[f_node_name]['level'] = 1
 
 							f_node_pointer[f_node_name] = { "xml.item": f_node_pointer[f_node_name] }
@@ -475,11 +477,11 @@ Adds a XML node with content - recursively if required.
 
 					if ((not f_continue_check) and (f_add_recursively)):
 					#
-						if (f_node_pointer['xml.item'].has_key ("level")): f_node_level = (1 + f_node_pointer['xml.item']['level'])
+						if ("level" in f_node_pointer['xml.item']): f_node_level = (1 + f_node_pointer['xml.item']['level'])
 						else: f_node_level = 1
 
 						f_node_array = { "tag": f_node_name,"level": f_node_level,"xmlns": { } }
-						if (f_node_pointer['xml.item'].has_key ("xmlns")): f_node_array['xmlns'] = f_node_pointer['xml.item']['xmlns']
+						if ("xmlns" in f_node_pointer['xml.item']): f_node_array['xmlns'] = f_node_pointer['xml.item']['xmlns']
 
 						f_continue_check = True
 						f_node_pointer[f_node_name] = { "xml.item": f_node_array }
@@ -494,15 +496,15 @@ Adds a XML node with content - recursively if required.
 					f_node_array = { "tag": f_node_name,"value": f_value,"xmlns": { } }
 					f_node_ns_check = True
 					f_node_ns_name = ""
-					if ((f_node_pointer.has_key ("xml.item")) and (f_node_pointer['xml.item'].has_key ("xmlns"))): f_node_array['xmlns'] = f_node_pointer['xml.item']['xmlns']
+					if (("xml.item" in f_node_pointer) and ("xmlns" in f_node_pointer['xml.item'])): f_node_array['xmlns'] = f_node_pointer['xml.item']['xmlns']
 
 					if ((type (f_attributes) == dict) and (len (f_attributes) > 0)):
 					#
-						if (f_attributes.has_key ("xmlns")):
+						if ("xmlns" in f_attributes):
 						#
 							if (len (f_attributes['xmlns']) > 0):
 							#
-								if (self.data_ns_default.has_key (f_attributes['xmlns'])):
+								if (f_attributes['xmlns'] in self.data_ns_default):
 								#
 									f_node_array['xmlns']['@'] = self.data_ns_default[f_attributes['xmlns']]
 									f_node_ns_name = "%s:%s" % ( self.data_ns_default[f_attributes['xmlns']],f_node_name )
@@ -516,7 +518,7 @@ Adds a XML node with content - recursively if required.
 									f_node_ns_name = "%s:%s" % ( self.data_ns_counter,f_node_name )
 								#
 							#
-							elif (f_node_array['xmlns'].has_key ("@")): del (f_node_array['xmlns']['@'])
+							elif ("@" in f_node_array['xmlns']): del (f_node_array['xmlns']['@'])
 						#
 
 						for f_key in f_attributes:
@@ -529,24 +531,24 @@ Adds a XML node with content - recursively if required.
 
 								if (len (f_value) > 0):
 								#
-									if (self.data_ns_default.has_key (f_value)): f_node_array['xmlns'][f_ns_name] = self.data_ns_default[f_value]
+									if (f_value in self.data_ns_default): f_node_array['xmlns'][f_ns_name] = self.data_ns_default[f_value]
 									else: f_node_array['xmlns'][f_ns_name] = f_value
 								#
-								elif (f_node_array['xmlns'].has_key (f_ns_name)): del (f_node_array['xmlns'][f_ns_name])
+								elif (f_ns_name in f_node_array['xmlns']): del (f_node_array['xmlns'][f_ns_name])
 							#
 						#
 
 						f_node_array['attributes'] = f_attributes
 					#
 
-					f_result_object = f_re_node_name_xmlns.match (f_node_name)
+					f_result_object = f_re_node_name_xmlns.search (f_node_name)
 
 					if (f_result_object != None):
 					#
-						if ((f_node_array['xmlns'].has_key (f_result_object.group (1))) and (type (f_node_array['xmlns'][f_result_object.group (1)]) == int)): f_node_ns_name = "%s:%s" % ( f_node_array['xmlns'][f_result_object.group (1)],f_result_object.group (2) )
+						if ((f_result_object.group (1) in f_node_array['xmlns']) and (type (f_node_array['xmlns'][f_result_object.group (1)]) == int)): f_node_ns_name = "%s:%s" % ( f_node_array['xmlns'][f_result_object.group (1)],f_result_object.group (2) )
 						else: f_node_ns_check = False
 					#
-					elif (f_node_array['xmlns'].has_key ("@")): f_node_ns_name = "%s:%s" % ( f_node_array['xmlns']['@'],f_node_name )
+					elif ("@" in f_node_array['xmlns']): f_node_ns_name = "%s:%s" % ( f_node_array['xmlns']['@'],f_node_name )
 					else: f_node_ns_check = False
 
 					if (f_node_ns_check):
@@ -576,9 +578,9 @@ Adds a XML node with content - recursively if required.
 						#
 					#
 
-					if (f_node_pointer.has_key (f_node_name)):
+					if (f_node_name in f_node_pointer):
 					#
-						if ((type (f_node_pointer[f_node_name]) != dict) or (not f_node_pointer[f_node_name].has_key ("xml.mtree"))): f_node_pointer[f_node_name] = { "xml.mtree": 1,0: f_node_pointer[f_node_name],1: f_node_array }
+						if ((type (f_node_pointer[f_node_name]) != dict) or (not "xml.mtree" in f_node_pointer[f_node_name])): f_node_pointer[f_node_name] = { "xml.mtree": 1,0: f_node_pointer[f_node_name],1: f_node_array }
 						else:
 						#
 							f_node_pointer[f_node_name]['xml.mtree'] += 1
@@ -608,7 +610,7 @@ Registers a namespace (URI) for later use with this XML bridge class.
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_reader->ns_register (%s,%s)- (#echo(__LINE__)#)" % (f_ns,f_uri ))
 		self.data_ns[f_ns] = f_uri
 
-		if (not self.data_ns_default.has_key (f_uri)):
+		if (not f_uri in self.data_ns_default):
 		#
 			self.data_ns_counter += 1
 			self.data_ns_default[f_uri] = self.data_ns_counter
@@ -630,15 +632,15 @@ tag will be saved as "tag_ns" and "tag_parsed".
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_reader->ns_translate (+f_node)- (#echo(__LINE__)#)")
 		f_return = f_node
 
-		if ((type (f_node) == dict) and (f_node.has_key ("tag"))):
+		if ((type (f_node) == dict) and ("tag" in f_node)):
 		#
 			f_return['tag_ns'] = ""
 			f_return['tag_parsed'] = f_node['tag']
-			f_result_object = re.compile("^(.+?):(\w+)$").match (f_node['tag'])
+			f_result_object = re.compile("^(.+?):(\\w+)$").search (f_node['tag'])
 
-			if ((f_result_object != None) and (f_node.has_key ("xmlns")) and (type (f_node['xmlns']) == dict)):
+			if ((f_result_object != None) and ("xmlns" in f_node) and (type (f_node['xmlns']) == dict)):
 			#
-				if ((f_node['xmlns'].has_key (f_result_object.group (1))) and (self.data_ns_compact.has_key (f_node['xmlns'][f_result_object.group (1)]))):
+				if ((f_result_object.group (1) in f_node['xmlns']) and (f_node['xmlns'][f_result_object.group (1)] in self.data_ns_compact)):
 				#
 					f_tag_ns = self.dict_search (self.data_ns_compact[f_node['xmlns'][f_result_object.group (1)]],self.data_ns)
 
@@ -670,7 +672,7 @@ path.
 
 		f_nodes_array = f_node_path.split (" ")
 		f_node_path = ""
-		f_re_node_name_xmlns = re.compile ("^(.+?):(\w+)$")
+		f_re_node_name_xmlns = re.compile ("^(.+?):(\\w+)$")
 
 		while (len (f_nodes_array) > 0):
 		#
@@ -680,14 +682,14 @@ path.
 			if (f_node_name.find (":") < 0): f_node_path += f_node_name
 			else:
 			#
-				f_result_object = f_re_node_name_xmlns.match (f_node_name)
+				f_result_object = f_re_node_name_xmlns.search (f_node_name)
 
 				if (f_result_object == None): f_node_path += f_node_name
 				else:
 				#
-					if (self.data_ns.has_key (f_result_object.group (1))):
+					if (f_result_object.group (1) in self.data_ns):
 					#
-						if (self.data_ns_default.has_key (self.data_ns[f_result_object.group (1)])): f_node_path += "%s:%s" % ( self.data_ns_default[self.data_ns[f_result_object.group (1)]],f_result_object.group (2) )
+						if (self.data_ns[f_result_object.group (1)] in self.data_ns_default): f_node_path += "%s:%s" % ( self.data_ns_default[self.data_ns[f_result_object.group (1)]],f_result_object.group (2) )
 						else: f_node_path += "%s:%s" % ( f_result_object.group (1),f_result_object.group (2) )
 					#
 					else: f_node_path += "%s:%s" % ( f_result_object.group (1),f_result_object.group (2) )
@@ -695,7 +697,7 @@ path.
 			#
 		#
 
-		if (self.data_ns_predefined_default.has_key (f_node_path)): f_return = self.data_ns_predefined_default[f_node_path]
+		if (f_node_path in self.data_ns_predefined_default): f_return = self.data_ns_predefined_default[f_node_path]
 		return f_return
 	#
 
@@ -712,7 +714,7 @@ Unregisters a namespace or clears the cache (if $f_ns is empty).
 
 		if (len (f_ns) > 0):
 		#
-			if (self.data_ns.has_key (f_ns)):
+			if (f_ns in self.data_ns):
 			#
 				del (self.data_ns_compact[self.data_ns_default[self.data_ns[f_ns]]]);
 				del (self.data_ns_default[self.data_ns[f_ns]]);

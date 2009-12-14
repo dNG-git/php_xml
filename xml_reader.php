@@ -305,7 +305,7 @@ Initiate the array tree cache
 
 					if ($f_value_attribute_check)
 					{
-						if ($this->data_charset != "UTF-8") { $f_value = mb_convert_encoding ($f_value,$this->data_charset,"UTF-8"); }
+						if ($this->data_charset != "UTF-8") { $f_data['value'] = mb_convert_encoding ($f_data['value'],$this->data_charset,"UTF-8"); }
 						$f_return .= " value=\"$f_data[value]\"";
 					}
 				}
@@ -320,7 +320,7 @@ Initiate the array tree cache
 						if ((strpos ($f_data['value'],"<") === false)&&(strpos ($f_data['value'],">") === false))
 						{
 							$f_data['value'] = str_replace ("&","&amp;",$f_data['value']);
-							if ($this->data_charset != "UTF-8") { $f_value = mb_convert_encoding ($f_value,$this->data_charset,"UTF-8"); }
+							if ($this->data_charset != "UTF-8") { $f_data['value'] = mb_convert_encoding ($f_data['value'],$this->data_charset,"UTF-8"); }
 							$f_return .= $f_data['value'];
 						}
 						else

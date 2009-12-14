@@ -209,7 +209,7 @@ required information.
 
 		if (self.parser_active):
 		#
-			if (self.parser_cache[self.parser_cache_link[self.node_path]].has_key ("value")): self.parser_cache[self.parser_cache_link[self.node_path]]['value'] += data
+			if ("value" in self.parser_cache[self.parser_cache_link[self.node_path]]): self.parser_cache[self.parser_cache_link[self.node_path]]['value'] += data
 			else: self.parser_cache[self.parser_cache_link[self.node_path]]['value'] = data
 		#
 	#
@@ -234,9 +234,9 @@ Method to handle "end element" callbacks.
 			self.node_path_depth -= 1
 			self.node_path = " ".join (self.node_path_array)
 
-			if (self.parser_cache[f_node_path].has_key ("value")):
+			if ("value" in self.parser_cache[f_node_path]):
 			#
-				if (self.parser_cache[f_node_path]['attributes'].has_key ("xml:space")):
+				if ("xml:space" in self.parser_cache[f_node_path]['attributes']):
 				#
 					if (self.parser_cache[f_node_path]['attributes']['xml:space'] != "preserve"): self.parser_cache[f_node_path]['value'] = self.parser_cache[f_node_path]['value'].strip ()
 				#
@@ -244,7 +244,7 @@ Method to handle "end element" callbacks.
 			#
 			else: self.parser_cache[f_node_path]['value'] = ""
 
-			if ((not self.parser_strict_standard) and (self.parser_cache[f_node_path]['attributes'].has_key ("value")) and (len (self.parser_cache[f_node_path]['value']) < 1)):
+			if ((not self.parser_strict_standard) and ("value" in self.parser_cache[f_node_path]['attributes']) and (len (self.parser_cache[f_node_path]['value']) < 1)):
 			#
 				self.parser_cache[f_node_path]['value'] = self.parser_cache[f_node_path]['attributes']['value']
 				del (self.parser_cache[f_node_path]['attributes']['value'])
@@ -300,13 +300,13 @@ Method to handle "end element" callbacks. (Merged XML parser)
 			self.node_path_depth -= 1
 			self.node_path = "_".join (self.node_path_array)
 
-			if (f_node_pointer['attributes'].has_key ("xml:space")):
+			if ("xml:space" in f_node_pointer['attributes']):
 			#
 				if (f_node_pointer['attributes']['xml:space'] != "preserve"): f_node_pointer['value'] = f_node_pointer['value'].strip ()
 			#
 			else: f_node_pointer['value'] = f_node_pointer['value'].strip ()
 
-			if ((f_node_pointer['attributes'].has_key ("value")) and (len (f_node_pointer['value']) < 1)):
+			if (("value" in f_node_pointer['attributes']) and (len (f_node_pointer['value']) < 1)):
 			#
 				f_node_pointer['value'] = f_node_pointer['attributes']['value']
 				del (f_node_pointer['attributes']['value'])
@@ -367,9 +367,9 @@ Method to handle "start element" callbacks. (Merged XML parser)
 
 		f_node_array = { "tag": name,"level": self.node_path_depth,"value": "","attributes": attributes }
 
-		if (self.parser_cache.has_key (self.node_path)):
+		if (self.node_path in self.parser_cache):
 		#
-			if (self.parser_cache[self.node_path].has_key ("tag")): self.parser_cache[self.node_path] = [ self.parser_cache[self.node_path],f_node_array ]
+			if ("tag" in self.parser_cache[self.node_path]): self.parser_cache[self.node_path] = [ self.parser_cache[self.node_path],f_node_array ]
 			else: self.parser_cache[self.node_path].append (f_node_array)
 
 			self.parser_cache_link[self.node_path] += 1
