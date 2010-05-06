@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##j## BOF
 
-"""/*n// NOTE
+"""n// NOTE
 ----------------------------------------------------------------------------
 Extended Core: XML
 Multiple XML parser abstraction layer
@@ -18,7 +18,7 @@ http://www.direct-netware.de/redirect.php?licenses;w3c
 #echo(extCoreXmlVersion)#
 extCore_xml/#echo(__FILEPATH__)#
 ----------------------------------------------------------------------------
-NOTE_END //n*/"""
+NOTE_END //n"""
 """
 XML (Extensible Markup Language) is the easiest way to use a descriptive
 language for controlling applications locally and world wide.
@@ -140,7 +140,7 @@ Initiate the array tree cache
 		self.data = None
 		self.data_cache_node = ""
 		self.data_cache_pointer = ""
-		self.data_charset = f_charset.capitalize ()
+		self.data_charset = f_charset.upper ()
 		self.data_ns = { }
 		self.data_ns_compact = { }
 		self.data_ns_counter = 0
@@ -252,7 +252,10 @@ Builds recursively a valid XML ouput reflecting the given XML array tree.
 				#
 					for f_key in f_data['attributes']:
 					#
-						f_value = f_data['attributes'][f_key]
+						f_type_value = type (f_data['attributes'][f_key])
+
+						if ((f_type_value == int) or (f_type_value == float)): f_value = str (f_data['attributes'][f_key])
+						else: f_value = f_data['attributes'][f_key]
 
 						if ((not f_strict_standard) and (not len (f_data['value'])) and (f_key == "value")): f_data['value'] = f_value
 						else:
@@ -270,11 +273,14 @@ Builds recursively a valid XML ouput reflecting the given XML array tree.
 
 				if (("value" in f_data) and ((f_strict_standard) or (len (f_data['value'])> 0))):
 				#
-					if (f_data['value'].find ("&") != -1): f_value_attribute_check = False
-					if (f_data['value'].find ("<") != -1): f_value_attribute_check = False
-					if (f_data['value'].find (">") != -1): f_value_attribute_check = False
-					if (f_data['value'].find ('"') != -1): f_value_attribute_check = False
-					if (re.compile("\\s").search (f_data['value'].replace (" ","_")) != None): f_value_attribute_check = False
+					f_type_data_value = type (f_data['value'])
+
+					if ((f_type_data_value == int) or (f_type_data_value == float)): f_data['value'] = str (f_data['value'])
+					elif (f_data['value'].find ("&") != -1): f_value_attribute_check = False
+					elif (f_data['value'].find ("<") != -1): f_value_attribute_check = False
+					elif (f_data['value'].find (">") != -1): f_value_attribute_check = False
+					elif (f_data['value'].find ('"') != -1): f_value_attribute_check = False
+					elif (re.compile("\\s").search (f_data['value'].replace (" ","_")) != None): f_value_attribute_check = False
 
 					if (f_value_attribute_check):
 					#
@@ -770,7 +776,15 @@ Converts XML data into a multi-dimensional or merged array ...
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_reader->xml2array (+f_data,+f_treemode,+f_strict_standard)- (#echo(__LINE__)#)")
 		f_return = False
 
-		try: f_parser_pointer = expat.ParserCreate ()
+		try:
+		#
+			if (re.compile("<\\?xml(.+?)encoding=").search (f_data) == None):
+			#
+				f_parser_pointer = expat.ParserCreate ("UTF-8")
+				if (type (f_data) == unicode): f_data = f_data.encode ("utf-8")
+			#
+			else: f_parser_pointer = expat.ParserCreate ()
+		#
 		except Exception,f_handled_exception: f_parser_pointer = None
 
 		if (f_parser_pointer != None):

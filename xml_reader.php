@@ -298,10 +298,10 @@ Initiate the array tree cache
 				if ((isset ($f_data['value']))&&(($f_strict_standard)||(strlen ($f_data['value']))))
 				{
 					if (strpos ($f_data['value'],"&") !== false) { $f_value_attribute_check = false; }
-					if (strpos ($f_data['value'],"<") !== false) { $f_value_attribute_check = false; }
-					if (strpos ($f_data['value'],">") !== false) { $f_value_attribute_check = false; }
-					if (strpos ($f_data['value'],'"') !== false) { $f_value_attribute_check = false; }
-					if (preg_match ("#\s#",(str_replace (" ","_",$f_data['value'])))) { $f_value_attribute_check = false; }
+					elseif (strpos ($f_data['value'],"<") !== false) { $f_value_attribute_check = false; }
+					elseif (strpos ($f_data['value'],">") !== false) { $f_value_attribute_check = false; }
+					elseif (strpos ($f_data['value'],'"') !== false) { $f_value_attribute_check = false; }
+					elseif (preg_match ("#\s#",(str_replace (" ","_",$f_data['value'])))) { $f_value_attribute_check = false; }
 
 					if ($f_value_attribute_check)
 					{

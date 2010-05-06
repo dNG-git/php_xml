@@ -344,12 +344,13 @@ Get the parent node of the target.
 	* Read a specified node including all children if applicable.
 	*
 	* @param  string $f_node_path Path to the node - delimiter is space
+	* @param  boolean $f_remove_metadata False to not remove the xml.item node
 	* @uses   direct_xml_reader::ns_translate_path()
 	* @uses   direct_xml_writer::node_get_pointer()
 	* @return mixed XML node array on success; false on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function node_get ($f_node_path)
+	/*#ifndef(PHP4) */public /* #*/function node_get ($f_node_path,$f_remove_metadata = true)
 	{
 		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->node_get ($f_node_path)- (#echo(__LINE__)#)"; }
 		$f_return = false;
@@ -362,7 +363,7 @@ Get the parent node of the target.
 			if ($f_node_pointer)
 			{
 				$f_return = $f_node_pointer;
-				if (isset ($f_return['xml.item'])) { unset ($f_return['xml.item']); }
+				if (($f_remove_metadata)&&(isset ($f_return['xml.item']))) { unset ($f_return['xml.item']); }
 			}
 		}
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##j## BOF
 
-"""/*n// NOTE
+"""n// NOTE
 ----------------------------------------------------------------------------
 Extended Core: XML
 Multiple XML parser abstraction layer
@@ -18,7 +18,7 @@ http://www.direct-netware.de/redirect.php?licenses;w3c
 #echo(extCoreXmlVersion)#
 extCore_xml/#echo(__FILEPATH__)#
 ----------------------------------------------------------------------------
-NOTE_END //n*/"""
+NOTE_END //n"""
 """
 XML (Extensible Markup Language) is the easiest way to use a descriptive
 language for controlling applications locally and world wide.
@@ -122,8 +122,9 @@ Connect to the Python container for the XML document
 
 		self.data_merged_mode = False
 		self.node_path_array = [ ]
-		self.parser = f_parser;
+		self.parser = f_parser
 		self.parser_active = False
+		self.parser_cache = { }
 		self.parser_strict_standard = True
 	#
 
@@ -450,7 +451,7 @@ the parser completed its work.
 
 		if ((not self.parser_active) and (type (self.parser_cache) == dict) and (len (self.parser_cache) > 0)):
 		#
-			self.parser.set ({ });
+			self.parser.set ({ })
 
 			for f_node_key in self.parser_cache:
 			#

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##j## BOF
 
-"""/*n// NOTE
+"""n// NOTE
 ----------------------------------------------------------------------------
 Extended Core: XML
 Multiple XML parser abstraction layer
@@ -18,7 +18,7 @@ http://www.direct-netware.de/redirect.php?licenses;w3c
 #echo(extCoreXmlVersion)#
 extCore_xml/#echo(__FILEPATH__)#
 ----------------------------------------------------------------------------
-NOTE_END //n*/"""
+NOTE_END //n"""
 """
 XML (Extensible Markup Language) is the easiest way to use a descriptive
 language for controlling applications locally and world wide.
@@ -72,7 +72,7 @@ Constructor __init__ (direct_xml_writer)
 @since v0.1.00
 		"""
 
-		super(direct_xml_writer,self).__init__ (f_charset,False,f_time,f_timeout_count,f_debug)
+		direct_xml_reader.__init__ (self,f_charset,False,f_time,f_timeout_count,f_debug)
 	#
 
 	def del_direct_xml_writer (self):
@@ -322,12 +322,13 @@ Get the parent node of the target.
 		return f_return
 	#
 
-	def node_get (self,f_node_path):
+	def node_get (self,f_node_path,f_remove_metadata = True):
 	#
 		"""
 Read a specified node including all children if applicable.
 
 @param  f_node_path Path to the node - delimiter is space
+@param  f_remove_metadata False to not remove the xml.item node
 @return (mixed) XML node array on success; false on error
 @since  v0.1.00
 		"""
@@ -345,7 +346,7 @@ Read a specified node including all children if applicable.
 			if (type (f_node_pointer) == dict):
 			#
 				f_return = f_node_pointer
-				if ("xml.item" in f_return): del (f_return['xml.item'])
+				if ((f_remove_metadata) and ("xml.item" in f_return)): del (f_return['xml.item'])
 			#
 		#
 
@@ -369,7 +370,7 @@ Returns the pointer to a specific node.
 
 		if ((f_type == str) or (f_type == unicode)):
 		#
-			if ((len (self.data_cache_node) == 0) or (re.compile("%s" % (re.escape (f_node_path)),re.I).match (self.data_cache_node) == None)): f_node_pointer = self.data
+			if ((len (self.data_cache_node) == 0) or (re.compile("%s" % (re.escape (self.data_cache_node)),re.I).match (f_node_path) == None)): f_node_pointer = self.data
 			else:
 			#
 				f_node_path = f_node_path[len (self.data_cache_node):].strip ()
@@ -393,7 +394,7 @@ Returns the pointer to a specific node.
 				else:
 				#
 					f_node_name = f_result_object.group (1)
-					f_node_position = f_result_object.group (2)
+					f_node_position = int (f_result_object.group (2))
 				#
 
 				if (f_node_name in f_node_pointer):
@@ -483,7 +484,7 @@ Get the parent node of the target.
 				else:
 				#
 					f_node_name = f_result_object.group (1)
-					f_node_position = f_result_object.group (2)
+					f_node_position = int (f_result_object.group (2))
 				#
 
 				if (f_node_name in f_node_pointer):
