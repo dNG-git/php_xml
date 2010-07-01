@@ -354,7 +354,12 @@ Method to handle "start element" callbacks. (Merged XML parser)
 			f_key_lowercase = f_key.lower ()
 			f_value = attributes[f_key]
 
-			if (f_key_lowercase == "xml:space"):
+			if (f_key_lowercase.startswith ("xmlns:")):
+			#
+				attributes["xmlns:%s" % f_key[6:]] = f_value
+				if (f_key != "xmlns:%s" % f_key[6:]): del (attributes[f_key])
+			#
+			elif (f_key_lowercase == "xml:space"):
 			#
 				attributes[f_key_lowercase] = f_value.lower ()
 				if (f_key != f_key_lowercase): del (attributes[f_key])
@@ -419,12 +424,17 @@ Method to handle "start element" callbacks.
 			f_key_lowercase = f_key.lower ()
 			f_value = attributes[f_key]
 
-			if (f_key_lowercase == "xml:space"):
+			if (f_key_lowercase.startswith ("xmlns:")):
+			#
+				attributes["xmlns:%s" % f_key[6:]] = f_value
+				if (f_key != "xmlns:%s" % f_key[6:]): del (attributes[f_key])
+			#
+			elif (f_key_lowercase == "xml:space"):
 			#
 				attributes[f_key_lowercase] = f_value.lower ()
 				if (f_key != f_key_lowercase): del (attributes[f_key])
 			#
-			elif (f_key != f_key_lowercase):
+			elif ((not self.parser_strict_standard) and (f_key != f_key_lowercase)):
 			#
 				del (attributes[f_key])
 				attributes[f_key_lowercase] = f_value

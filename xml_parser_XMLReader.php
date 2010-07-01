@@ -66,13 +66,22 @@ if (!defined ("CLASS_direct_xml_parser_XMLReader"))
 class direct_xml_parser_XMLReader
 {
 /**
-	* @var direct_xml_reader $parser Container for the XML document
+	* @var array $debug Debug message container
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $parser;
+	/*#ifndef(PHP4) */public/* #*//*#ifdef(PHP4):var:#*/ $debug;
+/**
+	* @var boolean $debugging True if we should fill the debug message
+	*      container
+*/
+	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $debugging;
 /**
 	* @var array $node_types Node types that this parser knows
 */
 	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $node_types;
+/**
+	* @var direct_xml_reader $parser Container for the XML document
+*/
+	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $parser;
 /**
 	* @var integer $time Current UNIX timestamp
 */
@@ -163,13 +172,12 @@ $this->node_types = array (
 	*
 	* @param  object &$f_xmlreader SimpleXMLElement object
 	* @param  boolean $f_strict_standard Be standard conform
-	* @uses   direct_xml_reader::node_add()
 	* @return array Multi-dimensional XML tree
 	* @since  v0.1.00
 */
 	/*#ifndef(PHP4) */public /* #*/function xml2array_XMLReader (&$f_xmlreader,$f_strict_standard = true)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader (+f_XMLReader,+f_strict_standard)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader (+f_xmlreader,+f_strict_standard)- (#echo(__LINE__)#)"; }
 		$f_return = array ();
 
 		if (is_object ($f_xmlreader))
@@ -181,10 +189,10 @@ $this->node_types = array (
 			do { $f_continue_check = $f_xmlreader->read (); }
 			while (($f_continue_check)&&($f_xmlreader->nodeType != $this->node_types['element'])&&($f_timeout_time > (time ())));
 
-			$f_XMLReader_array = $this->xml2array_XMLReader_walker ($f_xmlreader,$f_strict_standard);
+			$f_xmlreader_array = $this->xml2array_XMLReader_walker ($f_xmlreader,$f_strict_standard);
 			$f_xmlreader->close ();
 
-			if ($f_XMLReader_array) { $f_continue_check = $this->xml2array_XMLReader_array_walker ($f_XMLReader_array,$f_strict_standard); }
+			if ($f_xmlreader_array) { $f_continue_check = $this->xml2array_XMLReader_array_walker ($f_xmlreader_array,$f_strict_standard); }
 			if ($f_continue_check) { $f_return = $this->parser->get (); }
 		}
 
@@ -195,8 +203,7 @@ $this->node_types = array (
 /**
 	* Imports a pre-parsed XML array into the given parser instance.
 	*
-	* @param  array &$f_data Result array of a
-	*         "xml2array_XMLReader_walker ()"
+	* @param  array &$f_data Result array of a "xml2array_XMLReader_walker ()"
 	* @param  boolean $f_strict_standard Be standard conform
 	* @uses   direct_xml_reader::node_add()
 	* @return boolean True on success
@@ -243,7 +250,7 @@ $this->node_types = array (
 */
 	/*#ifndef(PHP4) */public /* #*/function xml2array_XMLReader_merged (&$f_xmlreader)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_merged (+f_XMLReader)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_merged (+f_xmlreader)- (#echo(__LINE__)#)"; }
 		$f_return = array ();
 
 		if (is_object ($f_xmlreader))
@@ -280,7 +287,8 @@ $this->node_types = array (
 							{
 								$f_attribute_name = strtolower ($f_xmlreader->name);
 
-								if ($f_attribute_name == "xml:space") { $f_attributes_array['xml:space'] = strtolower ($f_xmlreader->value); }
+								if (strpos ($f_attribute_name,"xmlns:") === 0) { $f_attributes_array["xmlns:".(substr ($f_xmlreader->name,6))] = $f_xmlreader->value; }
+								elseif ($f_attribute_name == "xml:space") { $f_attributes_array['xml:space'] = strtolower ($f_xmlreader->value); }
 								else { $f_attributes_array[$f_attribute_name] = $f_xmlreader->value; }
 							}
 							while (($f_xmlreader->moveToNextAttribute ())&&($f_timeout_time > (time ())));
@@ -295,17 +303,16 @@ $this->node_types = array (
 
 					$f_depth = $f_xmlreader->depth;
 					$f_continue_check = $f_xmlreader->read ();
+					$f_node_change_check = true;
 					$f_read_check = false;
-
-					if ($f_depth >= $f_xmlreader->depth) { $f_node_change_check = true; }
 
 					break 1;
 				}
 				case $this->node_types['element_end']:
 				{
 					$f_continue_check = $f_xmlreader->read ();
-					$f_read_check = false;
 					$f_node_change_check = true;
+					$f_read_check = false;
 					break 1;
 				}
 				case $this->node_types['text']:
@@ -345,10 +352,10 @@ $this->node_types = array (
 						unset ($f_nodes_array[$f_node_path]);
 					}
 
-					array_pop ($f_node_path_array);
-					$f_read_check = false;
-					$f_node_path = implode ("_",$f_node_path_array);
 					$f_depth = $f_xmlreader->depth;
+					array_pop ($f_node_path_array);
+					$f_node_path = implode ("_",$f_node_path_array);
+					$f_read_check = false;
 				}
 				elseif ($f_xmlreader->depth < $f_depth)
 				{
@@ -388,57 +395,66 @@ $this->node_types = array (
 */
 	/*#ifndef(PHP4) */protected /* #*/function xml2array_XMLReader_walker (&$f_xmlreader,$f_strict_standard = true,$f_node_path = "",$f_xml_level = 0)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_walker (+f_XMLReader,+f_strict_standard,$f_node_path,$f_xml_level)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_walker (+f_xmlreader,+f_strict_standard,$f_node_path,$f_xml_level)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if (is_object ($f_xmlreader))
 		{
 			$f_attributes_array = array ();
-			$f_continue_check = true;
+			$f_continue_check = false;
 			$f_node_content = "";
 			$f_nodes_array = array ();
 			$f_preserve_check = false;
 			$f_read_check = true;
 			$f_timeout_time = ($this->time + $this->timeout_count);
 
-			if ($f_xmlreader->nodeType == $this->node_types['element'])
+			while ((!$f_continue_check)&&($f_timeout_time > (time ())))
 			{
-				if ($f_strict_standard) { $f_node_name = $f_xmlreader->name; }
-				else
+				if ($f_xmlreader->nodeType == $this->node_types['element'])
 				{
-					$f_node_name = strtolower ($f_xmlreader->name);
-					if (strpos ($f_node_name,"digitstart__") === 0) { $f_node_name = substr ($f_node_name,12); }
-				}
-
-				if ($f_xmlreader->attributeCount > 0)
-				{
-					if ($f_xmlreader->moveToFirstAttribute ())
+					if ($f_strict_standard) { $f_node_name = $f_xmlreader->name; }
+					else
 					{
-						do
-						{
-							$f_attribute_name = strtolower ($f_xmlreader->name);
-
-							if ($f_attribute_name == "xml:space")
-							{
-								$f_attributes_array['xml:space'] = strtolower ($f_xmlreader->value);
-								if ($f_attributes_array['xml:space'] == "preserve") { $f_preserve_check = true; }
-							}
-							elseif (!$f_strict_standard) { $f_attributes_array[$f_attribute_name] = $f_xmlreader->value; }
-							else { $f_attributes_array[$f_xmlreader->name] = $f_xmlreader->value; }
-						}
-						while (($f_xmlreader->moveToNextAttribute ())&&($f_timeout_time > (time ())));
-
-						$f_xmlreader->moveToElement ();
+						$f_node_name = strtolower ($f_xmlreader->name);
+						if (strpos ($f_node_name,"digitstart__") === 0) { $f_node_name = substr ($f_node_name,12); }
 					}
+
+					if ($f_xmlreader->attributeCount > 0)
+					{
+						if ($f_xmlreader->moveToFirstAttribute ())
+						{
+							do
+							{
+								$f_attribute_name = strtolower ($f_xmlreader->name);
+
+								if (strpos ($f_attribute_name,"xmlns:") === 0) { $f_attributes_array["xmlns:".(substr ($f_xmlreader->name,6))] = $f_xmlreader->value; }
+								elseif ($f_attribute_name == "xml:space")
+								{
+									$f_attributes_array['xml:space'] = strtolower ($f_xmlreader->value);
+									if ($f_attributes_array['xml:space'] == "preserve") { $f_preserve_check = true; }
+								}
+								elseif (!$f_strict_standard) { $f_attributes_array[$f_attribute_name] = $f_xmlreader->value; }
+								else { $f_attributes_array[$f_xmlreader->name] = $f_xmlreader->value; }
+							}
+							while (($f_xmlreader->moveToNextAttribute ())&&($f_timeout_time > (time ())));
+
+							$f_xmlreader->moveToElement ();
+						}
+					}
+
+					$f_continue_check = true;
 				}
 
 				$f_xmlreader->read ();
 			}
 
-			if (strlen ($f_node_path)) { $f_node_path = $f_node_path." ".$f_node_name; }
-			else { $f_node_path = $f_node_name; }
+			if ($f_continue_check)
+			{
+				if (strlen ($f_node_path)) { $f_node_path = $f_node_path." ".$f_node_name; }
+				else { $f_node_path = $f_node_name; }
+			}
 
-			do
+			while (($f_continue_check)&&($f_timeout_time > (time ())))
 			{
 				if ($f_xml_level < $f_xmlreader->depth)
 				{
@@ -481,7 +497,6 @@ $this->node_types = array (
 				}
 				else { $f_continue_check = false; }
 			}
-			while (($f_continue_check)&&($f_timeout_time > (time ())));
 
 			$f_return = array ("node_path" => $f_node_path,"value" => $f_node_content,"attributes" => $f_attributes_array,"children" => $f_nodes_array);
 		}

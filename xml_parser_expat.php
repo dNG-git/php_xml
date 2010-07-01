@@ -71,6 +71,15 @@ class direct_xml_parser_expat
 */
 	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_merged_mode;
 /**
+	* @var array $debug Debug message container
+*/
+	/*#ifndef(PHP4) */public/* #*//*#ifdef(PHP4):var:#*/ $debug;
+/**
+	* @var boolean $debugging True if we should fill the debug message
+	*      container
+*/
+	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $debugging;
+/**
 	* @var string $node_path Current node path of the parser
 */
 	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $node_path;
@@ -353,7 +362,13 @@ Connect to the PHP container for the XML document
 		{
 			$f_key_lowercase = strtolower ($f_key);
 
-			if ($f_key_lowercase == "xml:space")
+			if (strpos ($f_key_lowercase,"xmlns:") === 0)
+			{
+				$f_ns_name = substr ($f_key,6);
+				$f_attributes["xmlns:".$f_ns_name] = $f_value;
+				if ($f_key != "xmlns:".$f_ns_name) { unset ($f_attributes[$f_key]); }
+			}
+			elseif ($f_key_lowercase == "xml:space")
 			{
 				$f_attributes[$f_key_lowercase] = strtolower ($f_value);
 				if ($f_key != $f_key_lowercase) { unset ($f_attributes[$f_key]); }
@@ -418,7 +433,13 @@ Connect to the PHP container for the XML document
 		{
 			$f_key_lowercase = strtolower ($f_key);
 
-			if ($f_key_lowercase == "xml:space")
+			if (strpos ($f_key_lowercase,"xmlns:") === 0)
+			{
+				$f_ns_name = substr ($f_key,6);
+				$f_attributes["xmlns:".$f_ns_name] = $f_value;
+				if ($f_key != "xmlns:".$f_ns_name) { unset ($f_attributes[$f_key]); }
+			}
+			elseif ($f_key_lowercase == "xml:space")
 			{
 				$f_attributes[$f_key_lowercase] = strtolower ($f_value);
 				if ($f_key != $f_key_lowercase) { unset ($f_attributes[$f_key]); }
@@ -456,7 +477,7 @@ Connect to the PHP container for the XML document
 			foreach ($this->parser_cache as $f_node_array) { $this->parser->node_add ($f_node_array['node_path'],$f_node_array['value'],$f_node_array['attributes']); }
 
 			$this->parser_cache = array ();
-			$f_return =& $this->parser->get ();
+			$f_return = $this->parser->get ();
 		}
 
 		return $f_return;
