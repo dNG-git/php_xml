@@ -478,7 +478,7 @@ Initiate the array tree cache
 					{
 						if (strlen ($f_node_path_done))
 						{
-							$this->data_ns_predefined_compact[$f_node_path_done." ".$f_node_name] = $this->data_ns_predefined_compact[$f_node_path_done]." ".$f_node_ns_name;
+							$this->data_ns_predefined_compact[$f_node_path_done." ".$f_node_name] = (isset ($this->data_ns_predefined_compact[$f_node_path_done]) ? $this->data_ns_predefined_compact[$f_node_path_done]." ".$f_node_ns_name : $f_node_path_done." ".$f_node_ns_name);
 							$this->data_ns_predefined_default[$this->data_ns_predefined_compact[$f_node_path_done." ".$f_node_name]] = $f_node_path_done." ".$f_node_name;
 						}
 						else

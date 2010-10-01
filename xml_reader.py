@@ -36,8 +36,31 @@ language for controlling applications locally and world wide.
             W3C (R) Software License
 """
 
-from xml_parser_expat import direct_xml_parser_expat
-from xml.parsers import expat
+try:
+#
+	import java.lang.System
+	_direct_xml_reader_mode = "java"
+#
+except ImportError,g_handled_exception: _direct_xml_reader_mode = None
+
+try:
+#
+	import clr
+	clr.AddReference ("System.Xml")
+	from System.IO import StringReader
+	from System.Xml import XmlDocument,XmlNodeReader
+	from xml_parser_MonoXML import direct_xml_parser_MonoXML
+	_direct_xml_reader_mode = "mono"
+#
+except ImportError,g_unhandled_exception: pass
+
+if (_direct_xml_reader_mode == None):
+#
+	_direct_xml_reader_mode = "py"
+	from xml.parsers import expat
+	from xml_parser_expat import direct_xml_parser_expat
+#
+
 import re
 
 class direct_xml_reader (object):
@@ -126,10 +149,13 @@ Constructor __init__ (direct_xml_reader)
 @since v0.1.00
 		"""
 
+		global _direct_xml_reader_mode
+
 		if (f_debug): self.debug = [ "xml/#echo(__FILEPATH__)# -xml_reader->__init__ (direct_xml_reader)- (#echo(__LINE__)#)" ]
 		else: self.debug = None
 
-		self.data_parser = direct_xml_parser_expat (self,f_debug)
+		if (_direct_xml_reader_mode == "mono"): self.data_parser = direct_xml_parser_MonoXML (self,f_time,f_timeout_count,f_debug)
+		else: self.data_parser = direct_xml_parser_expat (self,f_debug)
 
 		"""
 ----------------------------------------------------------------------------
@@ -773,12 +799,26 @@ Converts XML data into a multi-dimensional or merged array ...
 @since  v0.1.00
 		"""
 
+		global _direct_xml_reader_mode
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_reader->xml2array (+f_data,+f_treemode,+f_strict_standard)- (#echo(__LINE__)#)")
 		f_return = False
 
 		try:
 		#
-			if (re.compile("<\\?xml(.+?)encoding=").search (f_data) == None):
+			if (_direct_xml_reader_mode == "mono"):
+			#
+				if (type (f_data) == unicode): f_data = f_data.encode ("utf-8")
+				f_parser_pointer = XmlDocument ()
+				f_parser_pointer.LoadXml (f_data)
+				f_parser_pointer = XmlNodeReader (f_parser_pointer)
+
+				if (f_parser_pointer != None):
+				#
+					if (f_treemode): f_return = self.data_parser.xml2array_MonoXML (f_parser_pointer,f_strict_standard)
+					else: f_return = self.data_parser.xml2array_MonoXML_merged (f_parser_pointer)
+				#
+			#
+			elif (re.compile("<\\?xml(.+?)encoding=").search (f_data) == None):
 			#
 				f_parser_pointer = expat.ParserCreate ("UTF-8")
 				if (type (f_data) == unicode): f_data = f_data.encode ("utf-8")
@@ -787,7 +827,7 @@ Converts XML data into a multi-dimensional or merged array ...
 		#
 		except Exception,f_handled_exception: f_parser_pointer = None
 
-		if (f_parser_pointer != None):
+		if ((_direct_xml_reader_mode == "py") and (f_parser_pointer != None)):
 		#
 			if (f_treemode):
 			#
