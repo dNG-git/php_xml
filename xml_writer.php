@@ -136,11 +136,11 @@ My parent should be on my side to get the work done
 
 	//f// direct_xml_writer->array_import_walker (&$f_array,$f_level = 1)
 /**
-	* Read and convert a single dimensional of an array for our XML tree.
+	* Read and convert a single dimension of an array for our XML tree.
 	*
 	* @param  array &$f_array Input array
 	* @param  integer $f_level Current level of an multi-dimensional array
-	* @return array Output Array
+	* @return array Output array
 	* @since  v0.1.00
 */
 	/*#ifndef(PHP4) */protected /* #*/function array_import_walker (&$f_array,$f_level = 1)

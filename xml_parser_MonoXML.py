@@ -1,6 +1,22 @@
 # -*- coding: utf-8 -*-
 ##j## BOF
 
+"""
+XML (Extensible Markup Language) is the easiest way to use a descriptive
+language for controlling applications locally and world wide.
+
+@internal   We are using epydoc (JavaDoc style) to automate the
+            documentation process for creating the Developer's Manual.
+            Use the following line to ensure 76 character sizes:
+----------------------------------------------------------------------------
+@author     direct Netware Group
+@copyright  (C) direct Netware Group - All rights reserved
+@package    ext_core
+@subpackage xml
+@since      v0.1.00
+@license    http://www.direct-netware.de/redirect.php?licenses;w3c
+            W3C (R) Software License
+"""
 """n// NOTE
 ----------------------------------------------------------------------------
 Extended Core: XML
@@ -19,30 +35,17 @@ http://www.direct-netware.de/redirect.php?licenses;w3c
 extCore_xml/#echo(__FILEPATH__)#
 ----------------------------------------------------------------------------
 NOTE_END //n"""
-"""
-XML (Extensible Markup Language) is the easiest way to use a descriptive
-language for controlling applications locally and world wide.
-
-@internal   We are using epydoc (JavaDoc style) to automate the
-            documentation process for creating the Developer's Manual.
-            Use the following line to ensure 76 character sizes:
-----------------------------------------------------------------------------
-@author     direct Netware Group
-@copyright  (C) direct Netware Group - All rights reserved
-@package    ext_core
-@subpackage xml
-@since      v0.1.00
-@license    http://www.direct-netware.de/redirect.php?licenses;w3c
-            W3C (R) Software License
-"""
 
 from System.Xml import XmlNodeType
-import time
+from time import time
+
+try: _unicode_object = { "type": unicode,"str": unicode.encode }
+except: _unicode_object = { "type": bytes,"str": bytes.decode }
 
 class direct_xml_parser_MonoXML (object):
 #
 	"""
-This implementation supports expat for XML parsing.
+This implementation supports XmlNodeReader for XML parsing.
 
 @author     direct Netware Group
 @copyright  (C) direct Netware Group - All rights reserved
@@ -76,19 +79,19 @@ Construct the class
 ----------------------------------------------------------------------------
 	"""
 
-	def __init__ (self,f_parser,f_time = -1,f_timeout_count = 5,f_debug = False):
+	def __init__ (self,parser,current_time = -1,timeout_count = 5,debug = False):
 	#
 		"""
 Constructor __init__ (direct_xml_parser_MonoXML)
 
-@param f_parser Container for the XML document
-@param f_time Current UNIX timestamp
-@param f_timeout_count Retries before timing out
-@param f_debug Debug flag
+@param parser Container for the XML document
+@param current_time Current UNIX timestamp
+@param timeout_count Retries before timing out
+@param debug Debug flag
 @since v0.1.00
 		"""
 
-		if (f_debug): self.debug = [ "xml/#echo(__FILEPATH__)# -xml_parser->__init__ (direct_xml_parser_MonoXML)- (#echo(__LINE__)#)" ]
+		if (debug): self.debug = [ "xml/#echo(__FILEPATH__)# -xml_parser.__init__ (direct_xml_parser_MonoXML)- (#echo(__LINE__)#)" ]
 		else: self.debug = None
 
 		"""
@@ -97,13 +100,13 @@ Connect to the Python container for the XML document
 ----------------------------------------------------------------------------
 		"""
 
-		self.parser = f_parser
+		self.parser = parser
 
-		if (f_time < 0): self.time = time.time ()
-		else: self.time = f_time
+		if (current_time < 0): self.time = time ()
+		else: self.time = current_time
 
-		if (f_timeout_count == None): self.timeout_count = 5
-		else: self.timeout_count = f_timeout_count
+		if (timeout_count == None): self.timeout_count = 5
+		else: self.timeout_count = timeout_count
 	#
 
 	def __del__ (self):
@@ -128,69 +131,69 @@ Destructor del_direct_xml_parser_MonoXML (direct_xml_parser_MonoXML)
 		self.parser = None
 	#
 
-	def xml2array_MonoXML (self,f_xmlreader,f_strict_standard = True):
+	def xml2array_MonoXML (self,XmlNodeReader,strict_standard = True):
 	#
 		"""
 Adds the result of an expat parsing operation to the defined XML instance if
 the parser completed its work.
 
-@param  f_xmlreader XmlNodeReader object
-@param  f_strict_standard Be standard conform
-@return (array) Multi-dimensional XML tree
+@param  XmlNodeReader XmlNodeReader object
+@param  strict_standard Be standard conform
+@return (dict) Multi-dimensional XML tree
 @since  v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->xml2array_MonoXML (+f_xnkreader,+f_strict_standard)- (#echo(__LINE__)#)")
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.xml2array_MonoXML (XmlNodeReader,strict_standard)- (#echo(__LINE__)#)")
 		f_return = { }
 
-		if (hasattr (f_xmlreader,"Read")):
+		if (hasattr (XmlNodeReader,"Read")):
 		#
 			f_continue_check = True
 			f_timeout_time = (self.time + self.timeout_count)
 			self.parser.set ({ })
 
-			while ((f_continue_check) and (f_xmlreader.NodeType != XmlNodeType.Element) and (f_timeout_time > (time.time ()))): f_continue_check = f_xmlreader.Read ()
+			while ((f_continue_check) and (XmlNodeReader.NodeType != XmlNodeType.Element) and (f_timeout_time > (time ()))): f_continue_check = XmlNodeReader.Read ()
 
-			f_xmlreader_array = self.xml2array_XMLReader_walker (f_xmlreader,f_strict_standard)
-			f_xmlreader.Close ()
+			f_monoxml_dict = self.xml2array_MonoXML_walker (XmlNodeReader,strict_standard)
+			XmlNodeReader.Close ()
 
-			if (type (f_xmlreader_array) == dict): f_continue_check = self.xml2array_XMLReader_array_walker (f_xmlreader_array,f_strict_standard)
+			if (type (f_monoxml_dict) == dict): f_continue_check = self.xml2array_MonoXML_array_walker (f_monoxml_dict,strict_standard)
 			if (f_continue_check): f_return = self.parser.get ()
 		#
 
 		return f_return
 	#
 
-	def xml2array_XMLReader_array_walker (self,f_data,f_strict_standard = True):
+	def xml2array_MonoXML_array_walker (self,data_dict,strict_standard = True):
 	#
 		"""
-Imports a pre-parsed XML array into the given parser instance.
+Imports a pre-parsed XML dictionary into the given parser instance.
 
-@param  f_data Result array of a "xml2array_XMLReader_walker ()"
-@param  f_strict_standard Be standard conform
-@return (boolean) True on success
+@param  data_dict Result dictionary of a "xml2array_MonoXML_walker ()"
+@param  strict_standard Be standard conform
+@return (bool) True on success
 @since  v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_array_walker (+f_data,+f_strict_standard)- (#echo(__LINE__)#)")
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.xml2array_MonoXML_array_walker (data_dict,strict_standard)- (#echo(__LINE__)#)")
 		f_return = False
 
-		if (type (f_data) == dict):
+		if (type (data_dict) == dict):
 		#
-			if ((len (f_data['value']) > 0) or (len (f_data['attributes']) > 0) or (len (f_data['children']) > 0)):
+			if ((len (data_dict['value']) > 0) or (len (data_dict['attributes']) > 0) or (len (data_dict['children']) > 0)):
 			#
-				if ((not f_strict_standard) and ("value" in f_data['attributes']) and (len (f_data['value']) < 1)):
+				if ((not strict_standard) and ("value" in data_dict['attributes']) and (len (data_dict['value']) < 1)):
 				#
-					f_data['value'] = f_data['attributes']['value']
-					del (f_data['attributes']['value'])
+					data_dict['value'] = data_dict['attributes']['value']
+					del (data_dict['attributes']['value'])
 				#
 
-				self.parser.node_add (f_data['node_path'],f_data['value'],f_data['attributes'])
+				self.parser.node_add (data_dict['node_path'],data_dict['value'],data_dict['attributes'])
 			#
 
-			if (len (f_data['children']) > 0):
+			if (len (data_dict['children']) > 0):
 			#
-				for f_child_array in f_data['children']: self.xml2array_XMLReader_array_walker (f_child_array,f_strict_standard)
+				for f_child_dict in data_dict['children']: self.xml2array_MonoXML_array_walker (f_child_dict,strict_standard)
 			#
 
 			f_return = True
@@ -199,81 +202,84 @@ Imports a pre-parsed XML array into the given parser instance.
 		return f_return
 	#
 
-	def xml2array_XMLReader_merged (self,f_xmlreader):
+	def xml2array_MonoXML_merged (self,XmlNodeReader):
 	#
 		"""
-Converts XML data into a merged array ... using the
+Converts XML data into a merged dictionary ... using the
 "simplexml_load_string ()" result.
 
-@param  f_xmlreader SimpleXMLElement object
-@return (array) Merged XML tree
+@param  XmlNodeReader XmlNodeReader object
+@return (dict) Merged XML tree
 @since  v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_merged (+f_xmlreader)- (#echo(__LINE__)#)")
+		global _unicode_object
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.xml2array_MonoXML_merged (XmlNodeReader)- (#echo(__LINE__)#)")
+
 		f_return = False
 
-		if (hasattr (f_xmlreader,"Read")):
+		if (hasattr (XmlNodeReader,"Read")):
 		#
 			f_node_change_check = False
 			f_continue_check =True
 			f_depth = 0
 			f_node_path = ""
-			f_node_path_array = [ ]
-			f_nodes_array = { }
+			f_node_path_list = [ ]
+			f_nodes_dict = { }
 			f_read_check = True
 			f_timeout_time = (self.time + self.timeout_count)
 
-			while ((f_continue_check) and (f_timeout_time > (time.time ()))):
+			while ((f_continue_check) and (f_timeout_time > (time ()))):
 			#
-				if (f_xmlreader.NodeType == XmlNodeType.CDATA):
+				if (XmlNodeReader.NodeType == XmlNodeType.CDATA):
 				#
-					if (f_node_path in f_nodes_array):
+					if (f_node_path in f_nodes_dict):
 					#
-						if (("xml:space" in f_nodes_array[f_node_path]['attributes']) and (f_nodes_array[f_node_path]['attributes']['xml:space'] == "preserve")): f_nodes_array[f_node_path]['value'] += f_xmlreader.Value
-						else: f_nodes_array[f_node_path]['value'] += f_xmlreader.Value.strip ()
+						if (("xml:space" in f_nodes_dict[f_node_path]['attributes']) and (f_nodes_dict[f_node_path]['attributes']['xml:space'] == "preserve")): f_nodes_dict[f_node_path]['value'] += XmlNodeReader.Value
+						else: f_nodes_dict[f_node_path]['value'] += XmlNodeReader.Value.strip ()
 				#
-				elif (f_xmlreader.NodeType == XmlNodeType.Element):
+				elif (XmlNodeReader.NodeType == XmlNodeType.Element):
 				#
-					f_attributes_array = { }
-					f_node_name = f_xmlreader.Name.lower ()
+					f_attributes_dict = { }
+					f_node_name = XmlNodeReader.Name.lower ()
 					if (f_node_name.startswith ("digitstart__")): f_node_name = f_node_name[14:]
 
-					if (f_xmlreader.HasAttributes):
+					if (XmlNodeReader.HasAttributes):
 					#
-						while (f_xmlreader.MoveToNextAttribute () and (f_timeout_time > (time.time ()))):
+						while (XmlNodeReader.MoveToNextAttribute () and (f_timeout_time > (time ()))):
 						#
-							f_attribute_name = f_xmlreader.Name.lower ()
+							f_attribute_name = XmlNodeReader.Name.lower ()
+							if (type (f_attribute_name) == _unicode_object['type']): f_attribute_name = _unicode_object['str'] (f_attribute_name,"utf-8")
 
-							if (f_attribute_name.startswith ("xmlns:")): f_attributes_array["xmlns:%s" % f_attribute_name[6:]] = f_xmlreader.Value
-							elif (f_attribute_name == "xml:space"): f_attributes_array['xml:space'] = f_xmlreader.Value.lower ()
-							else: f_attributes_array[f_attribute_name] = f_xmlreader.Value
+							if (f_attribute_name.startswith ("xmlns:")): f_attributes_dict[("xmlns:{0}".format (f_attribute_name[6:]))] = XmlNodeReader.Value
+							elif (f_attribute_name == "xml:space"): f_attributes_dict['xml:space'] = XmlNodeReader.Value.lower ()
+							else: f_attributes_dict[f_attribute_name] = XmlNodeReader.Value
 						#
 
-						f_xmlreader.MoveToElement ()
+						XmlNodeReader.MoveToElement ()
 					#
 
-					f_node_path_array.append (f_node_name)
-					f_node_path = "_".join (f_node_path_array)
-					f_nodes_array[f_node_path] = { "tag": f_node_name,"level": (f_xmlreader.Depth + 1),"value": None,"attributes": f_attributes_array }
+					f_node_path_list.append (f_node_name)
+					f_node_path = "_".join (f_node_path_list)
+					f_nodes_dict[f_node_path] = { "tag": f_node_name,"level": (XmlNodeReader.Depth + 1),"value": None,"attributes": f_attributes_dict }
 
-					f_depth = f_xmlreader.Depth
-					f_continue_check = f_xmlreader.Read ()
+					f_depth = XmlNodeReader.Depth
+					f_continue_check = XmlNodeReader.Read ()
 					f_node_change_check = True
 					f_read_check = False
 				#
-				elif (f_xmlreader.NodeType == XmlNodeType.EndElement):
+				elif (XmlNodeReader.NodeType == XmlNodeType.EndElement):
 				#
-					f_continue_check = f_xmlreader.Read ()
+					f_continue_check = XmlNodeReader.Read ()
 					f_node_change_check = True
 					f_read_check = False
 				#
-				elif (f_xmlreader.NodeType == XmlNodeType.Text):
+				elif (XmlNodeReader.NodeType == XmlNodeType.Text):
 				#
-					if (f_node_path in f_nodes_array):
+					if (f_node_path in f_nodes_dict):
 					#
-						if (("xml:space" in f_nodes_array[f_node_path]['attributes']) and (f_nodes_array[f_node_path]['attributes']['xml:space'] == "preserve")): f_nodes_array[f_node_path]['value'] += f_xmlreader.Value
-						else: f_nodes_array[f_node_path]['value'] += f_xmlreader.Value.strip ()
+						if (("xml:space" in f_nodes_dict[f_node_path]['attributes']) and (f_nodes_dict[f_node_path]['attributes']['xml:space'] == "preserve")): f_nodes_dict[f_node_path]['value'] += XmlNodeReader.Value
+						else: f_nodes_dict[f_node_path]['value'] += XmlNodeReader.Value.strip ()
 					#
 				#
 
@@ -281,159 +287,168 @@ Converts XML data into a merged array ... using the
 				#
 					f_node_change_check = False
 
-					if (f_node_path in f_nodes_array[f_node_path]):
+					if (f_node_path in f_nodes_dict[f_node_path]):
 					#
-						if (("value" in f_nodes_array[f_node_path]['attributes']) and (len (f_nodes_array[f_node_path]['value']) < 1)):
+						if (("value" in f_nodes_dict[f_node_path]['attributes']) and (len (f_nodes_dict[f_node_path]['value']) < 1)):
 						#
-							f_nodes_array[f_node_path]['value'] = f_nodes_array[f_node_path]['attributes']['value']
-							del (f_nodes_array[f_node_path]['attributes']['value'])
+							f_nodes_dict[f_node_path]['value'] = f_nodes_dict[f_node_path]['attributes']['value']
+							del (f_nodes_dict[f_node_path]['attributes']['value'])
 						#
 
 						if (f_node_path in f_return):
 						#
 							if ("tag" in f_return[f_node_path]):
 							#
-								f_node_packed_array = f_return[f_node_path].copy ()
-								f_return[f_node_path] = [ f_node_packed_array ]
-								f_node_packed_array = None
+								f_node_packed_dict = f_return[f_node_path].copy ()
+								f_return[f_node_path] = [ f_node_packed_dict ]
+								f_node_packed_dict = None
 							#
 
-							f_return[f_node_path].append (f_nodes_array[f_node_path])
+							f_return[f_node_path].append (f_nodes_dict[f_node_path])
 						#
-						else: f_return[f_node_path] = f_nodes_array[f_node_path]
+						else: f_return[f_node_path] = f_nodes_dict[f_node_path]
 
-						del (f_nodes_array[f_node_path])
+						del (f_nodes_dict[f_node_path])
 					#
 
-					f_depth = f_xmlreader.Depth
-					f_node_path_array.pop ()
-					f_node_path = "_".join (f_node_path_array)
+					f_depth = XmlNodeReader.Depth
+					f_node_path_list.pop ()
+					f_node_path = "_".join (f_node_path_list)
 					f_read_check = False
 				#
-				elif (f_xmlreader.Depth < f_depth):
+				elif (XmlNodeReader.Depth < f_depth):
 				#
-					if (f_node_path in f_nodes_array): del (f_nodes_array[f_node_path])
+					if (f_node_path in f_nodes_dict): del (f_nodes_dict[f_node_path])
 
-					f_depth = f_xmlreader.Depth
-					f_node_path_array.pop ()
-					f_node_path = "_".join (f_node_path_array)
+					f_depth = XmlNodeReader.Depth
+					f_node_path_list.pop ()
+					f_node_path = "_".join (f_node_path_list)
 				#
 
 				if (f_read_check):
 				#
-					if (f_continue_check): f_continue_check = f_xmlreader.Read ()
+					if (f_continue_check): f_continue_check = XmlNodeReader.Read ()
 				#
 				else: f_read_check = True
 			#
 
-			f_xmlreader.Close ()
+			XmlNodeReader.Close ()
 		#
 
 		return f_return
 	#
 
-	def xml2array_XMLReader_walker (self,f_xmlreader,f_strict_standard = True,f_node_path = "",f_xml_level = 0):
+	def xml2array_MonoXML_walker (self,XmlNodeReader,strict_standard = True,node_path = "",xml_level = 0):
 	#
 		"""
-Converts XML data into a multi-dimensional array using the recursive
+Converts XML data into a multi-dimensional dictionary using the recursive
 algorithm.
 
-@param  f_xmlreader XmlNodeReader object
-@param  f_strict_standard Be standard conform
-@param  f_node_path Old node path (for recursive use only)
-@param  f_xml_level Current XML depth
-@return (mixed) XML node array on success; false on error
+@param  XmlNodeReader XmlNodeReader object
+@param  strict_standard Be standard conform
+@param  node_path Old node path (for recursive use only)
+@param  xml_level Current XML depth
+@return (mixed) XML node dictionary on success; false on error
 @since  v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_walker (+f_xmlreader,+f_strict_standard,%s,%i)- (#echo(__LINE__)#)" % ( f_node_path,f_xml_level ))
+		global _unicode_object
+		if (type (node_path) == _unicode_object['type']): node_path = _unicode_object['str'] (node_path,"utf-8")
+
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.xml2array_MonoXML_walker (XmlNodeReader,strict_standard,{0},{1:d})- (#echo(__LINE__)#)".format (node_path,xml_level))
 		f_return = False
 
-		if (hasattr (f_xmlreader,"Read")):
+		if (hasattr (XmlNodeReader,"Read")):
 		#
-			f_attributes_array = { }
+			f_attributes_dict = { }
 			f_continue_check = False
 			f_node_content = ""
-			f_nodes_array = [ ]
+			f_nodes_list = [ ]
 			f_preserve_check = False
 			f_read_check = True
 			f_timeout_time = (self.time + self.timeout_count)
 
-			while ((not f_continue_check) and (f_read_check) and (f_timeout_time > (time.time ()))):
+			while ((not f_continue_check) and (f_read_check) and (f_timeout_time > (time ()))):
 			#
-				if (f_xmlreader.NodeType == XmlNodeType.Element):
+				if (XmlNodeReader.NodeType == XmlNodeType.Element):
 				#
-					if (f_strict_standard): f_node_name = f_xmlreader.Name
+					if (strict_standard):
+					#
+						f_node_name = XmlNodeReader.Name
+						if (type (f_node_name) == _unicode_object['type']): f_node_name = _unicode_object['str'] (f_node_name,"utf-8")
+					#
 					else:
 					#
-						f_node_name = f_xmlreader.Name.lower ()
+						f_node_name = XmlNodeReader.Name.lower ()
+						if (type (f_node_name) == _unicode_object['type']): f_node_name = _unicode_object['str'] (f_node_name,"utf-8")
 						if (f_node_name.startswith ("digitstart__")): f_node_name = f_node_name[14:]
 					#
 
-					if (f_xmlreader.HasAttributes):
+					if (XmlNodeReader.HasAttributes):
 					#
-						while (f_xmlreader.MoveToNextAttribute () and (f_timeout_time > (time.time ()))):
+						while (XmlNodeReader.MoveToNextAttribute () and (f_timeout_time > (time ()))):
 						#
-							f_attribute_name = f_xmlreader.Name.lower ()
+							f_attribute_name = XmlNodeReader.Name.lower ()
+							if (type (f_attribute_name) == _unicode_object['type']): f_attribute_name = _unicode_object['str'] (f_attribute_name,"utf-8")
 
-							if (f_attribute_name.startswith ("xmlns:")): f_attributes_array["xmlns:%s" % f_attribute_name[6:]] = f_xmlreader.Value
-							elif (f_attribute_name == "xml:space"): f_attributes_array['xml:space'] = f_xmlreader.Value.lower ()
-							elif (not f_strict_standard): f_attributes_array[f_attribute_name] = f_xmlreader.Value
-							else: f_attributes_array[f_xmlreader.Name] = f_xmlreader.Value
+							if (f_attribute_name.startswith ("xmlns:")): f_attributes_dict[("xmlns:{0}".format (f_attribute_name[6:]))] = XmlNodeReader.Value
+							elif (f_attribute_name == "xml:space"): f_attributes_dict['xml:space'] = XmlNodeReader.Value.lower ()
+							elif (not strict_standard): f_attributes_dict[f_attribute_name] = XmlNodeReader.Value
+							else: f_attributes_dict[XmlNodeReader.Name] = XmlNodeReader.Value
 						#
 
-						f_xmlreader.MoveToElement ()
+						XmlNodeReader.MoveToElement ()
 					#
 
 					f_continue_check = True
 				#
 
-				f_read_check = f_xmlreader.Read ()
+				f_read_check = XmlNodeReader.Read ()
 			#
 
 			if (f_continue_check):
 			#
-				if (len (f_node_path) > 0): f_node_path = "%s %s" % ( f_node_path,f_node_name )
-				else: f_node_path = f_node_name
+				if (len (node_path) > 0): node_path = "{0} {1}".format (node_path,f_node_name)
+				else: node_path = f_node_name
 			#
 
-			while ((f_continue_check) and (f_timeout_time > (time.time ()))):
+			while ((f_continue_check) and (f_timeout_time > (time ()))):
 			#
-				if (f_xml_level < f_xmlreader.Depth):
+				if (xml_level < XmlNodeReader.Depth):
 				#
-					if (f_xmlreader.NodeType == XmlNodeType.CDATA):
+					if (XmlNodeReader.NodeType == XmlNodeType.CDATA):
 					#
-						if (f_preserve_check): f_node_content += f_xmlreader.Value
-						else: f_node_content += f_xmlreader.Value.strip ()
+						if (f_preserve_check): f_node_content += XmlNodeReader.Value
+						else: f_node_content += XmlNodeReader.Value.strip ()
 					#
-					elif (f_xmlreader.NodeType == XmlNodeType.Element):
+					elif (XmlNodeReader.NodeType == XmlNodeType.Element):
 					#
-						f_nodes_array.append (self.xml2array_XMLReader_walker (f_xmlreader,f_strict_standard,f_node_path,f_xmlreader.Depth))
+						f_nodes_list.append (self.xml2array_MonoXML_walker (XmlNodeReader,strict_standard,node_path,XmlNodeReader.Depth))
 						f_read_check = False
 					#
-					elif (f_xmlreader.NodeType == XmlNodeType.EndElement):
+					elif (XmlNodeReader.NodeType == XmlNodeType.EndElement):
 					#
 						f_read_check = False
-						f_xmlreader.Read ()
+						XmlNodeReader.Read ()
 					#
-					elif (f_xmlreader.NodeType == XmlNodeType.Text):
+					elif (XmlNodeReader.NodeType == XmlNodeType.Text):
 					#
-						if (f_preserve_check): f_node_content += f_xmlreader.Value
-						else: f_node_content += f_xmlreader.Value.strip ()
+						if (f_preserve_check): f_node_content += XmlNodeReader.Value
+						else: f_node_content += XmlNodeReader.Value.strip ()
 					#
-					elif ((f_preserve_check) and ((f_xmlreader.NodeType == XmlNodeType.Whitespace) or (f_xmlreader.NodeType == XmlNodeType.SignificantWhitespace))): f_node_content += f_xmlreader.Value
+					elif ((f_preserve_check) and ((XmlNodeReader.NodeType == XmlNodeType.Whitespace) or (XmlNodeReader.NodeType == XmlNodeType.SignificantWhitespace))): f_node_content += XmlNodeReader.Value
 
 					if (f_read_check):
 					#
-						if (f_continue_check): f_continue_check = f_xmlreader.Read ()
-						else: f_xmlreader.Read ()
+						if (f_continue_check): f_continue_check = XmlNodeReader.Read ()
+						else: XmlNodeReader.Read ()
 					#
 					else: f_read_check = True
 				#
 				else: f_continue_check = False
 			#
 
-			f_return = { "node_path": f_node_path,"value": f_node_content,"attributes": f_attributes_array,"children": f_nodes_array }
+			f_return = { "node_path": node_path,"value": f_node_content,"attributes": f_attributes_dict,"children": f_nodes_list }
 		#
 
 		return f_return

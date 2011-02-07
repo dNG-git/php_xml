@@ -1,6 +1,22 @@
 # -*- coding: utf-8 -*-
 ##j## BOF
 
+"""
+XML (Extensible Markup Language) is the easiest way to use a descriptive
+language for controlling applications locally and world wide.
+
+@internal   We are using epydoc (JavaDoc style) to automate the
+            documentation process for creating the Developer's Manual.
+            Use the following line to ensure 76 character sizes:
+----------------------------------------------------------------------------
+@author     direct Netware Group
+@copyright  (C) direct Netware Group - All rights reserved
+@package    ext_core
+@subpackage xml
+@since      v0.1.00
+@license    http://www.direct-netware.de/redirect.php?licenses;w3c
+            W3C (R) Software License
+"""
 """n// NOTE
 ----------------------------------------------------------------------------
 Extended Core: XML
@@ -19,22 +35,9 @@ http://www.direct-netware.de/redirect.php?licenses;w3c
 extCore_xml/#echo(__FILEPATH__)#
 ----------------------------------------------------------------------------
 NOTE_END //n"""
-"""
-XML (Extensible Markup Language) is the easiest way to use a descriptive
-language for controlling applications locally and world wide.
 
-@internal   We are using epydoc (JavaDoc style) to automate the
-            documentation process for creating the Developer's Manual.
-            Use the following line to ensure 76 character sizes:
-----------------------------------------------------------------------------
-@author     direct Netware Group
-@copyright  (C) direct Netware Group - All rights reserved
-@package    ext_core
-@subpackage xml
-@since      v0.1.00
-@license    http://www.direct-netware.de/redirect.php?licenses;w3c
-            W3C (R) Software License
-"""
+try: _unicode_object = { "type": unicode,"str": unicode.encode }
+except: _unicode_object = { "type": bytes,"str": bytes.decode }
 
 class direct_xml_parser_expat (object):
 #
@@ -62,7 +65,7 @@ Debug message container
 	"""
 Current node path of the parser
 	"""
-	node_path_array = [ ]
+	node_path_list = [ ]
 	"""
 Current path as an array of node tags
 	"""
@@ -101,17 +104,17 @@ Construct the class
 ----------------------------------------------------------------------------
 	"""
 
-	def __init__ (self,f_parser,f_debug = False):
+	def __init__ (self,parser,debug = False):
 	#
 		"""
 Constructor __init__ (direct_xml_parser_expat)
 
-@param f_parser Container for the XML document
-@param f_debug Debug flag
+@param parser Container for the XML document
+@param debug Debug flag
 @since v0.1.00
 		"""
 
-		if (f_debug): self.debug = [ "xml/#echo(__FILEPATH__)# -xml_parser->__init__ (direct_xml_parser_expat)- (#echo(__LINE__)#)" ]
+		if (debug): self.debug = [ "xml/#echo(__FILEPATH__)# -xml_parser.__init__ (direct_xml_parser_expat)- (#echo(__LINE__)#)" ]
 		else: self.debug = None
 
 		"""
@@ -121,8 +124,8 @@ Connect to the Python container for the XML document
 		"""
 
 		self.data_merged_mode = False
-		self.node_path_array = [ ]
-		self.parser = f_parser
+		self.node_path_list = [ ]
+		self.parser = parser
 		self.parser_active = False
 		self.parser_cache = { }
 		self.parser_strict_standard = True
@@ -150,44 +153,50 @@ Destructor del_direct_xml_parser_expat (direct_xml_parser_expat)
 		self.parser = None
 	#
 
-	def define_mode (self,f_mode = ""):
+	def define_mode (self,mode = ""):
 	#
 		"""
 Define the parser mode ("tree" or "merged").
 
-@param  f_mode Mode to select
-@return (boolean) True if parser is set to merged mode
+@param  mode Mode to select
+@return (bool) True if parser is set to merged mode
 @since  v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->define_mode (%s)- (#echo(__LINE__)#)" % f_mode)
+		global _unicode_object
+		if (type (mode) == _unicode_object['type']): mode = _unicode_object['str'] (mode,"utf-8")
 
-		f_type = type (f_mode)
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.define_mode ({0})- (#echo(__LINE__)#)".format (mode))
 
-		if ((not self.parser_active) and ((f_type == str) or (f_type == unicode))):
+		f_type = type (mode)
+
+		if ((not self.parser_active) and (type (mode) == str)):
 		#
-			if (f_mode == "merged"): self.data_merged_mode = True
+			if (mode == "merged"): self.data_merged_mode = True
 			else: self.data_merged_mode = False
 		#
 
 		return self.data_merged_mode
 	#
 
-	def define_strict_standard (self,f_strict_standard):
+	def define_strict_standard (self,strict_standard):
 	#
 		"""
 Changes the parser mode regarding being strict standard conform.
 
-@param  f_strict_standard Be standard conform
-@return (boolean) Accepted state
+@param  strict_standard Be standard conform
+@return (bool) Accepted state
 @since  v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->define_strict_standard (+f_strict_standard)- (#echo(__LINE__)#)")
-		f_type = type (f_strict_standard)
+		global _unicode_object
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.define_strict_standard (strict_standard)- (#echo(__LINE__)#)")
 
-		if (((f_type == bool) or (f_type == str) or (f_type == unicode)) and (f_strict_standard)): self.parser_strict_standard = True
-		elif ((f_strict_standard == None) and (not self.parser_strict_standard)): self.parser_strict_standard = True
+		if (type (strict_standard) == _unicode_object['type']): strict_standard = _unicode_object['str'] (strict_standard,"utf-8")
+		f_type = type (strict_standard)
+
+		if (((f_type == bool) or (f_type == str)) and (strict_standard)): self.parser_strict_standard = True
+		elif ((strict_standard == None) and (not self.parser_strict_standard)): self.parser_strict_standard = True
 		else: self.parser_strict_standard = False
 
 		return self.parser_strict_standard
@@ -206,7 +215,7 @@ required information.
 @since v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->expat_cdata (+data)- (#echo(__LINE__)#)")
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.expat_cdata (data)- (#echo(__LINE__)#)")
 
 		if (self.parser_active):
 		#
@@ -224,16 +233,19 @@ Method to handle "end element" callbacks.
 @since v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->expat_element_end (%s)- (#echo(__LINE__)#)" % name)
+		global _unicode_object
+		if (type (name) == _unicode_object['type']): name = _unicode_object['str'] (name,"utf-8")
+
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.expat_element_end ({0})- (#echo(__LINE__)#)".format (name))
 
 		if (self.parser_active):
 		#
 			f_node_path = self.parser_cache_link[self.node_path]
 
 			del (self.parser_cache_link[self.node_path])
-			self.node_path_array.pop ()
+			self.node_path_list.pop ()
 			self.node_path_depth -= 1
-			self.node_path = " ".join (self.node_path_array)
+			self.node_path = " ".join (self.node_path_list)
 
 			if ("value" in self.parser_cache[f_node_path]):
 			#
@@ -268,11 +280,11 @@ which must distinguish these cases can use the StartCdataSectionHandler,
 EndCdataSectionHandler, and ElementDeclHandler callbacks to collect the
 required information. (Merged XML parser)
 
-@param f_data Character data
+@param data Character data
 @since v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->expat_merged_cdata (+data)- (#echo(__LINE__)#)")
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.expat_merged_cdata (data)- (#echo(__LINE__)#)")
 
 		if (self.parser_active):
 		#
@@ -290,16 +302,19 @@ Method to handle "end element" callbacks. (Merged XML parser)
 @since v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->expat_merged_element_end (%s)- (#echo(__LINE__)#)" % name)
+		global _unicode_object
+		if (type (name) == _unicode_object['type']): name = _unicode_object['str'] (name,"utf-8")
+
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.expat_merged_element_end ({0})- (#echo(__LINE__)#)".format (name))
 
 		if (self.parser_active):
 		#
 			if (self.parser_cache_link[self.node_path] > 0): f_node_pointer = self.parser_cache[self.node_path][self.parser_cache_link[self.node_path]]
 			else: f_node_pointer = self.parser_cache[self.node_path]
 
-			self.node_path_array.pop ()
+			self.node_path_list.pop ()
 			self.node_path_depth -= 1
-			self.node_path = "_".join (self.node_path_array)
+			self.node_path = "_".join (self.node_path_list)
 
 			if ("xml:space" in f_node_pointer['attributes']):
 			#
@@ -331,7 +346,10 @@ Method to handle "start element" callbacks. (Merged XML parser)
 @since v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->expat_merged_element_start (%s,+attributes)- (#echo(__LINE__)#)" % name)
+		global _unicode_object
+		if (type (name) == _unicode_object['type']): name = _unicode_object['str'] (name,"utf-8")
+
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.expat_merged_element_start ({0},attributes)- (#echo(__LINE__)#)".format (name))
 
 		if (not self.parser_active):
 		#
@@ -346,18 +364,19 @@ Method to handle "start element" callbacks. (Merged XML parser)
 
 		if (len (self.node_path) > 0): self.node_path += "_"
 		self.node_path += name
-		self.node_path_array.append (name)
+		self.node_path_list.append (name)
 		self.node_path_depth += 1
 
 		for f_key in attributes:
 		#
+			if (type (f_key) == _unicode_object['type']): f_key = _unicode_object['str'] (f_key,"utf-8")
 			f_key_lowercase = f_key.lower ()
 			f_value = attributes[f_key]
 
 			if (f_key_lowercase.startswith ("xmlns:")):
 			#
-				attributes["xmlns:%s" % f_key[6:]] = f_value
-				if (f_key != "xmlns:%s" % f_key[6:]): del (attributes[f_key])
+				attributes[("xmlns:{0}".format (f_key[6:]))] = f_value
+				if ((f_key != "xmlns:{0}".format (f_key[6:]))): del (attributes[f_key])
 			#
 			elif (f_key_lowercase == "xml:space"):
 			#
@@ -371,18 +390,18 @@ Method to handle "start element" callbacks. (Merged XML parser)
 			#
 		#
 
-		f_node_array = { "tag": name,"level": self.node_path_depth,"value": "","attributes": attributes }
+		f_node_dict = { "tag": name,"level": self.node_path_depth,"value": "","attributes": attributes }
 
 		if (self.node_path in self.parser_cache):
 		#
-			if ("tag" in self.parser_cache[self.node_path]): self.parser_cache[self.node_path] = [ self.parser_cache[self.node_path],f_node_array ]
-			else: self.parser_cache[self.node_path].append (f_node_array)
+			if ("tag" in self.parser_cache[self.node_path]): self.parser_cache[self.node_path] = [ self.parser_cache[self.node_path],f_node_dict ]
+			else: self.parser_cache[self.node_path].append (f_node_dict)
 
 			self.parser_cache_link[self.node_path] += 1
 		#
 		else:
 		#
-			self.parser_cache[self.node_path] = f_node_array
+			self.parser_cache[self.node_path] = f_node_dict
 			self.parser_cache_link[self.node_path] = 0
 		#
 	#
@@ -397,7 +416,10 @@ Method to handle "start element" callbacks.
 @since v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->expat_element_start (%s,+attributes)- (#echo(__LINE__)#)" % name)
+		global _unicode_object
+		if (type (name) == _unicode_object['type']): name = _unicode_object['str'] (name,"utf-8")
+
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.expat_element_start ({0},attributes)- (#echo(__LINE__)#)".format (name))
 
 		if (not self.parser_active):
 		#
@@ -416,18 +438,19 @@ Method to handle "start element" callbacks.
 
 		if (len (self.node_path) > 0): self.node_path += " "
 		self.node_path += name
-		self.node_path_array.append (name)
+		self.node_path_list.append (name)
 		self.node_path_depth += 1
 
 		for f_key in attributes:
 		#
+			if (type (f_key) == _unicode_object['type']): f_key = _unicode_object['str'] (f_key,"utf-8")
 			f_key_lowercase = f_key.lower ()
 			f_value = attributes[f_key]
 
 			if (f_key_lowercase.startswith ("xmlns:")):
 			#
-				attributes["xmlns:%s" % f_key[6:]] = f_value
-				if (f_key != "xmlns:%s" % f_key[6:]): del (attributes[f_key])
+				attributes[("xmlns:{0}".format (f_key[6:]))] = f_value
+				if (f_key != "xmlns:{0}".format (f_key[6:])): del (attributes[f_key])
 			#
 			elif (f_key_lowercase == "xml:space"):
 			#
@@ -452,11 +475,11 @@ Method to handle "start element" callbacks.
 Adds the result of an expat parsing operation to the defined XML instance if
 the parser completed its work.
 
-@return array Multi-dimensional XML tree
+@return (dict) Multi-dimensional XML tree
 @since  v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->xml2array_expat ()- (#echo(__LINE__)#)")
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.xml2array_expat ()- (#echo(__LINE__)#)")
 		f_return = { }
 
 		if ((not self.parser_active) and (type (self.parser_cache) == dict) and (len (self.parser_cache) > 0)):
@@ -465,8 +488,8 @@ the parser completed its work.
 
 			for f_node_key in self.parser_cache:
 			#
-				f_node_array = self.parser_cache[f_node_key]
-				self.parser.node_add (f_node_array['node_path'],f_node_array['value'],f_node_array['attributes'])
+				f_node_dict = self.parser_cache[f_node_key]
+				self.parser.node_add (f_node_dict['node_path'],f_node_dict['value'],f_node_dict['attributes'])
 			#
 
 			self.parser_cache = { }
@@ -482,11 +505,11 @@ the parser completed its work.
 Returns the merged result of an expat parsing operation if the parser
 completed its work.
 
-@return array Merged XML tree
+@return (dict) Merged XML tree
 @since  v0.1.00
 		"""
 
-		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser->xml2array_expat_merged ()- (#echo(__LINE__)#)")
+		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.xml2array_expat_merged ()- (#echo(__LINE__)#)")
 		f_return = { }
 
 		if ((not self.parser_active) and (type (self.parser_cache) == dict) and (len (self.parser_cache) > 0)):
