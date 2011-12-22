@@ -54,7 +54,6 @@ if (!defined ("CLASS_direct_xml_reader")) { $g_continue_check = false; }
 
 if ($g_continue_check)
 {
-//c// direct_xml_writer
 /**
 * This class extends the bridge between PHP and XML to work with XML and
 * create valid documents.
@@ -74,7 +73,6 @@ class direct_xml_writer extends direct_xml_reader
 Extend the class using old and new behavior
 ------------------------------------------------------------------------- */
 
-	//f// direct_xml_writer->__construct () and direct_xml_writer->direct_xml_writer ()
 /**
 	* Constructor (PHP5+) __construct (direct_xml_writer)
 	*
@@ -108,7 +106,6 @@ My parent should be on my side to get the work done
 *\/
 	function direct_xml_writer ($f_charset = "UTF-8",$f_time = -1,$f_timeout_count = 5,$f_ext_xml_path = "",$f_debug = false) { $this->__construct ($f_charset,$f_time,$f_timeout_count,$f_ext_xml_path,$f_debug); }
 :#*/
-	//f// direct_xml_writer->array_import ($f_array,$f_overwrite = false)
 /**
 	* Read and convert a simple multi-dimensional array into our XML tree.
 	*
@@ -134,7 +131,6 @@ My parent should be on my side to get the work done
 		return $f_return;
 	}
 
-	//f// direct_xml_writer->array_import_walker (&$f_array,$f_level = 1)
 /**
 	* Read and convert a single dimension of an array for our XML tree.
 	*
@@ -168,7 +164,6 @@ My parent should be on my side to get the work done
 		return $f_return;
 	}
 
-	//f// direct_xml_writer->cache_export ($f_flush = false,$f_strict_standard = true)
 /**
 	* Convert the cached XML tree into a XML string.
 	*
@@ -192,7 +187,6 @@ My parent should be on my side to get the work done
 		return $f_return;
 	}
 
-	//f// direct_xml_writer->node_cache_pointer ($f_node_path)
 /**
 	* Set the cache pointer to a specific node.
 	*
@@ -228,7 +222,6 @@ My parent should be on my side to get the work done
 		return $f_return;
 	}
 
-	//f// direct_xml_writer->node_change_attributes ($f_node_path,$f_attributes)
 /**
 	* Change the attributes of a specified node. Note: XMLNS updates must be
 	* handled by the calling code.
@@ -251,8 +244,9 @@ My parent should be on my side to get the work done
 
 			if ($f_node_pointer)
 			{
-				if (isset ($f_node_pointer['xml.item'])) { $f_node_pointer =& $f_node_pointer['xml.item']; }
-				$f_node_pointer['attributes'] = $f_attributes;
+				if (isset ($f_node_pointer['xml.item'])) { $f_node_pointer['xml.item']['attributes'] = $f_attributes; }
+				else { $f_node_pointer['attributes'] = $f_attributes; }
+
 				$f_return = true;
 			}
 		}
@@ -260,7 +254,6 @@ My parent should be on my side to get the work done
 		return $f_return;
 	}
 
-	//f// direct_xml_writer->node_change_value ($f_node_path,$f_value)
 /**
 	* Change the value of a specified node.
 	*
@@ -293,7 +286,6 @@ My parent should be on my side to get the work done
 		return $f_return;
 	}
 
-	//f// direct_xml_writer->node_count ($f_node_path)
 /**
 	* Count the occurrence of a specified node.
 	*
@@ -329,17 +321,12 @@ Get the parent node of the target.
 				$f_node_pointer =& $this->data;
 			}
 
-			if (($f_node_pointer)&&(isset ($f_node_pointer[$f_node_name])))
-			{
-				if (isset ($f_node_pointer[$f_node_name]['xml.mtree'])) { $f_return = ((count ($f_node_pointer[$f_node_name])) - 1); }
-				else { $f_return = 1; }
-			}
+			if (($f_node_pointer)&&(isset ($f_node_pointer[$f_node_name]))) { $f_return = (isset ($f_node_pointer[$f_node_name]['xml.mtree']) ? ((count ($f_node_pointer[$f_node_name])) - 1) : 1); }
 		}
 
 		return $f_return;
 	}
 
-	//f// direct_xml_writer->node_get ($f_node_path)
 /**
 	* Read a specified node including all children if applicable.
 	*
@@ -352,7 +339,7 @@ Get the parent node of the target.
 */
 	/*#ifndef(PHP4) */public /* #*/function node_get ($f_node_path,$f_remove_metadata = true)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->node_get ($f_node_path)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->node_get ($f_node_path,+f_remove_metadata)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if (is_string ($f_node_path))
@@ -370,7 +357,6 @@ Get the parent node of the target.
 		return $f_return;
 	}
 
-	//f// direct_xml_writer->node_get_pointer ($f_node_path)
 /**
 	* Returns the pointer to a specific node.
 	*
@@ -385,7 +371,7 @@ Get the parent node of the target.
 
 		if (is_string ($f_node_path))
 		{
-			if ((strlen ($this->data_cache_node))&&(/*#ifndef(PHP4) */stripos ($this->data_cache_node,$f_node_path) === 0/* #*//*#ifdef(PHP4):preg_match ("#^".(preg_quote ($f_node_path,"#"))."#i",$this->data_cache_node):#*/))
+			if ((strlen ($this->data_cache_node))&&(strpos ($f_node_path,$this->data_cache_node) === 0))
 			{
 				$f_node_path = trim (substr ($f_node_path,(strlen ($this->data_cache_node))));
 				$f_node_pointer =& $this->data_cache_pointer;
@@ -436,7 +422,6 @@ Get the parent node of the target.
 		return $f_return;
 	}
 
-	//f// direct_xml_writer->node_remove ($f_node_path)
 /**
 	* Remove a node and all children if applicable.
 	*
@@ -538,7 +523,6 @@ Update the mtree counter or remove it if applicable.
 		return $f_return;
 	}
 
-	//f// direct_xml_writer->ns_get_uri ($f_input)
 /**
 	* Returns the registered namespace (URI) for a given XML NS or node name
 	* containing the registered XML NS.
@@ -552,7 +536,7 @@ Update the mtree counter or remove it if applicable.
 		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->ns_get_uri ($f_input)- (#echo(__LINE__)#)"; }
 		$f_return = "";
 
-		if (preg_match ("#^(\w+):(\w+)$#",$f_input,$f_result_array))
+		if (preg_match ("#^(.+?):(\w+)$#",$f_input,$f_result_array))
 		{
 			if (isset ($this->data_ns[$f_result_array[1]])) { $f_return = $this->data_ns[$f_result_array[1]]; }
 		}

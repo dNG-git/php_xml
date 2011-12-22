@@ -102,7 +102,7 @@ Connect to the Python container for the XML document
 
 		self.parser = parser
 
-		if (current_time < 0): self.time = time ()
+		if (current_time < 0): self.time = -1
 		else: self.time = current_time
 
 		if (timeout_count == None): self.timeout_count = 5
@@ -149,7 +149,10 @@ the parser completed its work.
 		if (hasattr (XmlNodeReader,"Read")):
 		#
 			f_continue_check = True
-			f_timeout_time = (self.time + self.timeout_count)
+
+			if (self.time < 0): f_timeout_time = (time () + self.timeout_count)
+			else: f_timeout_time = (self.time + self.timeout_count)
+
 			self.parser.set ({ })
 
 			while ((f_continue_check) and (XmlNodeReader.NodeType != XmlNodeType.Element) and (f_timeout_time > (time ()))): f_continue_check = XmlNodeReader.Read ()
@@ -227,7 +230,9 @@ Converts XML data into a merged dictionary ... using the
 			f_node_path_list = [ ]
 			f_nodes_dict = { }
 			f_read_check = True
-			f_timeout_time = (self.time + self.timeout_count)
+
+			if (self.time < 0): f_timeout_time = (time () + self.timeout_count)
+			else: f_timeout_time = (self.time + self.timeout_count)
 
 			while ((f_continue_check) and (f_timeout_time > (time ()))):
 			#
@@ -242,7 +247,7 @@ Converts XML data into a merged dictionary ... using the
 				#
 					f_attributes_dict = { }
 					f_node_name = XmlNodeReader.Name.lower ()
-					if (f_node_name.startswith ("digitstart__")): f_node_name = f_node_name[14:]
+					if (f_node_name.startswith ("digitstart__")): f_node_name = f_node_name[12:]
 
 					if (XmlNodeReader.HasAttributes):
 					#
@@ -366,7 +371,9 @@ algorithm.
 			f_nodes_list = [ ]
 			f_preserve_check = False
 			f_read_check = True
-			f_timeout_time = (self.time + self.timeout_count)
+
+			if (self.time < 0): f_timeout_time = (time () + self.timeout_count)
+			else: f_timeout_time = (self.time + self.timeout_count)
 
 			while ((not f_continue_check) and (f_read_check) and (f_timeout_time > (time ()))):
 			#
@@ -381,7 +388,7 @@ algorithm.
 					#
 						f_node_name = XmlNodeReader.Name.lower ()
 						if (type (f_node_name) == _unicode_object['type']): f_node_name = _unicode_object['str'] (f_node_name,"utf-8")
-						if (f_node_name.startswith ("digitstart__")): f_node_name = f_node_name[14:]
+						if (f_node_name.startswith ("digitstart__")): f_node_name = f_node_name[12:]
 					#
 
 					if (XmlNodeReader.HasAttributes):

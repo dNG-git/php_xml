@@ -51,7 +51,6 @@ Testing for required classes
 
 if (!defined ("CLASS_direct_xml_parser_XMLReader"))
 {
-//c// direct_xml_parser_XMLReader
 /**
 * This implementation supports XMLReader for XML parsing.
 *
@@ -90,12 +89,15 @@ class direct_xml_parser_XMLReader
 	* @var integer $timeout_count Retries before timing out
 */
 	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $timeout_count;
+/**
+	* @var boolean $PHP_is_valid True if the "is_valid ()" method is available
+*/
+	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $PHP_is_valid;
 
 /* -------------------------------------------------------------------------
 Construct the class using old and new behavior
 ------------------------------------------------------------------------- */
 
-	//f// direct_xml_parser_XMLReader->__construct (&$f_parser) and direct_xml_parser_XMLReader->direct_xml_parser_XMLReader (&$f_parser)
 /**
 	* Constructor (PHP5+) __construct (direct_xml_parser_XMLReader)
 	*
@@ -157,7 +159,6 @@ $this->node_types = array (
 *\/
 	function direct_xml_parser_XMLReader (&$f_parser,$f_time = -1,$f_timeout_count = 5,$f_debug = false) { $this->__construct ($f_parser,$f_time,$f_timeout_count,$f_debug); }
 :#\n*/
-	//f// direct_xml_parser_XMLReader->__destruct ()
 /**
 	* Destructor (PHP5+) __destruct (direct_xml_parser_XMLReader)
 	*
@@ -165,7 +166,6 @@ $this->node_types = array (
 */
 	/*#ifndef(PHP4) */public /* #*/function __destruct () { $this->parser = NULL; }
 
-	//f// direct_xml_parser_XMLReader->xml2array_XMLReader (&$f_xmlreader,$f_strict_standard = true)
 /**
 	* Converts XML data into a multi-dimensional array ... using the
 	* "simplexml_load_string ()" result.
@@ -180,7 +180,7 @@ $this->node_types = array (
 		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader (+f_xmlreader,+f_strict_standard)- (#echo(__LINE__)#)"; }
 		$f_return = array ();
 
-		if (is_object ($f_xmlreader))
+		if ($this->xml2array_XMLReader_is_valid ($f_xmlreader))
 		{
 			$f_continue_check = true;
 			$f_timeout_time = ($this->time + $this->timeout_count);
@@ -199,7 +199,6 @@ $this->node_types = array (
 		return $f_return;
 	}
 
-	//f// direct_xml_parser_XMLReader->xml2array_XMLReader_array_walker (&$f_data,$f_strict_standard = true)
 /**
 	* Imports a pre-parsed XML array into the given parser instance.
 	*
@@ -238,7 +237,26 @@ $this->node_types = array (
 		return $f_return;
 	}
 
-	//f// direct_xml_parser_XMLReader->xml2array_XMLReader_merged (&$f_xmlreader)
+/**
+	* Imports a pre-parsed XML array into the given parser instance.
+	*
+	* @param  array &$f_data Result array of a "xml2array_XMLReader_walker ()"
+	* @param  boolean $f_strict_standard Be standard conform
+	* @uses   direct_xml_reader::node_add()
+	* @return boolean True on success
+	* @since  v0.1.00
+*/
+	/*#ifndef(PHP4) */protected /* #*/function xml2array_XMLReader_is_valid (&$f_xmlreader)
+	{
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_is_valid (+f_xmlreader)- (#echo(__LINE__)#)"; }
+		$f_return = is_object ($f_xmlreader);
+
+		if (!isset ($this->PHP_is_valid)) { $this->PHP_is_valid = method_exists ($f_xmlreader,"is_valid"); }
+		if (($f_return)&&($this->PHP_is_valid)) { $f_return = $f_xmlreader->is_valid (); }
+
+		return $f_return;
+	}
+
 /**
 	* Converts XML data into a merged array ... using the
 	* "simplexml_load_string ()" result.
@@ -253,7 +271,7 @@ $this->node_types = array (
 		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_merged (+f_xmlreader)- (#echo(__LINE__)#)"; }
 		$f_return = array ();
 
-		if (is_object ($f_xmlreader))
+		if ($this->xml2array_XMLReader_is_valid ($f_xmlreader))
 		{
 			$f_node_change_check = false;
 			$f_continue_check = true;
@@ -297,13 +315,15 @@ $this->node_types = array (
 						}
 					}
 
-					$f_node_path_array[] = $f_node_name;
-					$f_node_path = implode ("_",$f_node_path_array);
-					$f_nodes_array[$f_node_path] = array ("tag" => $f_node_name,"level" => ($f_xmlreader->depth + 1),"value" => "","attributes" => $f_attributes_array);
-
 					$f_depth = $f_xmlreader->depth;
+					$f_node_change_check = $f_xmlreader->isEmptyElement;
+					$f_node_path_array = array_slice ($f_node_path_array,0,$f_depth);
+					$f_node_path_array[] = $f_node_name;
+
+					$f_node_path = implode ("_",$f_node_path_array);
+					$f_nodes_array[$f_node_path] = array ("tag" => $f_node_name,"level" => ($f_depth + 1),"value" => "","attributes" => $f_attributes_array);
+
 					$f_continue_check = $f_xmlreader->read ();
-					$f_node_change_check = true;
 					$f_read_check = false;
 
 					break 1;
@@ -380,7 +400,6 @@ $this->node_types = array (
 		return $f_return;
 	}
 
-	//f// direct_xml_parser_XMLReader->xml2array_XMLReader_walker (&$f_xmlreader,$f_strict_standard = true,$f_node_path = "",$f_xml_level = 0)
 /**
 	* Converts XML data into a multi-dimensional array using the recursive
 	* algorithm.
@@ -408,7 +427,7 @@ $this->node_types = array (
 			$f_read_check = true;
 			$f_timeout_time = ($this->time + $this->timeout_count);
 
-			while ((!$f_continue_check)&&($f_timeout_time > (time ())))
+			while ((!$f_continue_check)&&($f_read_check)&&($f_timeout_time > (time ())))
 			{
 				if ($f_xmlreader->nodeType == $this->node_types['element'])
 				{
@@ -445,7 +464,7 @@ $this->node_types = array (
 					$f_continue_check = true;
 				}
 
-				$f_xmlreader->read ();
+				$f_read_check = $f_xmlreader->read ();
 			}
 
 			if ($f_continue_check)
@@ -474,7 +493,7 @@ $this->node_types = array (
 					case $this->node_types['element_end']:
 					{
 						$f_read_check = false;
-						$f_xmlreader->read ();
+						if (!$f_xmlreader->read ()) { $f_continue_check = false; }
 						break 1;
 					}
 					case $this->node_types['text']:
@@ -491,7 +510,7 @@ $this->node_types = array (
 					if ($f_read_check)
 					{
 						if ($f_continue_check) { $f_continue_check = $f_xmlreader->read (); }
-						else { $f_xmlreader->read (); }
+						elseif (!$f_xmlreader->read ()) { $f_continue_check = false; }
 					}
 					else { $f_read_check = true; }
 				}

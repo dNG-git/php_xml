@@ -51,7 +51,6 @@ Testing for required classes
 
 if (!defined ("CLASS_direct_xml_parser_expat"))
 {
-//c// direct_xml_parser_expat
 /**
 * This implementation supports expat for XML parsing.
 *
@@ -121,7 +120,6 @@ class direct_xml_parser_expat
 Construct the class using old and new behavior
 ------------------------------------------------------------------------- */
 
-	//f// direct_xml_parser_expat->__construct (&$f_parser) and direct_xml_parser_expat->direct_xml_parser_expat (&$f_parser)
 /**
 	* Constructor (PHP5+) __construct (direct_xml_parser_expat)
 	*
@@ -154,7 +152,6 @@ Connect to the PHP container for the XML document
 *\/
 	function direct_xml_parser_expat (&$f_parser,$f_debug = false) { $this->__construct ($f_parser,$f_debug); }
 :#\n*/
-	//f// direct_xml_parser_expat->__destruct ()
 /**
 	* Destructor (PHP5+) __destruct (direct_xml_parser_expat)
 	*
@@ -162,7 +159,6 @@ Connect to the PHP container for the XML document
 */
 	/*#ifndef(PHP4) */public /* #*/function __destruct () { $this->parser = NULL; }
 
-	//f// direct_xml_parser_expat->define_mode ($f_mode)
 /**
 	* Define the parser mode ("tree" or "merged").
 	*
@@ -178,7 +174,6 @@ Connect to the PHP container for the XML document
 		return $this->data_merged_mode;
 	}
 
-	//f// direct_xml_parser_expat->define_strict_standard ($f_strict_standard)
 /**
 	* Changes the parser mode regarding being strict standard conform.
 	*
@@ -200,7 +195,6 @@ Connect to the PHP container for the XML document
 		return $this->parser_strict_standard;
 	}
 
-	//f// direct_xml_parser_expat->expat_cdata ($f_parser,$f_data)
 /**
 	* php.net: Character data handler is called for every piece of a text in the
 	* XML document. It can be called multiple times inside each fragment (e.g.
@@ -221,7 +215,6 @@ Connect to the PHP container for the XML document
 		}
 	}
 
-	//f// direct_xml_parser_expat->expat_element_end ($f_parser,$f_tag)
 /**
 	* Method to handle "end element" callbacks.
 	*
@@ -266,7 +259,6 @@ Connect to the PHP container for the XML document
 		}
 	}
 
-	//f// direct_xml_parser_expat->expat_merged_cdata ($f_parser,$f_data)
 /**
 	* php.net: Character data handler is called for every piece of a text in the
 	* XML document. It can be called multiple times inside each fragment (e.g.
@@ -287,7 +279,6 @@ Connect to the PHP container for the XML document
 		}
 	}
 
-	//f// direct_xml_parser_expat->expat_merged_element_end ($f_parser,$f_tag)
 /**
 	* Method to handle "end element" callbacks. (Merged XML parser)
 	*
@@ -329,7 +320,6 @@ Connect to the PHP container for the XML document
 		}
 	}
 
-	//f// direct_xml_parser_expat->expat_merged_element_start ($f_parser,$f_tag,$f_attributes)
 /**
 	* Method to handle "start element" callbacks. (Merged XML parser)
 	*
@@ -396,7 +386,6 @@ Connect to the PHP container for the XML document
 		}
 	}
 
-	//f// direct_xml_parser_expat->expat_element_start ($f_parser,$f_tag,$f_attributes)
 /**
 	* Method to handle "start element" callbacks.
 	*
@@ -456,7 +445,6 @@ Connect to the PHP container for the XML document
 		$this->parser_cache_counter++;
 	}
 
-	//f// direct_xml_parser_expat->xml2array_expat ()
 /**
 	* Adds the result of an expat parsing operation to the defined XML instance
 	* if the parser completed its work.
@@ -483,7 +471,6 @@ Connect to the PHP container for the XML document
 		return $f_return;
 	}
 
-	//f// direct_xml_parser_expat->xml2array_expat_merged ()
 /**
 	* Returns the merged result of an expat parsing operation if the parser
 	* completed its work.

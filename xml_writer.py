@@ -240,8 +240,9 @@ handled by the calling code.
 
 			if (type (f_node_pointer) == dict):
 			#
-				if ("xml.item" in f_node_pointer): f_node_pointer = f_node_pointer['xml.item']
-				f_node_pointer['attributes'] = attributes
+				if ("xml.item" in f_node_pointer): f_node_pointer['xml.item']['attributes'] = attributes
+				else: f_node_pointer['attributes'] = attributes
+
 				f_return = True
 			#
 		#
@@ -384,12 +385,12 @@ Returns the pointer to a specific node.
 
 		if (type (node_path)):
 		#
-			if ((len (self.data_cache_node) == 0) or (re.compile("{0}".format (re.escape (self.data_cache_node)),re.I).match (node_path) == None)): f_node_pointer = self.data
-			else:
+			if ((len (self.data_cache_node)) and (node_path.find (self.data_cache_node) == 0)):
 			#
 				node_path = node_path[len (self.data_cache_node):].strip ()
 				f_node_pointer = self.data_cache_pointer
 			#
+			else: f_node_pointer = self.data
 
 			f_continue_check = True
 
@@ -476,7 +477,7 @@ Get the parent node of the target.
 				f_node_path = " ".join (f_node_path_list)
 				f_node_pointer = self.node_get_pointer (f_node_path)
 
-				if ((len (self.data_cache_node)) and (self.data_cache_node.find (f_node_path) == 0)):
+				if ((len (self.data_cache_node)) and (f_node_path.find (self.data_cache_node) == 0)):
 				#
 					self.data_cache_node = "";
 					self.data_cache_pointer = self.data
@@ -580,7 +581,7 @@ containing the registered XML NS.
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_handler.ns_get_uri ({0})- (#echo(__LINE__)#)".format (data))
 		f_return = ""
 
-		f_result_object = re.compile("^(\\w+):(\\w+)$").search (data)
+		f_result_object = re.compile("^(.+?):(\\w+)$").search (data)
 
 		if (f_result_object != None):
 		#
