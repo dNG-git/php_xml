@@ -37,6 +37,10 @@ NOTE_END //n*/
 * @license    http://www.direct-netware.de/redirect.php?licenses;w3c
 *             W3C (R) Software License
 */
+/*#ifdef(PHP5n) */
+
+namespace dNG;
+/* #\n*/
 
 /* -------------------------------------------------------------------------
 All comments will be removed in the "production" packages (they will be in
@@ -49,8 +53,8 @@ all development packets)
 Testing for required classes
 ------------------------------------------------------------------------- */
 
-$g_continue_check = ((defined ("CLASS_direct_xml_writer")) ? false : true);
-if (!defined ("CLASS_direct_xml_reader")) { $g_continue_check = false; }
+$g_continue_check = ((defined ("CLASS_directXmlWriter")) ? false : true);
+if (!defined ("CLASS_directXmlReader")) { $g_continue_check = false; }
 
 if ($g_continue_check)
 {
@@ -62,19 +66,18 @@ if ($g_continue_check)
 * @copyright  (C) direct Netware Group - All rights reserved
 * @package    ext_core
 * @subpackage xml
-* @uses       CLASS_direct_xml_reader
 * @since      v0.1.00
 * @license    http://www.direct-netware.de/redirect.php?licenses;w3c
 *             W3C (R) Software License
 */
-class direct_xml_writer extends direct_xml_reader
+class directXmlWriter extends directXmlReader
 {
 /* -------------------------------------------------------------------------
 Extend the class using old and new behavior
 ------------------------------------------------------------------------- */
 
 /**
-	* Constructor (PHP5+) __construct (direct_xml_writer)
+	* Constructor (PHP5+) __construct (directXmlWriter)
 	*
 	* @param string $f_charset Charset to be added as information to XML output
 	* @param integer $f_time Current UNIX timestamp
@@ -85,7 +88,7 @@ Extend the class using old and new behavior
 */
 	/*#ifndef(PHP4) */public /* #*/function __construct ($f_charset = "UTF-8",$f_time = -1,$f_timeout_count = 5,$f_ext_xml_path = "",$f_debug = false)
 	{
-		if ($f_debug) { $this->debug = array ("xml/#echo(__FILEPATH__)# -xml_handler->__construct (direct_xml_writer)- (#echo(__LINE__)#)"); }
+		if ($f_debug) { $this->debug = array ("xml/#echo(__FILEPATH__)# -Xml->__construct (directXmlWriter)- (#echo(__LINE__)#)"); }
 
 /* -------------------------------------------------------------------------
 My parent should be on my side to get the work done
@@ -95,7 +98,7 @@ My parent should be on my side to get the work done
 	}
 /*#ifdef(PHP4):
 /**
-	* Constructor (PHP4) direct_xml_writer (direct_xml_writer)
+	* Constructor (PHP4) directXmlWriter
 	*
 	* @param string $f_charset Charset to be added as information to XML output
 	* @param integer $f_time Current UNIX timestamp
@@ -104,7 +107,7 @@ My parent should be on my side to get the work done
 	* @param boolean $f_debug Debug flag
 	* @since v0.1.00
 *\/
-	function direct_xml_writer ($f_charset = "UTF-8",$f_time = -1,$f_timeout_count = 5,$f_ext_xml_path = "",$f_debug = false) { $this->__construct ($f_charset,$f_time,$f_timeout_count,$f_ext_xml_path,$f_debug); }
+	function directXmlWriter ($f_charset = "UTF-8",$f_time = -1,$f_timeout_count = 5,$f_ext_xml_path = "",$f_debug = false) { $this->__construct ($f_charset,$f_time,$f_timeout_count,$f_ext_xml_path,$f_debug); }
 :#*/
 /**
 	* Read and convert a simple multi-dimensional array into our XML tree.
@@ -112,18 +115,17 @@ My parent should be on my side to get the work done
 	* @param  array $f_array Input array
 	* @param  boolean $f_overwrite True to overwrite the current
 	*         (non-empty) cache
-	* @uses   direct_xml_writer::array_import_walker()
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function array_import ($f_array,$f_overwrite = false)
+	/*#ifndef(PHP4) */public /* #*/function arrayImport ($f_array,$f_overwrite = false)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->array_import (+f_array,+f_overwrite)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -Xml->arrayImport (+f_array,+f_overwrite)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if ((empty ($this->data))||($f_overwrite))
 		{
-			$f_array = $this->array_import_walker ($f_array);
+			$f_array = $this->arrayImportWalker ($f_array);
 			$this->data = $f_array;
 			$f_return = true;
 		}
@@ -139,9 +141,9 @@ My parent should be on my side to get the work done
 	* @return array Output array
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function array_import_walker (&$f_array,$f_level = 1)
+	/*#ifndef(PHP4) */protected /* #*/function arrayImportWalker (&$f_array,$f_level = 1)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->array_import_walker (+f_array,$f_level)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -Xml->arrayImportWalker (+f_array,$f_level)- (#echo(__LINE__)#)"; }
 		$f_return = array ();
 
 		if (is_array ($f_array))
@@ -153,7 +155,7 @@ My parent should be on my side to get the work done
 					if (is_array ($f_value))
 					{
 						$f_node_array = array ("xml.item" => (array ("tag" => $f_key,"level" => $f_level,"xmlns" => array ())));
-						$f_node_array = array_merge ($f_node_array,($this->array_import_walker ($f_value,($f_level + 1))));
+						$f_node_array = array_merge ($f_node_array,($this->arrayImportWalker ($f_value,($f_level + 1))));
 						$f_return[$f_key] = $f_node_array;
 					}
 					elseif (!is_object ($f_value)) { $f_return[$f_key] = array ("tag" => $f_key,"value" => $f_value,"xmlns" => array ()); }
@@ -169,13 +171,12 @@ My parent should be on my side to get the work done
 	*
 	* @param  boolean $f_flush True to delete the cache content
 	* @param  boolean $f_strict_standard Be standard conform
-	* @uses   direct_xml_reader::array2xml()
 	* @return string Result string
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function cache_export ($f_flush = false,$f_strict_standard = true)
+	/*#ifndef(PHP4) */public /* #*/function cacheExport ($f_flush = false,$f_strict_standard = true)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->cache_export (+f_flush,+f_strict_standard)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -Xml->cacheExport (+f_flush,+f_strict_standard)- (#echo(__LINE__)#)"; }
 
 		if (empty ($this->data)) { $f_return = ""; }
 		else
@@ -191,24 +192,22 @@ My parent should be on my side to get the work done
 	* Set the cache pointer to a specific node.
 	*
 	* @param  string $f_node_path Path to the node - delimiter is space
-	* @uses   direct_xml_reader::ns_translate_path()
-	* @uses   direct_xml_writer::node_get_pointer()
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function node_cache_pointer ($f_node_path)
+	/*#ifndef(PHP4) */public /* #*/function nodeCachePointer ($f_node_path)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->node_cache_pointer ($f_node_path)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -Xml->nodeCachePointer ($f_node_path)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if (is_string ($f_node_path))
 		{
-			$f_node_path = $this->ns_translate_path ($f_node_path);
+			$f_node_path = $this->nsTranslatePath ($f_node_path);
 
 			if ($f_node_path == $this->data_cache_node) { $f_return = true; }
 			else
 			{
-				$f_node_pointer =& $this->node_get_pointer ($f_node_path);
+				$f_node_pointer =& $this->nodeGetPointer ($f_node_path);
 
 				if ($f_node_pointer)
 				{
@@ -228,19 +227,18 @@ My parent should be on my side to get the work done
 	*
 	* @param  string $f_node_path Path to the new node - delimiter is space
 	* @param  array $f_attributes Attributes of the node
-	* @uses   direct_xml_writer::node_get_pointer()
 	* @return boolean False on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function node_change_attributes ($f_node_path,$f_attributes)
+	/*#ifndef(PHP4) */public /* #*/function nodeChangeAttributes ($f_node_path,$f_attributes)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->node_change_attributes ($f_node_path,+f_attributes)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -Xml->nodeChangeAttributes ($f_node_path,+f_attributes)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if ((is_string ($f_node_path))&&(is_array ($f_attributes)))
 		{
-			$f_node_path = $this->ns_translate_path ($f_node_path);
-			$f_node_pointer =& $this->node_get_pointer ($f_node_path);
+			$f_node_path = $this->nsTranslatePath ($f_node_path);
+			$f_node_pointer =& $this->nodeGetPointer ($f_node_path);
 
 			if ($f_node_pointer)
 			{
@@ -259,20 +257,18 @@ My parent should be on my side to get the work done
 	*
 	* @param  string $f_node_path Path to the new node - delimiter is space
 	* @param  string $f_value Value for the new node
-	* @uses   direct_xml_reader::ns_translate_path()
-	* @uses   direct_xml_writer::node_get_pointer()
 	* @return boolean False on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function node_change_value ($f_node_path,$f_value)
+	/*#ifndef(PHP4) */public /* #*/function nodeChangeValue ($f_node_path,$f_value)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->node_change_value ($f_node_path,+f_value)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -Xml->nodeChangeValue ($f_node_path,+f_value)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if ((is_string ($f_node_path))&&((!is_array ($f_value))&&(!is_object ($f_value))))
 		{
-			$f_node_path = $this->ns_translate_path ($f_node_path);
-			$f_node_pointer =& $this->node_get_pointer ($f_node_path);
+			$f_node_path = $this->nsTranslatePath ($f_node_path);
+			$f_node_pointer =& $this->nodeGetPointer ($f_node_path);
 
 			if ($f_node_pointer)
 			{
@@ -290,14 +286,12 @@ My parent should be on my side to get the work done
 	* Count the occurrence of a specified node.
 	*
 	* @param  string $f_node_path Path to the node - delimiter is space
-	* @uses   direct_xml_reader::ns_translate_path()
-	* @uses   direct_xml_writer::node_get_pointer()
 	* @return integer Counted number off matching nodes
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function node_count ($f_node_path)
+	/*#ifndef(PHP4) */public /* #*/function nodeCount ($f_node_path)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->node_count ($f_node_path)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -Xml->nodeCount ($f_node_path)- (#echo(__LINE__)#)"; }
 		$f_return = 0;
 
 		if (is_string ($f_node_path))
@@ -306,14 +300,14 @@ My parent should be on my side to get the work done
 Get the parent node of the target.
 ------------------------------------------------------------------------- */
 
-			$f_node_path = $this->ns_translate_path ($f_node_path);
+			$f_node_path = $this->nsTranslatePath ($f_node_path);
 			$f_node_path_array = explode (" ",$f_node_path);
 
 			if (count ($f_node_path_array) > 1)
 			{
 				$f_node_name = array_pop ($f_node_path_array);
 				$f_node_path = implode (" ",$f_node_path_array);
-				$f_node_pointer =& $this->node_get_pointer ($f_node_path);
+				$f_node_pointer =& $this->nodeGetPointer ($f_node_path);
 			}
 			else
 			{
@@ -332,20 +326,18 @@ Get the parent node of the target.
 	*
 	* @param  string $f_node_path Path to the node - delimiter is space
 	* @param  boolean $f_remove_metadata False to not remove the xml.item node
-	* @uses   direct_xml_reader::ns_translate_path()
-	* @uses   direct_xml_writer::node_get_pointer()
 	* @return mixed XML node array on success; false on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function node_get ($f_node_path,$f_remove_metadata = true)
+	/*#ifndef(PHP4) */public /* #*/function nodeGet ($f_node_path,$f_remove_metadata = true)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->node_get ($f_node_path,+f_remove_metadata)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -Xml->nodeGet ($f_node_path,+f_remove_metadata)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if (is_string ($f_node_path))
 		{
-			$f_node_path = $this->ns_translate_path ($f_node_path);
-			$f_node_pointer =& $this->node_get_pointer ($f_node_path);
+			$f_node_path = $this->nsTranslatePath ($f_node_path);
+			$f_node_pointer =& $this->nodeGetPointer ($f_node_path);
 
 			if ($f_node_pointer)
 			{
@@ -364,9 +356,9 @@ Get the parent node of the target.
 	* @return mixed XML node pointer on success; false on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function &node_get_pointer ($f_node_path)
+	/*#ifndef(PHP4) */protected /* #*/function &nodeGetPointer ($f_node_path)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->node_get_pointer ($f_node_path)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -Xml->nodeGetPointer ($f_node_path)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if (is_string ($f_node_path))
@@ -426,14 +418,12 @@ Get the parent node of the target.
 	* Remove a node and all children if applicable.
 	*
 	* @param  string $f_node_path Path to the node - delimiter is space
-	* @uses   direct_xml_reader::ns_translate_path()
-	* @uses   direct_xml_writer::node_get_pointer()
 	* @return boolean False on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function node_remove ($f_node_path)
+	/*#ifndef(PHP4) */public /* #*/function nodeRemove ($f_node_path)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->node_remove ($f_node_path)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -Xml->nodeRemove ($f_node_path)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if (is_string ($f_node_path))
@@ -442,14 +432,14 @@ Get the parent node of the target.
 Get the parent node of the target.
 ------------------------------------------------------------------------- */
 
-			$f_node_path = $this->ns_translate_path ($f_node_path);
+			$f_node_path = $this->nsTranslatePath ($f_node_path);
 			$f_node_path_array = explode (" ",$f_node_path);
 
 			if (count ($f_node_path_array) > 1)
 			{
 				$f_node_name = array_pop ($f_node_path_array);
 				$f_node_path = implode (" ",$f_node_path_array);
-				$f_node_pointer =& $this->node_get_pointer ($f_node_path);
+				$f_node_pointer =& $this->nodeGetPointer ($f_node_path);
 
 				if ((strlen ($this->data_cache_node))&&(strpos ($f_node_path,$this->data_cache_node) === 0))
 				{
@@ -531,9 +521,9 @@ Update the mtree counter or remove it if applicable.
 	* @return string Namespace (URI)
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function ns_get_uri ($f_input)
+	/*#ifndef(PHP4) */public /* #*/function nsGetUri ($f_input)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_handler->ns_get_uri ($f_input)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -Xml->nsGetUri ($f_input)- (#echo(__LINE__)#)"; }
 		$f_return = "";
 
 		if (preg_match ("#^(.+?):(\w+)$#",$f_input,$f_result_array))
@@ -550,7 +540,7 @@ Update the mtree counter or remove it if applicable.
 Mark this class as the most up-to-date one
 ------------------------------------------------------------------------- */
 
-define ("CLASS_direct_xml_writer",true);
+define ("CLASS_directXmlWriter",true);
 }
 
 //j// EOF

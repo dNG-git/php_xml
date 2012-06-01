@@ -37,6 +37,10 @@ NOTE_END //n*/
 * @license    http://www.direct-netware.de/redirect.php?licenses;w3c
 *             W3C (R) Software License
 */
+/*#ifdef(PHP5n) */
+
+namespace dNG;
+/* #\n*/
 
 /* -------------------------------------------------------------------------
 All comments will be removed in the "production" packages (they will be in
@@ -45,11 +49,7 @@ all development packets)
 
 //j// Functions and classes
 
-/* -------------------------------------------------------------------------
-Testing for required classes
-------------------------------------------------------------------------- */
-
-if (!defined ("CLASS_direct_xml_parser_expat"))
+if (!defined ("CLASS_directXmlParserExpat"))
 {
 /**
 * This implementation supports expat for XML parsing.
@@ -62,7 +62,7 @@ if (!defined ("CLASS_direct_xml_parser_expat"))
 * @license    http://www.direct-netware.de/redirect.php?licenses;w3c
 *             W3C (R) Software License
 */
-class direct_xml_parser_expat
+class directXmlParserExpat
 {
 /**
 	* @var boolean $data_merged_mode True if the parser is set to merged
@@ -121,7 +121,7 @@ Construct the class using old and new behavior
 ------------------------------------------------------------------------- */
 
 /**
-	* Constructor (PHP5+) __construct (direct_xml_parser_expat)
+	* Constructor (PHP5+) __construct (directXmlParserExpat)
 	*
 	* @param direct_xml_reader &$f_parser Container for the XML document
 	* @param boolean $f_debug Debug flag
@@ -130,7 +130,7 @@ Construct the class using old and new behavior
 	/*#ifndef(PHP4) */public /* #*/function __construct (&$f_parser,$f_debug = false)
 	{
 		$this->debugging = $f_debug;
-		if ($this->debugging) { $this->debug = array ("xml/#echo(__FILEPATH__)# -xml_parser->__construct (direct_xml_parser_expat)- (#echo(__LINE__)#)"); }
+		if ($this->debugging) { $this->debug = array ("directXmlParserExpat/#echo(__FILEPATH__)# -XmlParser->__construct (directXmlParserExpat)- (#echo(__LINE__)#)"); }
 
 /* -------------------------------------------------------------------------
 Connect to the PHP container for the XML document 
@@ -144,16 +144,16 @@ Connect to the PHP container for the XML document
 	}
 /*#ifdef(PHP4):
 /**
-	* Constructor (PHP4) direct_xml_parser_expat (direct_xml_parser_expat)
+	* Constructor (PHP4) directXmlParserExpat
 	*
 	* @param direct_xml_reader &$f_parser Container for the XML document
 	* @param boolean $f_debug Debug flag
 	* @since v0.1.00
 *\/
-	function direct_xml_parser_expat (&$f_parser,$f_debug = false) { $this->__construct ($f_parser,$f_debug); }
+	function directXmlParserExpat (&$f_parser,$f_debug = false) { $this->__construct ($f_parser,$f_debug); }
 :#\n*/
 /**
-	* Destructor (PHP5+) __destruct (direct_xml_parser_expat)
+	* Destructor (PHP5+) __destruct (directXmlParserExpat)
 	*
 	* @since v0.1.00
 */
@@ -166,9 +166,9 @@ Connect to the PHP container for the XML document
 	* @return boolean True if parser is set to merged mode
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function define_mode ($f_mode = "")
+	/*#ifndef(PHP4) */public /* #*/function defineMode ($f_mode = "")
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->define_mode ($f_mode)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserExpat/#echo(__FILEPATH__)# -XmlParser->defineMode ($f_mode)- (#echo(__LINE__)#)"; }
 
 		if ((!$this->parser_active)&&(is_string ($f_mode))) { $this->data_merged_mode = (($f_mode == "merged") ? true : false); }
 		return $this->data_merged_mode;
@@ -181,9 +181,9 @@ Connect to the PHP container for the XML document
 	* @return boolean Accepted state
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function define_strict_standard ($f_strict_standard = true)
+	/*#ifndef(PHP4) */public /* #*/function defineStrictStandard ($f_strict_standard = true)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->define_strict_standard (+f_strict_standard)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserExpat/#echo(__FILEPATH__)# -XmlParser->defineStrictStandard (+f_strict_standard)- (#echo(__LINE__)#)"; }
 
 		if (!$this->parser_active)
 		{
@@ -204,9 +204,9 @@ Connect to the PHP container for the XML document
 	* @param string $f_data Character data
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function expat_cdata ($f_parser,$f_data)
+	/*#ifndef(PHP4) */public /* #*/function expatCData ($f_parser,$f_data)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->expat_cdata (+f_parser,+f_data)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserExpat/#echo(__FILEPATH__)# -XmlParser->expatCData (+f_parser,+f_data)- (#echo(__LINE__)#)"; }
 
 		if ($this->parser_active)
 		{
@@ -222,9 +222,9 @@ Connect to the PHP container for the XML document
 	* @param string $f_tag XML tag
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function expat_element_end ($f_parser,$f_tag)
+	/*#ifndef(PHP4) */public /* #*/function expatElementEnd ($f_parser,$f_tag)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->expat_element_end (+f_parser,$f_tag)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserExpat/#echo(__FILEPATH__)# -XmlParser->expatElementEnd (+f_parser,$f_tag)- (#echo(__LINE__)#)"; }
 
 		if ($this->parser_active)
 		{
@@ -268,9 +268,9 @@ Connect to the PHP container for the XML document
 	* @param string $f_data Character data
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function expat_merged_cdata ($f_parser,$f_data)
+	/*#ifndef(PHP4) */public /* #*/function expatMergedCData ($f_parser,$f_data)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->expat_merged_cdata (+f_parser,+f_data)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserExpat/#echo(__FILEPATH__)# -XmlParser->expatMergedCData (+f_parser,+f_data)- (#echo(__LINE__)#)"; }
 
 		if ($this->parser_active)
 		{
@@ -284,12 +284,11 @@ Connect to the PHP container for the XML document
 	*
 	* @param object $f_parser XML parser calling this handler
 	* @param string $f_tag XML tag
-	* @uses  direct_xml_reader::node_add()
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function expat_merged_element_end ($f_parser,$f_tag)
+	/*#ifndef(PHP4) */public /* #*/function expatMergedElementEnd ($f_parser,$f_tag)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->expat_merged_element_end (+f_parser,$f_tag)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserExpat/#echo(__FILEPATH__)# -XmlParser->expatMergedElementEnd (+f_parser,$f_tag)- (#echo(__LINE__)#)"; }
 	
 		if ($this->parser_active)
 		{
@@ -328,9 +327,9 @@ Connect to the PHP container for the XML document
 	* @param array $f_attributes Node attributes
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function expat_merged_element_start ($f_parser,$f_tag,$f_attributes)
+	/*#ifndef(PHP4) */public /* #*/function expatMergedElementStart ($f_parser,$f_tag,$f_attributes)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->expat_merged_element_start (+f_parser,$f_tag,+f_attributes)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserExpat/#echo(__FILEPATH__)# -XmlParser->expatMergedElementStart (+f_parser,$f_tag,+f_attributes)- (#echo(__LINE__)#)"; }
 
 		if (!$this->parser_active)
 		{
@@ -394,9 +393,9 @@ Connect to the PHP container for the XML document
 	* @param array $f_attributes Node attributes
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function expat_element_start ($f_parser,$f_tag,$f_attributes)
+	/*#ifndef(PHP4) */public /* #*/function expatElementStart ($f_parser,$f_tag,$f_attributes)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->expat_element_start (+f_parser,$f_tag,+f_attributes)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserExpat/#echo(__FILEPATH__)# -XmlParser->expatElementStart (+f_parser,$f_tag,+f_attributes)- (#echo(__LINE__)#)"; }
 
 		if (!$this->parser_active)
 		{
@@ -449,20 +448,19 @@ Connect to the PHP container for the XML document
 	* Adds the result of an expat parsing operation to the defined XML instance
 	* if the parser completed its work.
 	*
-	* @uses   direct_xml_reader::node_add()
 	* @return array Multi-dimensional XML tree
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function xml2array_expat ()
+	/*#ifndef(PHP4) */public /* #*/function xml2arrayExpat ()
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_expat ()- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserExpat/#echo(__FILEPATH__)# -XmlParser->xml2arrayExpat ()- (#echo(__LINE__)#)"; }
 		$f_return = array ();
 
 		if ((!$this->parser_active)&&(is_array ($this->parser_cache))&&(!empty ($this->parser_cache)))
 		{
 			$this->parser->set (array ());
 
-			foreach ($this->parser_cache as $f_node_array) { $this->parser->node_add ($f_node_array['node_path'],$f_node_array['value'],$f_node_array['attributes']); }
+			foreach ($this->parser_cache as $f_node_array) { $this->parser->nodeAdd ($f_node_array['node_path'],$f_node_array['value'],$f_node_array['attributes']); }
 
 			$this->parser_cache = array ();
 			$f_return = $this->parser->get ();
@@ -478,9 +476,9 @@ Connect to the PHP container for the XML document
 	* @return array Merged XML tree
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function xml2array_expat_merged ()
+	/*#ifndef(PHP4) */public /* #*/function xml2arrayExpatMerged ()
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_expat_merged ()- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserExpat/#echo(__FILEPATH__)# -XmlParser->xml2arrayExpatMerged ()- (#echo(__LINE__)#)"; }
 		$f_return = array ();
 
 		if ((!$this->parser_active)&&(is_array ($this->parser_cache))&&(!empty ($this->parser_cache)))
@@ -497,7 +495,7 @@ Connect to the PHP container for the XML document
 Mark this class as the most up-to-date one
 ------------------------------------------------------------------------- */
 
-define ("CLASS_direct_xml_parser_expat",true);
+define ("CLASS_directXmlParserExpat",true);
 }
 
 //j// EOF

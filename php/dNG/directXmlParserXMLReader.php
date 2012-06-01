@@ -37,6 +37,10 @@ NOTE_END //n*/
 * @license    http://www.direct-netware.de/redirect.php?licenses;w3c
 *             W3C (R) Software License
 */
+/*#ifdef(PHP5n) */
+
+namespace dNG;
+/* #\n*/
 
 /* -------------------------------------------------------------------------
 All comments will be removed in the "production" packages (they will be in
@@ -45,11 +49,7 @@ all development packets)
 
 //j// Functions and classes
 
-/* -------------------------------------------------------------------------
-Testing for required classes
-------------------------------------------------------------------------- */
-
-if (!defined ("CLASS_direct_xml_parser_XMLReader"))
+if (!defined ("CLASS_directXmlParserXMLReader"))
 {
 /**
 * This implementation supports XMLReader for XML parsing.
@@ -62,7 +62,7 @@ if (!defined ("CLASS_direct_xml_parser_XMLReader"))
 * @license    http://www.direct-netware.de/redirect.php?licenses;w3c
 *             W3C (R) Software License
 */
-class direct_xml_parser_XMLReader
+class directXmlParserXMLReader
 {
 /**
 	* @var array $debug Debug message container
@@ -99,7 +99,7 @@ Construct the class using old and new behavior
 ------------------------------------------------------------------------- */
 
 /**
-	* Constructor (PHP5+) __construct (direct_xml_parser_XMLReader)
+	* Constructor (PHP5+) __construct (directXmlParserXMLReader)
 	*
 	* @param direct_xml_reader &$f_parser Container for the XML document
 	* @param integer $f_time Current UNIX timestamp
@@ -110,7 +110,7 @@ Construct the class using old and new behavior
 	/*#ifndef(PHP4) */public /* #*/function __construct (&$f_parser,$f_time = -1,$f_timeout_count = 5,$f_debug = false)
 	{
 		$this->debugging = $f_debug;
-		if ($this->debugging) { $this->debug = array ("xml/#echo(__FILEPATH__)# -xml_parser->__construct (direct_xml_parser_XMLReader)- (#echo(__LINE__)#)"); }
+		if ($this->debugging) { $this->debug = array ("directXmlParserXMLReader/#echo(__FILEPATH__)# -XmlParser->__construct (directXmlParserXMLReader)- (#echo(__LINE__)#)"); }
 
 /* -------------------------------------------------------------------------
 Connect to the PHP container for the XML document 
@@ -149,7 +149,7 @@ $this->node_types = array (
 	}
 /*#ifdef(PHP4):
 /**
-	* Constructor (PHP4) direct_xml_parser_XMLReader (direct_xml_parser_XMLReader)
+	* Constructor (PHP4) directXmlParserXMLReader
 	*
 	* @param direct_xml_reader &$f_parser Container for the XML document
 	* @param integer $f_time Current UNIX timestamp
@@ -157,10 +157,10 @@ $this->node_types = array (
 	* @param boolean $f_debug Debug flag
 	* @since v0.1.00
 *\/
-	function direct_xml_parser_XMLReader (&$f_parser,$f_time = -1,$f_timeout_count = 5,$f_debug = false) { $this->__construct ($f_parser,$f_time,$f_timeout_count,$f_debug); }
+	function directXmlParserXMLReader (&$f_parser,$f_time = -1,$f_timeout_count = 5,$f_debug = false) { $this->__construct ($f_parser,$f_time,$f_timeout_count,$f_debug); }
 :#\n*/
 /**
-	* Destructor (PHP5+) __destruct (direct_xml_parser_XMLReader)
+	* Destructor (PHP5+) __destruct (directXmlParserXMLReader)
 	*
 	* @since v0.1.00
 */
@@ -175,12 +175,12 @@ $this->node_types = array (
 	* @return array Multi-dimensional XML tree
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function xml2array_XMLReader (&$f_xmlreader,$f_strict_standard = true)
+	/*#ifndef(PHP4) */public /* #*/function xml2arrayXMLReader (&$f_xmlreader,$f_strict_standard = true)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader (+f_xmlreader,+f_strict_standard)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserXMLReader/#echo(__FILEPATH__)# -XmlParser->xml2arrayXMLReader (+f_xmlreader,+f_strict_standard)- (#echo(__LINE__)#)"; }
 		$f_return = array ();
 
-		if ($this->xml2array_XMLReader_is_valid ($f_xmlreader))
+		if ($this->xml2arrayXMLReaderIsValid ($f_xmlreader))
 		{
 			$f_continue_check = true;
 			$f_timeout_time = ($this->time + $this->timeout_count);
@@ -189,10 +189,10 @@ $this->node_types = array (
 			do { $f_continue_check = $f_xmlreader->read (); }
 			while (($f_continue_check)&&($f_xmlreader->nodeType != $this->node_types['element'])&&($f_timeout_time > (time ())));
 
-			$f_xmlreader_array = $this->xml2array_XMLReader_walker ($f_xmlreader,$f_strict_standard);
+			$f_xmlreader_array = $this->xml2arrayXMLReaderWalker ($f_xmlreader,$f_strict_standard);
 			$f_xmlreader->close ();
 
-			if ($f_xmlreader_array) { $f_continue_check = $this->xml2array_XMLReader_array_walker ($f_xmlreader_array,$f_strict_standard); }
+			if ($f_xmlreader_array) { $f_continue_check = $this->xml2arrayXMLReaderArrayWalker ($f_xmlreader_array,$f_strict_standard); }
 			if ($f_continue_check) { $f_return = $this->parser->get (); }
 		}
 
@@ -202,15 +202,14 @@ $this->node_types = array (
 /**
 	* Imports a pre-parsed XML array into the given parser instance.
 	*
-	* @param  array &$f_data Result array of a "xml2array_XMLReader_walker ()"
+	* @param  array &$f_data Result array of a "xml2arrayXMLReaderWalker ()"
 	* @param  boolean $f_strict_standard Be standard conform
-	* @uses   direct_xml_reader::node_add()
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function xml2array_XMLReader_array_walker (&$f_data,$f_strict_standard = true)
+	/*#ifndef(PHP4) */protected /* #*/function xml2arrayXMLReaderArrayWalker (&$f_data,$f_strict_standard = true)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_array_walker (+f_data,+f_strict_standard)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserXMLReader/#echo(__FILEPATH__)# -XmlParser->xml2arrayXMLReaderArrayWalker (+f_data,+f_strict_standard)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if (is_array ($f_data))
@@ -223,12 +222,12 @@ $this->node_types = array (
 					unset ($f_data['attributes']['value']);
 				}
 
-				$this->parser->node_add ($f_data['node_path'],$f_data['value'],$f_data['attributes']);
+				$this->parser->nodeAdd ($f_data['node_path'],$f_data['value'],$f_data['attributes']);
 			}
 
 			if (!empty ($f_data['children']))
 			{
-				foreach ($f_data['children'] as $f_child_array) { $this->xml2array_XMLReader_array_walker ($f_child_array,$f_strict_standard); }
+				foreach ($f_data['children'] as $f_child_array) { $this->xml2arrayXMLReaderArrayWalker ($f_child_array,$f_strict_standard); }
 			}
 
 			$f_return = true;
@@ -240,15 +239,14 @@ $this->node_types = array (
 /**
 	* Imports a pre-parsed XML array into the given parser instance.
 	*
-	* @param  array &$f_data Result array of a "xml2array_XMLReader_walker ()"
+	* @param  array &$f_data Result array of a "xml2arrayXMLReaderWalker ()"
 	* @param  boolean $f_strict_standard Be standard conform
-	* @uses   direct_xml_reader::node_add()
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function xml2array_XMLReader_is_valid (&$f_xmlreader)
+	/*#ifndef(PHP4) */protected /* #*/function xml2arrayXMLReaderIsValid (&$f_xmlreader)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_is_valid (+f_xmlreader)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserXMLReader/#echo(__FILEPATH__)# -XmlParser->xml2arrayXMLReaderIsValid (+f_xmlreader)- (#echo(__LINE__)#)"; }
 		$f_return = is_object ($f_xmlreader);
 
 		if (!isset ($this->PHP_is_valid)) { $this->PHP_is_valid = method_exists ($f_xmlreader,"is_valid"); }
@@ -262,16 +260,15 @@ $this->node_types = array (
 	* "simplexml_load_string ()" result.
 	*
 	* @param  object &$f_xmlreader SimpleXMLElement object
-	* @uses   direct_xml_reader::xml2array_XMLReader_merged_walker()
 	* @return array Merged XML tree
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function xml2array_XMLReader_merged (&$f_xmlreader)
+	/*#ifndef(PHP4) */public /* #*/function xml2arrayXMLReaderMerged (&$f_xmlreader)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_merged (+f_xmlreader)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserXMLReader/#echo(__FILEPATH__)# -XmlParser->xml2arrayXMLReaderMerged (+f_xmlreader)- (#echo(__LINE__)#)"; }
 		$f_return = array ();
 
-		if ($this->xml2array_XMLReader_is_valid ($f_xmlreader))
+		if ($this->xml2arrayXMLReaderIsValid ($f_xmlreader))
 		{
 			$f_node_change_check = false;
 			$f_continue_check = true;
@@ -408,13 +405,12 @@ $this->node_types = array (
 	* @param  boolean $f_strict_standard Be standard conform
 	* @param  string $f_node_path Old node path (for recursive use only)
 	* @param  integer $f_xml_level Current XML depth
-	* @uses   direct_xml_reader::node_add()
 	* @return mixed XML node array on success; false on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function xml2array_XMLReader_walker (&$f_xmlreader,$f_strict_standard = true,$f_node_path = "",$f_xml_level = 0)
+	/*#ifndef(PHP4) */protected /* #*/function xml2arrayXMLReaderWalker (&$f_xmlreader,$f_strict_standard = true,$f_node_path = "",$f_xml_level = 0)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_XMLReader_walker (+f_xmlreader,+f_strict_standard,$f_node_path,$f_xml_level)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserXMLReader/#echo(__FILEPATH__)# -XmlParser->xml2arrayXMLReaderWalker (+f_xmlreader,+f_strict_standard,$f_node_path,$f_xml_level)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if (is_object ($f_xmlreader))
@@ -486,7 +482,7 @@ $this->node_types = array (
 					}
 					case $this->node_types['element']:
 					{
-						$f_nodes_array[] = $this->xml2array_XMLReader_walker ($f_xmlreader,$f_strict_standard,$f_node_path,$f_xmlreader->depth);
+						$f_nodes_array[] = $this->xml2arrayXMLReaderWalker ($f_xmlreader,$f_strict_standard,$f_node_path,$f_xmlreader->depth);
 						$f_read_check = false;
 						break 1;
 					}
@@ -528,7 +524,7 @@ $this->node_types = array (
 Mark this class as the most up-to-date one
 ------------------------------------------------------------------------- */
 
-define ("CLASS_direct_xml_parser_XMLReader",true);
+define ("CLASS_directXmlParserXMLReader",true);
 }
 
 //j// EOF

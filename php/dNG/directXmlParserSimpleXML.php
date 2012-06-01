@@ -37,6 +37,10 @@ NOTE_END //n*/
 * @license    http://www.direct-netware.de/redirect.php?licenses;w3c
 *             W3C (R) Software License
 */
+/*#ifdef(PHP5n) */
+
+namespace dNG;
+/* #\n*/
 
 /* -------------------------------------------------------------------------
 All comments will be removed in the "production" packages (they will be in
@@ -45,11 +49,7 @@ all development packets)
 
 //j// Functions and classes
 
-/* -------------------------------------------------------------------------
-Testing for required classes
-------------------------------------------------------------------------- */
-
-if (!defined ("CLASS_direct_xml_parser_SimpleXML"))
+if (!defined ("CLASS_directXmlParserSimpleXML"))
 {
 /**
 * This implementation supports SimpleXML for XML parsing.
@@ -62,7 +62,7 @@ if (!defined ("CLASS_direct_xml_parser_SimpleXML"))
 * @license    http://www.direct-netware.de/redirect.php?licenses;w3c
 *             W3C (R) Software License
 */
-class direct_xml_parser_SimpleXML
+class directXmlParserSimpleXML
 {
 /**
 	* @var array $debug Debug message container
@@ -91,7 +91,7 @@ Construct the class using old and new behavior
 ------------------------------------------------------------------------- */
 
 /**
-	* Constructor (PHP5+) __construct (direct_xml_parser_SimpleXML)
+	* Constructor (PHP5+) __construct (directXmlParserSimpleXML)
 	*
 	* @param direct_xml_reader &$f_parser Container for the XML document
 	* @param integer $f_time Current UNIX timestamp
@@ -102,7 +102,7 @@ Construct the class using old and new behavior
 	/*#ifndef(PHP4) */public /* #*/function __construct (&$f_parser,$f_time = -1,$f_timeout_count = 5,$f_debug = false)
 	{
 		$this->debugging = $f_debug;
-		if ($this->debugging) { $this->debug = array ("xml/#echo(__FILEPATH__)# -xml_parser->__construct (direct_xml_parser_SimpleXML)- (#echo(__LINE__)#)"); }
+		if ($this->debugging) { $this->debug = array ("directXmlParserSimpleXML/#echo(__FILEPATH__)# -XmlParser->__construct (directXmlParserSimpleXML)- (#echo(__LINE__)#)"); }
 
 /* -------------------------------------------------------------------------
 Connect to the PHP container for the XML document 
@@ -114,7 +114,7 @@ Connect to the PHP container for the XML document
 	}
 /*#ifdef(PHP4):
 /**
-	* Constructor (PHP4) direct_xml_parser_SimpleXML (direct_xml_parser_SimpleXML)
+	* Constructor (PHP4) directXmlParserSimpleXML
 	*
 	* @param direct_xml_reader &$f_parser Container for the XML document
 	* @param integer $f_time Current UNIX timestamp
@@ -122,10 +122,10 @@ Connect to the PHP container for the XML document
 	* @param boolean $f_debug Debug flag
 	* @since v0.1.00
 *\/
-	function direct_xml_parser_SimpleXML (&$f_parser,$f_time = -1,$f_timeout_count = 5,$f_debug = false) { $this->__construct ($f_parser,$f_time,$f_timeout_count,$f_debug); }
+	function directXmlParserSimpleXML (&$f_parser,$f_time = -1,$f_timeout_count = 5,$f_debug = false) { $this->__construct ($f_parser,$f_time,$f_timeout_count,$f_debug); }
 :#\n*/
 /**
-	* Destructor (PHP5+) __destruct (direct_xml_parser_SimpleXML)
+	* Destructor (PHP5+) __destruct (directXmlParserSimpleXML)
 	*
 	* @since v0.1.00
 */
@@ -140,17 +140,17 @@ Connect to the PHP container for the XML document
 	* @return array Multi-dimensional XML tree
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function xml2array_SimpleXML (&$f_xmlelement,$f_strict_standard = true)
+	/*#ifndef(PHP4) */public /* #*/function xml2arraySimpleXML (&$f_xmlelement,$f_strict_standard = true)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_SimpleXML (+f_xmlreader,+f_strict_standard)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserSimpleXML/#echo(__FILEPATH__)# -XmlParser->xml2arraySimpleXML (+f_xmlreader,+f_strict_standard)- (#echo(__LINE__)#)"; }
 		$f_return = array ();
 
 		if (is_object ($f_xmlelement))
 		{
 			$this->parser->set (array ());
-			$f_xmlelement_array = $this->xml2array_SimpleXML_walker ($f_xmlelement,$f_strict_standard);
+			$f_xmlelement_array = $this->xml2arraySimpleXMLWalker ($f_xmlelement,$f_strict_standard);
 
-			if ($f_xmlelement_array) { $f_continue_check = $this->xml2array_SimpleXML_array_walker ($f_xmlelement_array,$f_strict_standard); }
+			if ($f_xmlelement_array) { $f_continue_check = $this->xml2arraySimpleXMLArrayWalker ($f_xmlelement_array,$f_strict_standard); }
 			if ($f_continue_check) { $f_return = $this->parser->get (); }
 		}
 
@@ -160,15 +160,14 @@ Connect to the PHP container for the XML document
 /**
 	* Imports a pre-parsed XML array into the given parser instance.
 	*
-	* @param  array &$f_data Result array of a "xml2array_SimpleXML_walker ()"
+	* @param  array &$f_data Result array of a "xml2arraySimpleXMLWalker ()"
 	* @param  boolean $f_strict_standard Be standard conform
-	* @uses   direct_xml_reader::node_add()
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function xml2array_SimpleXML_array_walker (&$f_data,$f_strict_standard = true)
+	/*#ifndef(PHP4) */protected /* #*/function xml2arraySimpleXMLArrayWalker (&$f_data,$f_strict_standard = true)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_SimpleXML_array_walker (+f_data,+f_strict_standard)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserSimpleXML/#echo(__FILEPATH__)# -XmlParser->xml2arraySimpleXMLArrayWalker (+f_data,+f_strict_standard)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if (is_array ($f_data))
@@ -181,12 +180,12 @@ Connect to the PHP container for the XML document
 					unset ($f_data['attributes']['value']);
 				}
 
-				$this->parser->node_add ($f_data['node_path'],$f_data['value'],$f_data['attributes']);
+				$this->parser->nodeAdd ($f_data['node_path'],$f_data['value'],$f_data['attributes']);
 			}
 
 			if (!empty ($f_data['children']))
 			{
-				foreach ($f_data['children'] as $f_child_array) { $this->xml2array_SimpleXML_array_walker ($f_child_array,$f_strict_standard); }
+				foreach ($f_data['children'] as $f_child_array) { $this->xml2arraySimpleXMLArrayWalker ($f_child_array,$f_strict_standard); }
 			}
 
 			$f_return = true;
@@ -200,19 +199,18 @@ Connect to the PHP container for the XML document
 	* "simplexml_load_string ()" result.
 	*
 	* @param  object &$f_xmlelement SimpleXMLElement object
-	* @uses   direct_xml_reader::xml2array_SimpleXML_merged_walker()
 	* @return array Merged XML tree
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function xml2array_SimpleXML_merged (&$f_xmlelement)
+	/*#ifndef(PHP4) */public /* #*/function xml2arraySimpleXMLMerged (&$f_xmlelement)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_SimpleXML_merged (+f_xmlreader)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserSimpleXML/#echo(__FILEPATH__)# -XmlParser->xml2arraySimpleXMLMerged (+f_xmlreader)- (#echo(__LINE__)#)"; }
 		$f_return = array ();
 
 		if (is_object ($f_xmlelement))
 		{
-			$f_xmlelement_array = $this->xml2array_SimpleXML_walker ($f_xmlelement,false);
-			if ($f_xmlelement_array) { $f_return = $this->xml2array_SimpleXML_merged_array_walker ($f_xmlelement_array); }
+			$f_xmlelement_array = $this->xml2arraySimpleXMLWalker ($f_xmlelement,false);
+			if ($f_xmlelement_array) { $f_return = $this->xml2arraySimpleXMLMergedArrayWalker ($f_xmlelement_array); }
 		}
 
 		return $f_return;
@@ -221,14 +219,13 @@ Connect to the PHP container for the XML document
 /**
 	* Converts a pre-parsed XML array into a merged array.
 	*
-	* @param  array &$f_data Result array of a "xml2array_SimpleXML_walker ()"
-	* @uses   direct_xml_reader::node_add()
+	* @param  array &$f_data Result array of a "xml2arraySimpleXMLWalker ()"
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function xml2array_SimpleXML_merged_array_walker (&$f_data,$f_return = NULL)
+	/*#ifndef(PHP4) */public /* #*/function xml2arraySimpleXMLMergedArrayWalker (&$f_data,$f_return = NULL)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_SimpleXML_merged_array_walker (+f_data,+f_return)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserSimpleXML/#echo(__FILEPATH__)# -XmlParser->xml2arraySimpleXMLMergedArrayWalker (+f_data,+f_return)- (#echo(__LINE__)#)"; }
 		if (!isset ($f_return)) { $f_return = array (); }
 
 		if (is_array ($f_data))
@@ -261,7 +258,7 @@ Connect to the PHP container for the XML document
 
 			if (isset ($f_data['children']))
 			{
-				foreach ($f_data['children'] as $f_child_array) { $f_return = $this->xml2array_SimpleXML_merged_array_walker ($f_child_array,$f_return); }
+				foreach ($f_data['children'] as $f_child_array) { $f_return = $this->xml2arraySimpleXMLMergedArrayWalker ($f_child_array,$f_return); }
 			}
 		}
 
@@ -276,13 +273,12 @@ Connect to the PHP container for the XML document
 	* @param  boolean $f_strict_standard Be standard conform
 	* @param  string $f_node_path Old node path (for recursive use only)
 	* @param  integer $f_xml_level Current XML depth
-	* @uses   direct_xml_reader::node_add()
 	* @return mixed XML node array on success; false on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function xml2array_SimpleXML_walker (&$f_xmlelement,$f_strict_standard = true,$f_node_path = "",$f_xml_level = 0)
+	/*#ifndef(PHP4) */protected /* #*/function xml2arraySimpleXMLWalker (&$f_xmlelement,$f_strict_standard = true,$f_node_path = "",$f_xml_level = 0)
 	{
-		if ($this->debugging) { $this->debug[] = "xml/#echo(__FILEPATH__)# -xml_parser->xml2array_SimpleXML_walker (+f_xmlreader,+f_strict_standard,$f_node_path,$f_xml_level)- (#echo(__LINE__)#)"; }
+		if ($this->debugging) { $this->debug[] = "directXmlParserSimpleXML/#echo(__FILEPATH__)# -XmlParser->xml2arraySimpleXMLWalker (+f_xmlreader,+f_strict_standard,$f_node_path,$f_xml_level)- (#echo(__LINE__)#)"; }
 		$f_return = false;
 
 		if (is_object ($f_xmlelement))
@@ -330,7 +326,7 @@ Connect to the PHP container for the XML document
 
 			foreach ($f_xmlelement_subnodes as $f_xmlelement_subnode)
 			{
-				if ($f_timeout_time > (time ())) { $f_nodes_array[] = $this->xml2array_SimpleXML_walker ($f_xmlelement_subnode,$f_strict_standard,$f_node_path,($f_xml_level + 1)); }
+				if ($f_timeout_time > (time ())) { $f_nodes_array[] = $this->xml2arraySimpleXMLWalker ($f_xmlelement_subnode,$f_strict_standard,$f_node_path,($f_xml_level + 1)); }
 			}
 
 			$f_return = array ("node_path" => $f_node_path,"value" => ($f_preserve_check ? (string)$f_xmlelement : trim ((string)$f_xmlelement)),"attributes" => $f_attributes_array,"children" => $f_nodes_array);
@@ -344,7 +340,7 @@ Connect to the PHP container for the XML document
 Mark this class as the most up-to-date one
 ------------------------------------------------------------------------- */
 
-define ("CLASS_direct_xml_parser_SimpleXML",true);
+define ("CLASS_directXmlParserSimpleXML",true);
 }
 
 //j// EOF
