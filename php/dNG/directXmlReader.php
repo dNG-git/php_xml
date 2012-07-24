@@ -168,7 +168,7 @@ Force or automatically select an implemenation
 		if ((USE_xml_implementation == "autoselect")&&($this->data_parser == NULL)||(USE_xml_implementation == "XMLReader"))
 		{
 			if (!defined ("CLASS_directXmlParserXMLReader")) { @include_once ($f_ext_xml_path."directXmlParserXMLReader.php"); }
-			if ((class_exists ("XMLReader",/*#ifndef(PHP4) */false/* #*/))&&(defined ("CLASS_directXmlParserXMLReader"))) { $this->data_parser = new directXmlParserXMLReader ($this,$f_time,$f_timeout_count,$f_debug); }
+			if ((class_exists (/*#ifdef(PHP5n) */'\XMLReader'/* #*//*#ifndef(PHP5n):"XMLReader":#*/,/*#ifndef(PHP4) */false/* #*/))&&(defined ("CLASS_directXmlParserXMLReader"))) { $this->data_parser = new directXmlParserXMLReader ($this,$f_time,$f_timeout_count,$f_debug); }
 		}
 
 /* -------------------------------------------------------------------------
@@ -746,7 +746,7 @@ Initiate the array tree cache
 
 		if (defined ("CLASS_directXmlParserXMLReader"))
 		{
-			$f_parser_object = new XMLReader ();
+			$f_parser_object = new /*#ifdef(PHP5n) */\XMLReader/* #*//*#ifndef(PHP5n):XMLReader:#*/ ();
 			$f_parser_object->XML ($f_data);
 			if (is_object ($f_parser_object)) { $f_return = ($f_treemode ? $this->data_parser->xml2arrayXMLReader ($f_parser_object,$f_strict_standard) : $this->data_parser->xml2arrayXMLReaderMerged ($f_parser_object)); }
 		}
