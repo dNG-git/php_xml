@@ -14,8 +14,8 @@ language for controlling applications locally and world wide.
 @package    ext_core
 @subpackage xml
 @since      v0.1.00
-@license    http://www.direct-netware.de/redirect.php?licenses;w3c
-            W3C (R) Software License
+@license    http://www.direct-netware.de/redirect.php?licenses;mpl2
+            Mozilla Public License, v. 2.0
 """
 """n// NOTE
 ----------------------------------------------------------------------------
@@ -25,11 +25,11 @@ Multiple XML parser abstraction layer
 (C) direct Netware Group - All rights reserved
 http://www.direct-netware.de/redirect.php?ext_core_xml
 
-This work is distributed under the W3C (R) Software License, but without any
-warranty; without even the implied warranty of merchantability or fitness
-for a particular purpose.
+This Source Code Form is subject to the terms of the Mozilla Public License,
+v. 2.0. If a copy of the MPL was not distributed with this file, You can
+obtain one at http://mozilla.org/MPL/2.0/.
 ----------------------------------------------------------------------------
-http://www.direct-netware.de/redirect.php?licenses;w3c
+http://www.direct-netware.de/redirect.php?licenses;mpl2
 ----------------------------------------------------------------------------
 #echo(extCoreXmlVersion)#
 extCore_xml/#echo(__FILEPATH__)#
@@ -49,8 +49,8 @@ This implementation supports expat for XML parsing.
 @package    ext_core
 @subpackage xml
 @since      v0.1.00
-@license    http://www.direct-netware.de/redirect.php?licenses;w3c
-            W3C (R) Software License
+@license    http://www.direct-netware.de/redirect.php?licenses;mpl2
+            Mozilla Public License, v. 2.0
 	"""
 
 	data_merged_mode = False
