@@ -4,7 +4,7 @@
 /*n// NOTE
 ----------------------------------------------------------------------------
 Extended Core: XML
-Multiple XML parser abstraction layer
+Multiple XML parsers: Common abstraction layer
 ----------------------------------------------------------------------------
 (C) direct Netware Group - All rights reserved
 http://www.direct-netware.de/redirect.php?ext_core_xml
