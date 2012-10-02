@@ -4,18 +4,6 @@
 """
 XML (Extensible Markup Language) is the easiest way to use a descriptive
 language for controlling applications locally and world wide.
-
-@internal   We are using epydoc (JavaDoc style) to automate the
-            documentation process for creating the Developer's Manual.
-            Use the following line to ensure 76 character sizes:
-----------------------------------------------------------------------------
-@author     direct Netware Group
-@copyright  (C) direct Netware Group - All rights reserved
-@package    ext_core
-@subpackage xml
-@since      v0.1.00
-@license    http://www.direct-netware.de/redirect.php?licenses;mpl2
-            Mozilla Public License, v. 2.0
 """
 """n// NOTE
 ----------------------------------------------------------------------------
@@ -44,13 +32,13 @@ class direct_xml_parser_expat (object):
 	"""
 This implementation supports expat for XML parsing.
 
-@author     direct Netware Group
-@copyright  (C) direct Netware Group - All rights reserved
-@package    ext_core
-@subpackage xml
-@since      v0.1.00
-@license    http://www.direct-netware.de/redirect.php?licenses;mpl2
-            Mozilla Public License, v. 2.0
+:author:     direct Netware Group
+:copyright:  direct Netware Group - All rights reserved
+:package:    ext_core
+:subpackage: xml
+:since:      v0.1.00
+:license:    http://www.direct-netware.de/redirect.php?licenses;mpl2
+             Mozilla Public License, v. 2.0
 	"""
 
 	data_merged_mode = False
@@ -109,9 +97,10 @@ Construct the class
 		"""
 Constructor __init__ (direct_xml_parser_expat)
 
-@param parser Container for the XML document
-@param debug Debug flag
-@since v0.1.00
+:param parser: Container for the XML document
+:param debug: Debug flag
+
+:since: v0.1.00
 		"""
 
 		if (debug): self.debug = [ "xml/#echo(__FILEPATH__)# -xml_parser.__init__ (direct_xml_parser_expat)- (#echo(__LINE__)#)" ]
@@ -136,7 +125,7 @@ Connect to the Python container for the XML document
 		"""
 Destructor __del__ (direct_xml_parser_expat)
 
-@since v0.1.00
+:since: v0.1.00
 		"""
 
 		self.del_direct_xml_parser_expat ()
@@ -147,7 +136,7 @@ Destructor __del__ (direct_xml_parser_expat)
 		"""
 Destructor del_direct_xml_parser_expat (direct_xml_parser_expat)
 
-@since v0.1.00
+:since: v0.1.00
 		"""
 
 		self.parser = None
@@ -158,9 +147,10 @@ Destructor del_direct_xml_parser_expat (direct_xml_parser_expat)
 		"""
 Define the parser mode ("tree" or "merged").
 
-@param  mode Mode to select
-@return (bool) True if parser is set to merged mode
-@since  v0.1.00
+:param mode: Mode to select
+
+:return: (bool) True if parser is set to merged mode
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -184,9 +174,10 @@ Define the parser mode ("tree" or "merged").
 		"""
 Changes the parser mode regarding being strict standard conform.
 
-@param  strict_standard Be standard conform
-@return (bool) Accepted state
-@since  v0.1.00
+:param strict_standard: Be standard conform
+
+:return: (bool) Accepted state
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -211,8 +202,9 @@ which must distinguish these cases can use the StartCdataSectionHandler,
 EndCdataSectionHandler, and ElementDeclHandler callbacks to collect the
 required information.
 
-@param data Character data
-@since v0.1.00
+:param data: Character data
+
+:since: v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.expat_cdata (data)- (#echo(__LINE__)#)")
@@ -229,8 +221,9 @@ required information.
 		"""
 Method to handle "end element" callbacks.
 
-@param name XML tag
-@since v0.1.00
+:param name: XML tag
+
+:since: v0.1.00
 		"""
 
 		global _unicode_object
@@ -280,8 +273,9 @@ which must distinguish these cases can use the StartCdataSectionHandler,
 EndCdataSectionHandler, and ElementDeclHandler callbacks to collect the
 required information. (Merged XML parser)
 
-@param data Character data
-@since v0.1.00
+:param data: Character data
+
+:since: v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.expat_merged_cdata (data)- (#echo(__LINE__)#)")
@@ -298,8 +292,9 @@ required information. (Merged XML parser)
 		"""
 Method to handle "end element" callbacks. (Merged XML parser)
 
-@param name XML tag
-@since v0.1.00
+:param name: XML tag
+
+:since: v0.1.00
 		"""
 
 		global _unicode_object
@@ -341,9 +336,10 @@ Method to handle "end element" callbacks. (Merged XML parser)
 		"""
 Method to handle "start element" callbacks. (Merged XML parser)
 
-@param name XML tag
-@param attributes Node attributes
-@since v0.1.00
+:param name: XML tag
+:param attributes: Node attributes
+
+:since: v0.1.00
 		"""
 
 		global _unicode_object
@@ -411,9 +407,10 @@ Method to handle "start element" callbacks. (Merged XML parser)
 		"""
 Method to handle "start element" callbacks.
 
-@param name XML tag
-@param attributes Node attributes
-@since v0.1.00
+:param name: XML tag
+:param attributes: Node attributes
+
+:since: v0.1.00
 		"""
 
 		global _unicode_object
@@ -475,8 +472,8 @@ Method to handle "start element" callbacks.
 Adds the result of an expat parsing operation to the defined XML instance if
 the parser completed its work.
 
-@return (dict) Multi-dimensional XML tree
-@since  v0.1.00
+:return: (dict) Multi-dimensional XML tree
+:since:  v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.xml2array_expat ()- (#echo(__LINE__)#)")
@@ -505,8 +502,8 @@ the parser completed its work.
 Returns the merged result of an expat parsing operation if the parser
 completed its work.
 
-@return (dict) Merged XML tree
-@since  v0.1.00
+:return: (dict) Merged XML tree
+:since:  v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.xml2array_expat_merged ()- (#echo(__LINE__)#)")

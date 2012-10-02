@@ -4,18 +4,6 @@
 """
 XML (Extensible Markup Language) is the easiest way to use a descriptive
 language for controlling applications locally and world wide.
-
-@internal   We are using epydoc (JavaDoc style) to automate the
-            documentation process for creating the Developer's Manual.
-            Use the following line to ensure 76 character sizes:
-----------------------------------------------------------------------------
-@author     direct Netware Group
-@copyright  (C) direct Netware Group - All rights reserved
-@package    ext_core
-@subpackage xml
-@since      v0.1.00
-@license    http://www.direct-netware.de/redirect.php?licenses;mpl2
-            Mozilla Public License, v. 2.0
 """
 """n// NOTE
 ----------------------------------------------------------------------------
@@ -73,13 +61,13 @@ class direct_xml_reader (object):
 	"""
 This class provides a bridge between Python and XML to read XML on the fly.
 
-@author     direct Netware Group
-@copyright  (C) direct Netware Group - All rights reserved
-@package    ext_core
-@subpackage xml
-@since      v1.0.0
-@license    http://www.direct-netware.de/redirect.php?licenses;mpl2
-            Mozilla Public License, v. 2.0
+:author:     direct Netware Group
+:copyright:  direct Netware Group - All rights reserved
+:package:    ext_core
+:subpackage: xml
+:since:      v1.0.0
+:license:    http://www.direct-netware.de/redirect.php?licenses;mpl2
+             Mozilla Public License, v. 2.0
 	"""
 
 	data = None
@@ -146,12 +134,13 @@ Construct the class
 		"""
 Constructor __init__ (direct_xml_reader)
 
-@param xml_charset Charset to be added as information to XML output
-@param parse_only Parse data only
-@param current_time Current UNIX timestamp
-@param timeout_count Retries before timing out
-@param debug Debug flag
-@since v0.1.00
+:param xml_charset: Charset to be added as information to XML output
+:param parse_only: Parse data only
+:param current_time: Current UNIX timestamp
+:param timeout_count: Retries before timing out
+:param debug: Debug flag
+
+:since: v0.1.00
 		"""
 
 		global _direct_xml_reader_mode
@@ -186,7 +175,7 @@ Initiate the array tree cache
 		"""
 Destructor __del__ (direct_xml_reader)
 
-@since v0.1.00
+:since: v0.1.00
 		"""
 
 		self.del_direct_xml_reader ()
@@ -197,7 +186,7 @@ Destructor __del__ (direct_xml_reader)
 		"""
 Destructor del_direct_xml_reader (direct_xml_reader)
 
-@since v0.1.00
+:since: v0.1.00
 		"""
 
 		self.data_parser = None
@@ -208,10 +197,11 @@ Destructor del_direct_xml_reader (direct_xml_reader)
 		"""
 Builds recursively a valid XML ouput reflecting the given XML array tree.
 
-@param  xml_dict XML array tree level to work on
-@param  strict_standard Be standard conform
-@return (str) XML output string
-@since  v0.1.00
+:param xml_dict: XML array tree level to work on
+:param strict_standard: Be standard conform
+
+:return: (str) XML output string
+:since:  v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_reader.array2xml (xml_dict,strict_standard)- (#echo(__LINE__)#)")
@@ -261,11 +251,12 @@ Builds recursively a valid XML ouput reflecting the given XML array tree.
 		"""
 Builds recursively a valid XML ouput reflecting the given XML array tree.
 
-@param  data Array containing information about the current item
-@param  close_tag Output will contain a ending tag if true
-@param  strict_standard Be standard conform
-@return (str) XML output string
-@since  v0.1.00
+:param data: Array containing information about the current item
+:param close_tag: Output will contain a ending tag if true
+:param strict_standard: Be standard conform
+
+:return: (str) XML output string
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -369,9 +360,10 @@ Builds recursively a valid XML ouput reflecting the given XML array tree.
 Changes the object behaviour of deleting cached data after parsing is
 completed.
 
-@param  parse_only Parse data only
-@return (bool) Accepted state
-@since  v0.1.00
+:param parse_only: Parse data only
+
+:return: (bool) Accepted state
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -392,10 +384,11 @@ completed.
 		"""
 Searches haystack for needle. 
 
-@param  needle Value to be searched for
-@param  haystack Dict to search in
-@return (mixed) Key on success; False on error
-@since  v0.1.00
+:param needle: Value to be searched for
+:param haystack: Dict to search in
+
+:return: (mixed) Key on success; False on error
+:since:  v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_reader.dict_search ({0},haystack)- (#echo(__LINE__)#)".format (needle))
@@ -421,8 +414,8 @@ Searches haystack for needle.
 		"""
 This operation just gives back the content of self.data.
 
-@return (mixed) XML data on success; false on error
-@since  v0.1.00
+:return: (mixed) XML data on success; false on error
+:since:  v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_reader.get ()- (#echo(__LINE__)#)")
@@ -436,12 +429,13 @@ This operation just gives back the content of self.data.
 		"""
 Adds a XML node with content - recursively if required.
 
-@param  node_path Path to the new node - delimiter is space
-@param  value Value for the new node
-@param  attributes Attributes of the node
-@param  add_recursively True to create the required tree recursively
-@return (bool) False on error
-@since  v0.1.00
+:param node_path: Path to the new node - delimiter is space
+:param value: Value for the new node
+:param attributes: Attributes of the node
+:param add_recursively: True to create the required tree recursively
+
+:return: (bool) False on error
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -649,9 +643,10 @@ Adds a XML node with content - recursively if required.
 		"""
 Registers a namespace (URI) for later use with this XML bridge class.
 
-@param ns Output relevant namespace definition
-@param uri Uniform Resource Identifier
-@since v0.1.00
+:param ns: Output relevant namespace definition
+:param uri: Uniform Resource Identifier
+
+:since: v0.1.00
 		"""
 
 		global _unicode_object
@@ -675,9 +670,10 @@ Registers a namespace (URI) for later use with this XML bridge class.
 Translates the tag value if a predefined namespace matches. The translated
 tag will be saved as "tag_ns" and "tag_parsed".
 
-@param  node XML array node
-@return (dict) Checked XML array node
-@since  v0.1.00
+:param node: XML array node
+
+:return: (dict) Checked XML array node
+:since:  v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_reader.ns_translate (node)- (#echo(__LINE__)#)")
@@ -731,9 +727,10 @@ tag will be saved as "tag_ns" and "tag_parsed".
 Checks input path for predefined namespaces converts it to the internal
 path.
 
-@param  node_path Path to the new node - delimiter is space
-@return (str) Output node path
-@since  v0.1.00
+:param node_path: Path to the new node - delimiter is space
+
+:return: (str) Output node path
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -778,8 +775,9 @@ path.
 		"""
 Unregisters a namespace or clears the cache (if $ns is empty).
 
-@param ns Output relevant namespace definition
-@since v0.1.00
+:param ns: Output relevant namespace definition
+
+:since: v0.1.00
 		"""
 
 		global _unicode_object
@@ -812,10 +810,11 @@ Unregisters a namespace or clears the cache (if $ns is empty).
 		"""
 "Imports" a XML tree into the cache.
 
-@param  xml_dict Input array
-@param  overwrite True to overwrite the current (non-empty) cache
-@return (bool) True on success
-@since  v0.1.00
+:param xml_dict: Input array
+:param overwrite: True to overwrite the current (non-empty) cache
+
+:return: (bool) True on success
+:since:  v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_reader.set (xml_dict,overwrite)- (#echo(__LINE__)#)")
@@ -835,12 +834,13 @@ Unregisters a namespace or clears the cache (if $ns is empty).
 		"""
 Converts XML data into a multi-dimensional or merged array ...
 
-@param  data Input XML data
-@param  strict_standard Be standard conform
-@param  treemode Create a multi-dimensional result
-@return (mixed) Multi-dimensional XML tree or merged dictionary; False on
-        error
-@since  v0.1.00
+:param data: Input XML data
+:param strict_standard: Be standard conform
+:param treemode: Create a multi-dimensional result
+
+:return: (mixed) Multi-dimensional XML tree or merged dictionary; False on
+         error
+:since:  v0.1.00
 		"""
 
 		global _direct_xml_reader_mode,_unicode_object

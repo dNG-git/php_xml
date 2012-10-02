@@ -4,18 +4,6 @@
 """
 XML (Extensible Markup Language) is the easiest way to use a descriptive
 language for controlling applications locally and world wide.
-
-@internal   We are using epydoc (JavaDoc style) to automate the
-            documentation process for creating the Developer's Manual.
-            Use the following line to ensure 76 character sizes:
-----------------------------------------------------------------------------
-@author     direct Netware Group
-@copyright  (C) direct Netware Group - All rights reserved
-@package    ext_core
-@subpackage xml
-@since      v0.1.00
-@license    http://www.direct-netware.de/redirect.php?licenses;mpl2
-            Mozilla Public License, v. 2.0
 """
 """n// NOTE
 ----------------------------------------------------------------------------
@@ -47,13 +35,13 @@ class direct_xml_parser_MonoXML (object):
 	"""
 This implementation supports XmlNodeReader for XML parsing.
 
-@author     direct Netware Group
-@copyright  (C) direct Netware Group - All rights reserved
-@package    ext_core
-@subpackage xml
-@since      v0.1.00
-@license    http://www.direct-netware.de/redirect.php?licenses;mpl2
-            Mozilla Public License, v. 2.0
+:author:     direct Netware Group
+:copyright:  direct Netware Group - All rights reserved
+:package:    ext_core
+:subpackage: xml
+:since:      v0.1.00
+:license:    http://www.direct-netware.de/redirect.php?licenses;mpl2
+             Mozilla Public License, v. 2.0
 	"""
 
 	debug = None
@@ -84,11 +72,12 @@ Construct the class
 		"""
 Constructor __init__ (direct_xml_parser_MonoXML)
 
-@param parser Container for the XML document
-@param current_time Current UNIX timestamp
-@param timeout_count Retries before timing out
-@param debug Debug flag
-@since v0.1.00
+:param parser: Container for the XML document
+:param current_time: Current UNIX timestamp
+:param timeout_count: Retries before timing out
+:param debug: Debug flag
+
+:since: v0.1.00
 		"""
 
 		if (debug): self.debug = [ "xml/#echo(__FILEPATH__)# -xml_parser.__init__ (direct_xml_parser_MonoXML)- (#echo(__LINE__)#)" ]
@@ -114,7 +103,7 @@ Connect to the Python container for the XML document
 		"""
 Destructor __del__ (direct_xml_parser_MonoXML)
 
-@since v0.1.00
+:since: v0.1.00
 		"""
 
 		self.del_direct_xml_parser_MonoXML ()
@@ -125,7 +114,7 @@ Destructor __del__ (direct_xml_parser_MonoXML)
 		"""
 Destructor del_direct_xml_parser_MonoXML (direct_xml_parser_MonoXML)
 
-@since v0.1.00
+:since: v0.1.00
 		"""
 
 		self.parser = None
@@ -137,10 +126,11 @@ Destructor del_direct_xml_parser_MonoXML (direct_xml_parser_MonoXML)
 Adds the result of an expat parsing operation to the defined XML instance if
 the parser completed its work.
 
-@param  XmlNodeReader XmlNodeReader object
-@param  strict_standard Be standard conform
-@return (dict) Multi-dimensional XML tree
-@since  v0.1.00
+:param XmlNodeReader: XmlNodeReader object
+:param strict_standard: Be standard conform
+
+:return: (dict) Multi-dimensional XML tree
+:since:  v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.xml2array_MonoXML (XmlNodeReader,strict_standard)- (#echo(__LINE__)#)")
@@ -172,10 +162,11 @@ the parser completed its work.
 		"""
 Imports a pre-parsed XML dictionary into the given parser instance.
 
-@param  data_dict Result dictionary of a "xml2array_MonoXML_walker ()"
-@param  strict_standard Be standard conform
-@return (bool) True on success
-@since  v0.1.00
+:param data_dict: Result dictionary of a "xml2array_MonoXML_walker ()"
+:param strict_standard: Be standard conform
+
+:return: (bool) True on success
+:since:  v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_parser.xml2array_MonoXML_array_walker (data_dict,strict_standard)- (#echo(__LINE__)#)")
@@ -211,9 +202,10 @@ Imports a pre-parsed XML dictionary into the given parser instance.
 Converts XML data into a merged dictionary ... using the
 "simplexml_load_string ()" result.
 
-@param  XmlNodeReader XmlNodeReader object
-@return (dict) Merged XML tree
-@since  v0.1.00
+:param XmlNodeReader: XmlNodeReader object
+
+:return: (dict) Merged XML tree
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -349,12 +341,13 @@ Converts XML data into a merged dictionary ... using the
 Converts XML data into a multi-dimensional dictionary using the recursive
 algorithm.
 
-@param  XmlNodeReader XmlNodeReader object
-@param  strict_standard Be standard conform
-@param  node_path Old node path (for recursive use only)
-@param  xml_level Current XML depth
-@return (mixed) XML node dictionary on success; false on error
-@since  v0.1.00
+:param XmlNodeReader: XmlNodeReader object
+:param strict_standard: Be standard conform
+:param node_path: Old node path (for recursive use only)
+:param xml_level: Current XML depth
+
+:return: (mixed) XML node dictionary on success; false on error
+:since:  v0.1.00
 		"""
 
 		global _unicode_object

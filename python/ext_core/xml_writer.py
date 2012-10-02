@@ -4,18 +4,6 @@
 """
 XML (Extensible Markup Language) is the easiest way to use a descriptive
 language for controlling applications locally and world wide.
-
-@internal   We are using epydoc (JavaDoc style) to automate the
-            documentation process for creating the Developer's Manual.
-            Use the following line to ensure 76 character sizes:
-----------------------------------------------------------------------------
-@author     direct Netware Group
-@copyright  (C) direct Netware Group - All rights reserved
-@package    ext_core
-@subpackage xml
-@since      v0.1.00
-@license    http://www.direct-netware.de/redirect.php?licenses;mpl2
-            Mozilla Public License, v. 2.0
 """
 """n// NOTE
 ----------------------------------------------------------------------------
@@ -49,13 +37,13 @@ class direct_xml_writer (direct_xml_reader):
 This class extends the bridge between Python and XML to work with XML and
 create valid documents.
 
-@author     direct Netware Group
-@copyright  (C) direct Netware Group - All rights reserved
-@package    ext_core
-@subpackage xml
-@since      v1.0.0
-@license    http://www.direct-netware.de/redirect.php?licenses;mpl2
-            Mozilla Public License, v. 2.0
+:author:     direct Netware Group
+:copyright:  direct Netware Group - All rights reserved
+:package:    ext_core
+:subpackage: xml
+:since:      v1.0.0
+:license:    http://www.direct-netware.de/redirect.php?licenses;mpl2
+             Mozilla Public License, v. 2.0
 	"""
 
 	"""
@@ -69,11 +57,12 @@ Extend the class
 		"""
 Constructor __init__ (direct_xml_writer)
 
-@param xml_charset Charset to be added as information to XML output
-@param current_time Current UNIX timestamp
-@param timeout_count Retries before timing out
-@param debug Debug flag
-@since v0.1.00
+:param xml_charset: Charset to be added as information to XML output
+:param current_time: Current UNIX timestamp
+:param timeout_count: Retries before timing out
+:param debug: Debug flag
+
+:since: v0.1.00
 		"""
 
 		direct_xml_reader.__init__ (self,xml_charset,False,current_time,timeout_count,debug)
@@ -84,7 +73,7 @@ Constructor __init__ (direct_xml_writer)
 		"""
 Destructor del_direct_xml_writer (direct_xml_writer)
 
-@since v0.1.00
+:since: v0.1.00
 		"""
 
 		self.del_direct_xml_reader ()
@@ -95,10 +84,11 @@ Destructor del_direct_xml_writer (direct_xml_writer)
 		"""
 Read and convert a simple multi-dimensional dict into our XML tree.
 
-@param  data_dict Input array
-@param  overwrite True to overwrite the current (non-empty) cache
-@return (bool) True on success
-@since  v0.1.00
+:param data_dict: Input array
+:param overwrite: True to overwrite the current (non-empty) cache
+
+:return: (bool) True on success
+:since:  v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_handler.array_import (data_dict,overwrite)- (#echo(__LINE__)#)")
@@ -119,10 +109,11 @@ Read and convert a simple multi-dimensional dict into our XML tree.
 		"""
 Read and convert a single dimension of an dictionary for our XML tree.
 
-@param  data_dict Input array
-@param  xml_level Current level of an multi-dimensional array
-@return (dict) Output dictionary
-@since  v0.1.00
+:param data_dict: Input array
+:param xml_level: Current level of an multi-dimensional array
+
+:return: (dict) Output dictionary
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -161,10 +152,11 @@ Read and convert a single dimension of an dictionary for our XML tree.
 		"""
 Convert the cached XML tree into a XML string.
 
-@param  flush True to delete the cache content
-@param  strict_standard Be standard conform
-@return (str) Result string
-@since  v0.1.00
+:param flush: True to delete the cache content
+:param strict_standard: Be standard conform
+
+:return: (str) Result string
+:since:  v0.1.00
 		"""
 
 		if (self.debug != None): self.debug.append ("xml/#echo(__FILEPATH__)# -xml_handler.cache_export (flush,strict_standard)- (#echo(__LINE__)#)")
@@ -184,9 +176,10 @@ Convert the cached XML tree into a XML string.
 		"""
 Set the cache pointer to a specific node.
 
-@param  node_path Path to the node - delimiter is space
-@return (bool) True on success
-@since  v0.1.00
+:param node_path: Path to the node - delimiter is space
+
+:return: (bool) True on success
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -222,10 +215,11 @@ Set the cache pointer to a specific node.
 Change the attributes of a specified node. Note: XMLNS updates must be
 handled by the calling code.
 
-@param  node_path Path to the new node - delimiter is space
-@param  attributes Attributes of the node
-@return (bool) False on error
-@since  v0.1.00
+:param node_path: Path to the new node - delimiter is space
+:param attributes: Attributes of the node
+
+:return: (bool) False on error
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -256,10 +250,11 @@ handled by the calling code.
 		"""
 Change the value of a specified node.
 
-@param  node_path Path to the new node - delimiter is space
-@param  value Value for the new node
-@return (bool) False on error
-@since  v0.1.00
+:param node_path: Path to the new node - delimiter is space
+:param value: Value for the new node
+
+:return: (bool) False on error
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -292,9 +287,10 @@ Change the value of a specified node.
 		"""
 Count the occurrence of a specified node.
 
-@param  node_path Path to the node - delimiter is space
-@return (int) Counted number off matching nodes
-@since  v0.1.00
+:param node_path: Path to the node - delimiter is space
+
+:return: (int) Counted number off matching nodes
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -341,10 +337,11 @@ Get the parent node of the target.
 		"""
 Read a specified node including all children if applicable.
 
-@param  node_path Path to the node - delimiter is space
-@param  remove_metadata False to not remove the xml.item node
-@return (mixed) XML node array on success; false on error
-@since  v0.1.00
+:param node_path: Path to the node - delimiter is space
+:param remove_metadata: False to not remove the xml.item node
+
+:return: (mixed) XML node array on success; false on error
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -373,9 +370,10 @@ Read a specified node including all children if applicable.
 		"""
 Returns the pointer to a specific node.
 
-@param  node_path Path to the node - delimiter is space
-@return (mixed) XML node pointer on success; false on error
-@since  v0.1.00
+:param node_path: Path to the node - delimiter is space
+
+:return: (mixed) XML node pointer on success; false on error
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -450,9 +448,10 @@ Returns the pointer to a specific node.
 		"""
 Remove a node and all children if applicable.
 
-@param  node_path Path to the node - delimiter is space
-@return (bool) False on error
-@since  v0.1.00
+:param node_path: Path to the node - delimiter is space
+
+:return: (bool) False on error
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
@@ -571,9 +570,10 @@ Update the mtree counter or remove it if applicable.
 Returns the registered namespace (URI) for a given XML NS or node name
 containing the registered XML NS.
 
-@param  data XML NS or node name
-@return (str) Namespace (URI)
-@since  v0.1.00
+:param data: XML NS or node name
+
+:return: (str) Namespace (URI)
+:since:  v0.1.00
 		"""
 
 		global _unicode_object
