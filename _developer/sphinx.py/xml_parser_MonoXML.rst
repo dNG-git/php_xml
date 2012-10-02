@@ -1,5 +1,5 @@
-xml_reader
-==========
+xml_parser_MonoXML
+==================
 
 .. automodule:: ext_core.xml_parser_MonoXML
     :members:
