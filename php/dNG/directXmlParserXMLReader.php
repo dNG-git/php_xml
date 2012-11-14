@@ -530,4 +530,3 @@ define ("CLASS_directXmlParserXMLReader",true);
 }
 
 //j// EOF
-?>

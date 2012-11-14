@@ -808,4 +808,3 @@ if (!defined ("USE_xml_implementation")) { define ("USE_xml_implementation","aut
 }
 
 //j// EOF
-?>

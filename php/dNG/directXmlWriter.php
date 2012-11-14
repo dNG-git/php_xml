@@ -544,4 +544,3 @@ define ("CLASS_directXmlWriter",true);
 }
 
 //j// EOF
-?>

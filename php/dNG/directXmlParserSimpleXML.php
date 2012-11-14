@@ -344,4 +344,3 @@ define ("CLASS_directXmlParserSimpleXML",true);
 }
 
 //j// EOF
-?>
