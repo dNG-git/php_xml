@@ -1,8 +1,8 @@
-# Extended Core: XML
-# Multiple XML parsers: Common abstraction layer
+# XML.php
+# Multiple XML parsers with a common abstraction layer
 
 # Source file or directory to parse
-#source: ../php
+#source: ../libs
 # Use a generated source tree directory
 
 # Directory where to save the generated documentation
