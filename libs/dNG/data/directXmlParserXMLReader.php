@@ -35,13 +35,12 @@ NOTE_END //n*/
 * @license   http://www.direct-netware.de/redirect.php?licenses;mpl2
 *            Mozilla Public License, v. 2.0
 */
+
 /*#ifdef(PHP5n) */
-
 namespace dNG\data;
-
 use XMLReader;
-/* #\n*/
 
+/* #\n*/
 /* -------------------------------------------------------------------------
 All comments will be removed in the "production" packages (they will be in
 all development packets)
