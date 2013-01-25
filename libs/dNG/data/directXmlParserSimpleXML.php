@@ -35,11 +35,11 @@ NOTE_END //n*/
 * @license   http://www.direct-netware.de/redirect.php?licenses;mpl2
 *            Mozilla Public License, v. 2.0
 */
+
 /*#ifdef(PHP5n) */
-
 namespace dNG\data;
-/* #\n*/
 
+/* #\n*/
 /* -------------------------------------------------------------------------
 All comments will be removed in the "production" packages (they will be in
 all development packets)
@@ -63,18 +63,18 @@ class directXmlParserSimpleXML
 	* @var object $event_handler The EventHandler is called whenever debug messages
 	*      should be logged or errors happened.
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $event_handler;
+	protected $event_handler;
 /**
 	* @var direct_xml_reader $parser Container for the XML document
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $parser;
+	protected $parser;
 /**
 	* @var integer $timeout_retries Retries before timing out
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $timeout_retries;
+	protected $timeout_retries;
 
 /* -------------------------------------------------------------------------
-Construct the class using old and new behavior
+Construct the class
 ------------------------------------------------------------------------- */
 
 /**
@@ -85,9 +85,9 @@ Construct the class using old and new behavior
 	* @param object $event_handler EventHandler to use
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function __construct(&$parser, $timeout_retries = 5, $event_handler = NULL)
+	public function __construct(&$parser, $timeout_retries = 5, $event_handler = NULL)
 	{
-		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -XmlParser->__construct(directXmlParserSimpleXML)- (#echo(__LINE__)#)"); }
+		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -xml->__construct(directXmlParserSimpleXML)- (#echo(__LINE__)#)"); }
 
 /* -------------------------------------------------------------------------
 Connect to the PHP container for the XML document 
@@ -97,23 +97,12 @@ Connect to the PHP container for the XML document
 		$this->parser = $parser;
 		$this->timeout_retries = $timeout_retries;
 	}
-/*#ifdef(PHP4):
-/**
-	* Constructor (PHP4) directXmlParserSimpleXML
-	*
-	* @param direct_xml_reader &$parser Container for the XML document
-	* @param integer $timeout_retries Retries before timing out
-	* @param object $event_handler EventHandler to use
-	* @since v0.1.00
-*\/
-	function directXmlParserSimpleXML(&$parser, $timeout_retries = 5, $event_handler = NULL) { $this->__construct($parser, $timeout_retries, $event_handler); }
-:#\n*/
 /**
 	* Destructor (PHP5+) __destruct (directXmlParserSimpleXML)
 	*
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function __destruct() { $this->parser = NULL; }
+	public function __destruct() { $this->parser = NULL; }
 
 /**
 	* Sets the EventHandler.
@@ -121,9 +110,9 @@ Connect to the PHP container for the XML document
 	* @param object $event_handler EventHandler to use
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function setEventHandler($event_handler)
+	public function setEventHandler($event_handler)
 	{
-		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -XmlParser->setEventHandler(+event_handler)- (#echo(__LINE__)#)"); }
+		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -xml->setEventHandler(+event_handler)- (#echo(__LINE__)#)"); }
 		$this->event_handler = $event_handler;
 	}
 
@@ -135,9 +124,9 @@ Connect to the PHP container for the XML document
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function SimpleXMLArrayWalker(&$data, $strict_standard = true)
+	protected function SimpleXMLArrayWalker(&$data, $strict_standard = true)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -XmlParser->SimpleXMLArrayWalker(+data, +strict_standard)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->SimpleXMLArrayWalker(+data, +strict_standard)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if (is_array($data))
@@ -171,9 +160,9 @@ Connect to the PHP container for the XML document
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function SimpleXMLMergedArrayWalker(&$data, $return = NULL)
+	public function SimpleXMLMergedArrayWalker(&$data, $return = NULL)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -XmlParser->SimpleXMLMergedArrayWalker(+data, +return)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->SimpleXMLMergedArrayWalker(+data, +return)- (#echo(__LINE__)#)"); }
 		if (!isset($return)) { $return = array(); }
 
 		if (is_array($data))
@@ -224,9 +213,9 @@ Connect to the PHP container for the XML document
 	* @return mixed XML node array on success; false on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function SimpleXMLWalker(&$xmlelement, $strict_standard = true, $node_path = "", $xml_level = 0)
+	protected function SimpleXMLWalker(&$xmlelement, $strict_standard = true, $node_path = "", $xml_level = 0)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -XmlParser->SimpleXMLWalker(+xmlreader, +strict_standard, $node_path, $xml_level)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->SimpleXMLWalker(+xmlreader, +strict_standard, $node_path, $xml_level)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if (is_object($xmlelement))
@@ -278,7 +267,7 @@ Connect to the PHP container for the XML document
 				else { $is_timed_out = true; }
 			}
 
-			if ($is_timed_out && $this->event_handler !== NULL) { $this->event_handler->error("#echo(__FILEPATH__)# -XmlParser->SimpleXMLWalker()- timed out"); }
+			if ($is_timed_out && $this->event_handler !== NULL) { $this->event_handler->error("#echo(__FILEPATH__)# -xml->SimpleXMLWalker()- timed out"); }
 			$return = array("node_path" => $node_path, "value" => ($preserve_value ? (string)$xmlelement : trim((string)$xmlelement)), "attributes" => $attributes_array, "children" => $nodes_array);
 		}
 
@@ -294,9 +283,9 @@ Connect to the PHP container for the XML document
 	* @return array Multi-dimensional XML tree
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function xml2arraySimpleXML(&$xmlelement, $strict_standard = true)
+	public function xml2arraySimpleXML(&$xmlelement, $strict_standard = true)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -XmlParser->xml2arraySimpleXML(+xmlreader, +strict_standard)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->xml2arraySimpleXML(+xmlreader, +strict_standard)- (#echo(__LINE__)#)"); }
 		$return = array();
 
 		if (is_object($xmlelement))
@@ -319,9 +308,9 @@ Connect to the PHP container for the XML document
 	* @return array Merged XML tree
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function xml2arraySimpleXMLMerged(&$xmlelement)
+	public function xml2arraySimpleXMLMerged(&$xmlelement)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -XmlParser->xml2arraySimpleXMLMerged(+xmlreader)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->xml2arraySimpleXMLMerged(+xmlreader)- (#echo(__LINE__)#)"); }
 		$return = array();
 
 		if (is_object($xmlelement))

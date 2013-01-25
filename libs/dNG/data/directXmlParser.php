@@ -35,11 +35,11 @@ NOTE_END //n*/
 * @license   http://www.direct-netware.de/redirect.php?licenses;mpl2
 *            Mozilla Public License, v. 2.0
 */
+
 /*#ifdef(PHP5n) */
-
 namespace dNG\data;
-/* #\n*/
 
+/* #\n*/
 /* -------------------------------------------------------------------------
 All comments will be removed in the "production" packages (they will be in
 all development packets)
@@ -59,67 +59,85 @@ all development packets)
 */
 class directXmlParser
 {
+	const EXPAT = 1;
+	const SIMPLEXML = 2;
+	const XMLREADER = 3;
+
 /**
 	* @var array $data XML data
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data;
+	protected $data;
 /**
 	* @var string $data_cache_node Path of the cached node pointer
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_cache_node;
+	protected $data_cache_node;
 /**
 	* @var mixed $data_cache_ptr Reference of the cached node pointer
 	*      (string if unset)
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_cache_ptr;
+	protected $data_cache_ptr;
 /**
 	* @var string $data_charset Charset used
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_charset;
+	protected $data_charset;
 /**
 	* @var array $data_ns Cache for known XML NS (URI)
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_ns;
+	protected $data_ns;
 /**
 	* @var array $data_ns_compact Cache for the compact number of a XML NS
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_ns_compact;
+	protected $data_ns_compact;
 /**
 	* @var integer $data_ns_compact Counter for the compact link numbering
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_ns_counter;
+	protected $data_ns_counter;
 /**
 	* @var array $data_ns_default Cache for the XML NS and the
 	*      corresponding number
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_ns_default;
+	protected $data_ns_default;
 /**
 	* @var array $data_ns_predefined_default Cache of node pathes with a
 	*      predefined NS (key = Compact name)
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_ns_predefined_compact;
+	protected $data_ns_predefined_compact;
 /**
 	* @var array $data_ns_predefined_default Cache of node pathes with a
 	*      predefined NS (key = Full name)
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_ns_predefined_default;
+	protected $data_ns_predefined_default;
 /**
 	* @var boolean $data_parse_only Parse data only
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_parse_only;
+	protected $data_parse_only;
 /**
 	* @var object $data_parser The selected parser implementation
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_parser;
-/**
-	* @var object $data_parser_name The selected parser implementation name
-*/
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $data_parser_name;
+	protected $data_parser;
 /**
 	* @var object $event_handler The EventHandler is called whenever debug messages
 	*      should be logged or errors happened.
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $event_handler;
+	protected $event_handler;
+/**
+	* @var int $implementation Implementation identifier
+*/
+	protected $implementation;
+/**
+	* @var boolean $PHP_fopen_url True if the PHP function
+	*      "simplexml_load_string()" is supported.
+*/
+	protected $PHP_simplexml_load_string;
+/**
+	* @var boolean $PHP_curl_init True if the PHP class "XMLReader" is supported.
+*/
+	protected $PHP_XMLReader;
+/**
+	* @var boolean $PHP_stream_select True if the PHP function "xml_parser_create()"
+	*      is supported.
+*/
+	protected $PHP_xml_parser_create;
 
 /* -------------------------------------------------------------------------
 Construct the class using old and new behavior
@@ -134,33 +152,9 @@ Construct the class using old and new behavior
 	* @param object $event_handler EventHandler to use
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function __construct($charset = "UTF-8", $parse_only = true, $timeout_retries = 5, $event_handler = NULL)
+	public function __construct($charset = "UTF-8", $parse_only = true, $timeout_retries = 5, $event_handler = NULL)
 	{
-		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -Xml->__construct(directXmlParser)- (#echo(__LINE__)#)"); }
-
-/* -------------------------------------------------------------------------
-Force or automatically select an implemenation 
-------------------------------------------------------------------------- */
-
-		$this->data_parser = NULL;
-
-		if (USE_xml_implementation == "autoselect" || USE_xml_implementation == "expat")
-		{
-			if (function_exists("xml_parser_create") && class_exists(/*#ifdef(PHP5n) */'dNG\data\directXmlParserExpat'/* #*//*#ifndef(PHP5n):"directXmlParserExpat":#*/)) { $this->data_parser = new directXmlParserExpat($this, $event_handler); }
-			if ($this->data_parser !== NULL) { $this->data_parser_name = "expat"; }
-		}
-
-		if (USE_xml_implementation == "autoselect" && ($this->data_parser === NULL || USE_xml_implementation == "SimpleXML"))
-		{
-			if (function_exists("simplexml_load_string") && class_exists(/*#ifdef(PHP5n) */'dNG\data\directXmlParserSimpleXML'/* #*//*#ifndef(PHP5n):"directXmlParserSimpleXML":#*/)) { $this->data_parser = new directXmlParserSimpleXML($this, $timeout_retries, $event_handler); }
-			if ($this->data_parser !== NULL) { $this->data_parser_name = "SimpleXML"; }
-		}
-
-		if (USE_xml_implementation == "autoselect" && ($this->data_parser === NULL || USE_xml_implementation == "XMLReader"))
-		{
-			if (class_exists("XMLReader"/*#ifndef(PHP4) */, false/* #*/) && class_exists(/*#ifdef(PHP5n) */'dNG\data\directXmlParserXMLReader'/* #*//*#ifndef(PHP5n):"directXmlParserXMLReader":#*/)) { $this->data_parser = new directXmlParserXMLReader($this, $timeout_retries, $event_handler); }
-			if ($this->data_parser !== NULL) { $this->data_parser_name = "XMLReader"; }
-		}
+		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -xml->__construct(directXmlParser)- (#echo(__LINE__)#)"); }
 
 /* -------------------------------------------------------------------------
 Initiate the array tree cache
@@ -178,25 +172,23 @@ Initiate the array tree cache
 		$this->data_ns_predefined_default = array();
 		$this->data_parse_only = $parse_only;
 		$this->event_handler = $event_handler;
+
+/* -------------------------------------------------------------------------
+Select an implemenation 
+------------------------------------------------------------------------- */
+
+		$this->PHP_simplexml_load_string = function_exists("simplexml_load_string");
+		$this->PHP_XMLReader = class_exists("XMLReader", false);
+		$this->PHP_xml_parser_create = function_exists("xml_parser_create");
+
+		$this->setImplementation();
 	}
-/*#ifdef(PHP4):
-/**
-	* Constructor (PHP4) directXmlParser
-	*
-	* @param string $charset Charset to be added as information to XML output
-	* @param boolean $parse_only Parse data only
-	* @param integer $timeout_retries Retries before timing out
-	* @param object $event_handler EventHandler to use
-	* @since v0.1.00
-*\/
-	function directXmlParser($charset = "UTF-8", $parse_only = true, $timeout_retries = 5, $event_handler = NULL) { $this->__construct($charset, $parse_only, $timeout_retries, $event_handler); }
-:#\n*/
 /**
 	* Destructor (PHP5+) __destruct (directXmlParser)
 	*
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function __destruct() { $this->data_parser = NULL; }
+	public function __destruct() { $this->data_parser = NULL; }
 
 /**
 	* Builds recursively a valid XML ouput reflecting the given XML array tree.
@@ -206,9 +198,9 @@ Initiate the array tree cache
 	* @return string XML output string
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function array2xml(&$xml_array, $strict_standard = true)
+	public function array2xml(&$xml_array, $strict_standard = true)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->array2xml(+xml_array, +strict_standard)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->array2xml(+xml_array, +strict_standard)- (#echo(__LINE__)#)"); }
 		$return = "";
 
 		if (is_array($xml_array) && !empty($xml_array))
@@ -248,9 +240,9 @@ Initiate the array tree cache
 	* @return string XML output string
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function array2xmlItemEncoder($data, $close_tag = true, $strict_standard = true)
+	public function array2xmlItemEncoder($data, $close_tag = true, $strict_standard = true)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->array2xmlItemEncoder(+data, +close_tag, +strict_standard)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->array2xmlItemEncoder(+data, +close_tag, +strict_standard)- (#echo(__LINE__)#)"); }
 		$return = "";
 
 		$value_as_attribute = ($strict_standard ? false : true);
@@ -332,9 +324,9 @@ Initiate the array tree cache
 	* @return boolean Accepted state
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function defineParseOnly($parse_only = true)
+	public function defineParseOnly($parse_only = true)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->defineParseOnly(+parse_only)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->defineParseOnly(+parse_only)- (#echo(__LINE__)#)"); }
 
 		if ((is_bool($parse_only) || is_string($parse_only)) && $parse_only) { $this->data_parse_only = true; }
 		elseif ($parse_only === NULL && !$this->data_parse_only) { $this->data_parse_only = true; }
@@ -349,12 +341,24 @@ Initiate the array tree cache
 	* @return mixed XML data on success; false on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function get()
+	public function get()
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->get()- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->get()- (#echo(__LINE__)#)"); }
 
 		if (isset($this->data)) { return $this->data; }
 		else { return false; }
+	}
+
+/**
+	* Returns the parser implementation in use.
+	*
+	* @return int Implementation identifier
+	* @since  v0.1.00
+*/
+	public function getImplementation()
+	{
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->getImplementation()- (#echo(__LINE__)#)"); }
+		return $this->implementation;
 	}
 
 /**
@@ -368,16 +372,16 @@ Initiate the array tree cache
 	* @return boolean False on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function nodeAdd($node_path, $value = "", $attributes = "", $add_recursively = true)
+	public function nodeAdd($node_path, $value = "", $attributes = "", $add_recursively = true)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nodeAdd($node_path, +value, +attributes, +add_recursively)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nodeAdd($node_path, +value, +attributes, +add_recursively)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if (is_string($node_path) && !is_array($value) && !is_object($value))
 		{
 			$node_path = $this->nsTranslatePath($node_path);
 
-			if (strlen($this->data_cache_node) && /*#ifndef(PHP4) */stripos($this->data_cache_node, $node_path) === 0/* #*//*#ifdef(PHP4):preg_match("#^".preg_quote($node_path, "#")."#i", $this->data_cache_node):#*/)
+			if (strlen($this->data_cache_node) && stripos($this->data_cache_node, $node_path) === 0)
 			{
 				$node_path = trim(substr($node_path, strlen($this->data_cache_node)));
 				$node_path_done = $this->data_cache_node;
@@ -436,7 +440,7 @@ Initiate the array tree cache
 
 						foreach ($attributes as $key => $value)
 						{
-							if (/*#ifndef(PHP4) */stripos($key, "xmlns:") === 0/* #*//*#ifdef(PHP4):preg_match("#^xmlns\:#i", $key):#*/)
+							if (stripos($key, "xmlns:") === 0)
 							{
 								$ns_name = substr($key, 6);
 
@@ -554,9 +558,9 @@ Initiate the array tree cache
 	* @param string $uri Uniform Resource Identifier
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function nsRegister($ns, $uri)
+	public function nsRegister($ns, $uri)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nsRegister($ns, $uri)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nsRegister($ns, $uri)- (#echo(__LINE__)#)"); }
 		$this->data_ns[$ns] = $uri;
 
 		if (!isset($this->data_ns_default[$uri]))
@@ -575,9 +579,9 @@ Initiate the array tree cache
 	* @return array Checked XML array node
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function nsTranslate($node)
+	public function nsTranslate($node)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nsTranslate(+node)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nsTranslate(+node)- (#echo(__LINE__)#)"); }
 		$return = $node;
 
 		if (is_array($node) && isset($node['xmlns']) && is_array($node['xmlns']) && isset($node['tag']))
@@ -585,7 +589,7 @@ Initiate the array tree cache
 			$return['tag_ns'] = "";
 			$return['tag_parsed'] = $node['tag'];
 
-			if (preg_match("#^(.+?):(\w+)$#", $node['tag'], $result_array) && isset($node['xmlns'][$result_array[1]]/*#ifndef(PHP4) */, /* #*//*#ifdef(PHP4):) && isset(:#*/$this->data_ns_compact[$node['xmlns'][$result_array[1]]]))
+			if (preg_match("#^(.+?):(\w+)$#", $node['tag'], $result_array) && isset($node['xmlns'][$result_array[1]], $this->data_ns_compact[$node['xmlns'][$result_array[1]]]))
 			{
 				$tag_ns = array_search($this->data_ns_compact[$node['xmlns'][$result_array[1]]], $this->data_ns);
 
@@ -600,7 +604,7 @@ Initiate the array tree cache
 			{
 				foreach ($node['attributes'] as $key => $value)
 				{
-					if (preg_match("#^(.+?):(\w+)$#", $key, $result_array) && isset($node['xmlns'][$result_array[1]]/*#ifndef(PHP4) */, /* #*//*#ifdef(PHP4):) && isset(:#*/$this->data_ns_compact[$node['xmlns'][$result_array[1]]]))
+					if (preg_match("#^(.+?):(\w+)$#", $key, $result_array) && isset($node['xmlns'][$result_array[1]], $this->data_ns_compact[$node['xmlns'][$result_array[1]]]))
 					{
 						$tag_ns = array_search($this->data_ns_compact[$node['xmlns'][$result_array[1]]], $this->data_ns);
 
@@ -625,9 +629,9 @@ Initiate the array tree cache
 	* @return string Output node path
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function nsTranslatePath($node_path)
+	protected function nsTranslatePath($node_path)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nsTranslatePath($node_path)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nsTranslatePath($node_path)- (#echo(__LINE__)#)"); }
 
 		$nodes_array = explode(" ", $node_path);
 		$return = $node_path;
@@ -660,9 +664,9 @@ Initiate the array tree cache
 	* @param string $ns Output relevant namespace definition
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function nsUnregister($ns = "")
+	public function nsUnregister($ns = "")
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nsUnregister($ns)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nsUnregister($ns)- (#echo(__LINE__)#)"); }
 
 		if (strlen($ns))
 		{
@@ -693,9 +697,9 @@ Initiate the array tree cache
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function set($xml_array, $overwrite = false)
+	public function set($xml_array, $overwrite = false)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->set(+xml_array, +overwrite)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->set(+xml_array, +overwrite)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if ((!isset($this->data) || $overwrite) && is_array($xml_array))
@@ -713,10 +717,33 @@ Initiate the array tree cache
 	* @param object $event_handler EventHandler to use
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function setEventHandler($event_handler)
+	public function setEventHandler($event_handler)
 	{
-		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -Xml->setEventHandler(+event_handler)- (#echo(__LINE__)#)"); }
+		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -xml->setEventHandler(+event_handler)- (#echo(__LINE__)#)"); }
 		$this->event_handler = $event_handler;
+	}
+
+/**
+	* Set the parser implementation to use.
+	*
+	* @param int $implementation Implementation identifier
+	* @since v0.1.00
+*/
+	public function setImplementation($implementation = NULL)
+	{
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->setImplementation(+implementation)- (#echo(__LINE__)#)"); }
+
+		if (!isset($implementation))
+		{
+			if ($this->PHP_XMLReader) { $implementation = self::XMLREADER; }
+			else { $implementation = ($this->PHP_simplexml_load_string ? self::SIMPLEXML : self::EXPAT); }
+		}
+
+		if ($this->PHP_xml_parser_create && $implementation == self::EXPAT && class_exists(/*#ifdef(PHP5n) */'dNG\data\directXmlParserExpat'/* #*//*#ifndef(PHP5n):"directXmlParserExpat":#*/)) { $this->implementation = self::EXPAT; }
+		elseif ($this->PHP_simplexml_load_string && $implementation == self::SIMPLEXML && class_exists(/*#ifdef(PHP5n) */'dNG\data\directXmlParserSimpleXML'/* #*//*#ifndef(PHP5n):"directXmlParserSimpleXML":#*/)) { $this->implementation = self::SIMPLEXML; }
+		elseif ($this->PHP_XMLREADER && class_exists(/*#ifdef(PHP5n) */'dNG\data\directXmlParserXMLReader'/* #*//*#ifndef(PHP5n):"directXmlParserXMLReader":#*/)) { $this->implementation = self::XMLREADER; }
+
+		$this->data_parser = NULL;
 	}
 
 /**
@@ -728,26 +755,16 @@ Initiate the array tree cache
 	* @return mixed Multi-dimensional XML tree or merged array; False on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function xml2array(&$data, $treemode = true, $strict_standard = true)
+	public function xml2array(&$data, $treemode = true, $strict_standard = true)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->xml2array(+data, +treemode, +strict_standard)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->xml2array(+data, +treemode, +strict_standard)- (#echo(__LINE__)#)"); }
 		$return = false;
 
-		if ($this->data_parser_name == "SimpleXML")
+		switch ($this->implementation)
 		{
-			$parser_object = simplexml_load_string($data);
-			if (is_object($parser_object)) { $return = ($treemode ? $this->data_parser->xml2arraySimpleXML($parser_object, $strict_standard) : $this->data_parser->xml2arraySimpleXMLMerged($parser_object)); }
-		}
-
-		if ($this->data_parser_name == "XMLReader")
+		case self::EXPAT:
 		{
-			$parser_object = new /*#ifdef(PHP5n) */\XMLReader/* #*//*#ifndef(PHP5n):XMLReader:#*/();
-			$parser_object->XML($data);
-			if (is_object($parser_object)) { $return = ($treemode ? $this->data_parser->xml2arrayXMLReader($parser_object, $strict_standard) : $this->data_parser->xml2arrayXMLReaderMerged($parser_object)); }
-		}
-
-		if ($this->data_parser_name = "expat")
-		{
+			if (!isset($this->data_parser)) { $this->data_parser = new directXmlParserExpat($this, $event_handler); }
 			$parser_ptr = xml_parser_create();
 
 			if ($parser_ptr)
@@ -779,9 +796,32 @@ Initiate the array tree cache
 					$return = $this->data_parser->xml2arrayExpatMerged();
 				}
 			}
+
+			break 1;
+		}
+		case self::SIMPLEXML:
+		{
+			if (!isset($this->data_parser)) { $this->data_parser = new directXmlParserSimpleXML($this, $timeout_retries, $event_handler); }
+
+			$parser_object = simplexml_load_string($data);
+			if (is_object($parser_object)) { $return = ($treemode ? $this->data_parser->xml2arraySimpleXML($parser_object, $strict_standard) : $this->data_parser->xml2arraySimpleXMLMerged($parser_object)); }
+
+			break 1;
+		}
+		case self::XMLREADER:
+		{
+			if (!isset($this->data_parser)) { $this->data_parser = new directXmlParserXMLReader($this, $timeout_retries, $event_handler); }
+
+			$parser_object = new /*#ifdef(PHP5n) */\XMLReader/* #*//*#ifndef(PHP5n):XMLReader:#*/();
+			$parser_object->XML($data);
+			if (is_object($parser_object)) { $return = ($treemode ? $this->data_parser->xml2arrayXMLReader($parser_object, $strict_standard) : $this->data_parser->xml2arrayXMLReaderMerged($parser_object)); }
+
+			break 1;
+		}
+		default: { $this->event_handler->error("#echo(__FILEPATH__)# -xml->xml2array()- has no possibility to parse XML"); }
 		}
 
-		if ($treemode && $this->data_parse_only)
+		if ($return && $treemode && $this->data_parse_only)
 		{
 			$this->data = array();
 			$this->data_cache_node = "";
@@ -792,7 +832,5 @@ Initiate the array tree cache
 		return $return;
 	}
 }
-
-if (!defined("USE_xml_implementation")) { define("USE_xml_implementation", "autoselect"); }
 
 //j// EOF

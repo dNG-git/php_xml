@@ -35,13 +35,12 @@ NOTE_END //n*/
 * @license   http://www.direct-netware.de/redirect.php?licenses;mpl2
 *            Mozilla Public License, v. 2.0
 */
+
 /*#ifdef(PHP5n) */
-
 namespace dNG\data;
-
 use XMLReader;
-/* #\n*/
 
+/* #\n*/
 /* -------------------------------------------------------------------------
 All comments will be removed in the "production" packages (they will be in
 all development packets)
@@ -65,26 +64,26 @@ class directXmlParserXMLReader
 	* @var object $event_handler The EventHandler is called whenever debug messages
 	*      should be logged or errors happened.
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $event_handler;
+	protected $event_handler;
 /**
 	* @var array $node_types Node types that this parser knows
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $node_types;
+	protected $node_types;
 /**
 	* @var direct_xml_reader $parser Container for the XML document
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $parser;
+	protected $parser;
 /**
 	* @var integer $timeout_retries Retries before timing out
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $timeout_retries;
+	protected $timeout_retries;
 /**
 	* @var boolean $PHP_is_valid True if the "is_valid()" method is available
 */
-	/*#ifndef(PHP4) */protected/* #*//*#ifdef(PHP4):var:#*/ $PHP_is_valid;
+	protected $PHP_is_valid;
 
 /* -------------------------------------------------------------------------
-Construct the class using old and new behavior
+Construct the class
 ------------------------------------------------------------------------- */
 
 /**
@@ -95,9 +94,9 @@ Construct the class using old and new behavior
 	* @param object $event_handler EventHandler to use
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function __construct(&$parser, $timeout_retries = 5, $event_handler = NULL)
+	public function __construct(&$parser, $timeout_retries = 5, $event_handler = NULL)
 	{
-		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -XmlParser->__construct(directXmlParserXMLReader)- (#echo(__LINE__)#)"); }
+		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -xml->__construct(directXmlParserXMLReader)- (#echo(__LINE__)#)"); }
 
 /* -------------------------------------------------------------------------
 Connect to the PHP container for the XML document 
@@ -134,23 +133,12 @@ $this->node_types = array(
 );
 		}
 	}
-/*#ifdef(PHP4):
-/**
-	* Constructor (PHP4) directXmlParserXMLReader
-	*
-	* @param direct_xml_reader &$parser Container for the XML document
-	* @param integer $timeout_retries Retries before timing out
-	* @param object $event_handler EventHandler to use
-	* @since v0.1.00
-*\/
-	function directXmlParserXMLReader(&$parser, $timeout_retries = 5, $event_handler = NULL) { $this->__construct($parser, $timeout_retries, $event_handler); }
-:#\n*/
 /**
 	* Destructor (PHP5+) __destruct (directXmlParserXMLReader)
 	*
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function __destruct() { $this->parser = NULL; }
+	public function __destruct() { $this->parser = NULL; }
 
 /**
 	* Sets the EventHandler.
@@ -158,9 +146,9 @@ $this->node_types = array(
 	* @param object $event_handler EventHandler to use
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function setEventHandler($event_handler)
+	public function setEventHandler($event_handler)
 	{
-		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -XmlParser->setEventHandler(+event_handler)- (#echo(__LINE__)#)"); }
+		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -xml->setEventHandler(+event_handler)- (#echo(__LINE__)#)"); }
 		$this->event_handler = $event_handler;
 	}
 
@@ -173,9 +161,9 @@ $this->node_types = array(
 	* @return array Multi-dimensional XML tree
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function xml2arrayXMLReader(&$xmlreader, $strict_standard = true)
+	public function xml2arrayXMLReader(&$xmlreader, $strict_standard = true)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -XmlParser->xml2arrayXMLReader(+xmlreader, +strict_standard)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->xml2arrayXMLReader(+xmlreader, +strict_standard)- (#echo(__LINE__)#)"); }
 		$return = array();
 
 		if ($this->XMLReaderIsValid($xmlreader))
@@ -205,9 +193,9 @@ $this->node_types = array(
 	* @return array Merged XML tree
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function xml2arrayXMLReaderMerged(&$xmlreader)
+	public function xml2arrayXMLReaderMerged(&$xmlreader)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -XmlParser->xml2arrayXMLReaderMerged(+xmlreader)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->xml2arrayXMLReaderMerged(+xmlreader)- (#echo(__LINE__)#)"); }
 		$return = array();
 
 		if ($this->XMLReaderIsValid($xmlreader))
@@ -348,9 +336,9 @@ $this->node_types = array(
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function XMLReaderArrayWalker(&$data, $strict_standard = true)
+	protected function XMLReaderArrayWalker(&$data, $strict_standard = true)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -XmlParser->XMLReaderArrayWalker(+data, +strict_standard)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->XMLReaderArrayWalker(+data, +strict_standard)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if (is_array($data))
@@ -385,9 +373,9 @@ $this->node_types = array(
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function XMLReaderIsValid(&$xmlreader)
+	protected function XMLReaderIsValid(&$xmlreader)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -XmlParser->XMLReaderIsValid(+xmlreader)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->XMLReaderIsValid(+xmlreader)- (#echo(__LINE__)#)"); }
 		$return = is_object($xmlreader);
 
 		if (!isset($this->PHP_is_valid)) { $this->PHP_is_valid = method_exists($xmlreader, "is_valid"); }
@@ -407,9 +395,9 @@ $this->node_types = array(
 	* @return mixed XML node array on success; false on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function XMLReaderWalker(&$xmlreader, $strict_standard = true, $node_path = "", $xml_level = 0)
+	protected function XMLReaderWalker(&$xmlreader, $strict_standard = true, $node_path = "", $xml_level = 0)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -XmlParser->XMLReaderWalker(+xmlreader, +strict_standard, $node_path, $xml_level)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->XMLReaderWalker(+xmlreader, +strict_standard, $node_path, $xml_level)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if (is_object($xmlreader))

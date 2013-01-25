@@ -35,11 +35,11 @@ NOTE_END //n*/
 * @license   http://www.direct-netware.de/redirect.php?licenses;mpl2
 *            Mozilla Public License, v. 2.0
 */
+
 /*#ifdef(PHP5n) */
-
 namespace dNG\data;
-/* #\n*/
 
+/* #\n*/
 /* -------------------------------------------------------------------------
 All comments will be removed in the "production" packages (they will be in
 all development packets)
@@ -61,7 +61,7 @@ all development packets)
 class directXml extends directXmlParser
 {
 /* -------------------------------------------------------------------------
-Extend the class using old and new behavior
+Extend the class
 ------------------------------------------------------------------------- */
 
 /**
@@ -72,9 +72,9 @@ Extend the class using old and new behavior
 	* @param object $event_handler EventHandler to use
 	* @since v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function __construct($charset = "UTF-8", $timeout_retries = 5, $event_handler = NULL)
+	public function __construct($charset = "UTF-8", $timeout_retries = 5, $event_handler = NULL)
 	{
-		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -Xml->__construct(directXml)- (#echo(__LINE__)#)"); }
+		if ($event_handler !== NULL) { $event_handler->debug("#echo(__FILEPATH__)# -xml->__construct(directXml)- (#echo(__LINE__)#)"); }
 
 /* -------------------------------------------------------------------------
 My parent should be on my side to get the work done
@@ -82,17 +82,6 @@ My parent should be on my side to get the work done
 
 		parent::__construct($charset, false, $timeout_retries, $event_handler);
 	}
-/*#ifdef(PHP4):
-/**
-	* Constructor (PHP4) directXml
-	*
-	* @param string $charset Charset to be added as information to XML output
-	* @param integer $timeout_retries Retries before timing out
-	* @param object $event_handler EventHandler to use
-	* @since v0.1.00
-*\/
-	function directXml($charset = "UTF-8", $timeout_retries = 5, $event_handler = NULL) { $this->__construct($charset, $timeout_retries, $event_handler); }
-:#*/
 /**
 	* Read and convert a simple multi-dimensional array into our XML tree.
 	*
@@ -102,9 +91,9 @@ My parent should be on my side to get the work done
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function arrayImport($array, $overwrite = false)
+	public function arrayImport($array, $overwrite = false)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->arrayImport(+array, +overwrite)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->arrayImport(+array, +overwrite)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if (empty($this->data) || $overwrite)
@@ -125,9 +114,9 @@ My parent should be on my side to get the work done
 	* @return array Output array
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function arrayImportWalker(&$array, $level = 1)
+	protected function arrayImportWalker(&$array, $level = 1)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->arrayImportWalker(+array, $level)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->arrayImportWalker(+array, $level)- (#echo(__LINE__)#)"); }
 		$return = array();
 
 		if (is_array($array))
@@ -158,9 +147,9 @@ My parent should be on my side to get the work done
 	* @return string Result string
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function cacheExport($flush = false, $strict_standard = true)
+	public function cacheExport($flush = false, $strict_standard = true)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->cacheExport(+flush, +strict_standard)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->cacheExport(+flush, +strict_standard)- (#echo(__LINE__)#)"); }
 
 		if (empty($this->data)) { $return = ""; }
 		else
@@ -179,9 +168,9 @@ My parent should be on my side to get the work done
 	* @return boolean True on success
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function nodeCachePointer($node_path)
+	public function nodeCachePointer($node_path)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nodeCachePointer($node_path)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nodeCachePointer($node_path)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if (is_string($node_path))
@@ -214,9 +203,9 @@ My parent should be on my side to get the work done
 	* @return boolean False on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function nodeChangeAttributes($node_path, $attributes)
+	public function nodeChangeAttributes($node_path, $attributes)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nodeChangeAttributes($node_path, +attributes)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nodeChangeAttributes($node_path, +attributes)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if (is_string($node_path) && is_array($attributes))
@@ -244,9 +233,9 @@ My parent should be on my side to get the work done
 	* @return boolean False on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function nodeChangeValue($node_path, $value)
+	public function nodeChangeValue($node_path, $value)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nodeChangeValue($node_path, +value)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nodeChangeValue($node_path, +value)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if (is_string($node_path) && !is_array($value) && !is_object($value))
@@ -273,9 +262,9 @@ My parent should be on my side to get the work done
 	* @return integer Counted number off matching nodes
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function nodeCount($node_path)
+	public function nodeCount($node_path)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nodeCount($node_path)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nodeCount($node_path)- (#echo(__LINE__)#)"); }
 		$return = 0;
 
 		if (is_string($node_path))
@@ -313,9 +302,9 @@ Get the parent node of the target.
 	* @return mixed XML node array on success; false on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function nodeGet($node_path, $remove_metadata = true)
+	public function nodeGet($node_path, $remove_metadata = true)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nodeGet($node_path, +remove_metadata)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nodeGet($node_path, +remove_metadata)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if (is_string($node_path))
@@ -340,9 +329,9 @@ Get the parent node of the target.
 	* @return mixed XML node pointer on success; false on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */protected /* #*/function &nodeGetPointer($node_path)
+	protected function &nodeGetPointer($node_path)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nodeGetPointer($node_path)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nodeGetPointer($node_path)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if (is_string($node_path))
@@ -405,9 +394,9 @@ Get the parent node of the target.
 	* @return boolean False on error
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function nodeRemove($node_path)
+	public function nodeRemove($node_path)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nodeRemove($node_path)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nodeRemove($node_path)- (#echo(__LINE__)#)"); }
 		$return = false;
 
 		if (is_string($node_path))
@@ -505,9 +494,9 @@ Update the mtree counter or remove it if applicable.
 	* @return string Namespace (URI)
 	* @since  v0.1.00
 */
-	/*#ifndef(PHP4) */public /* #*/function nsGetUri($input)
+	public function nsGetUri($input)
 	{
-		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -Xml->nsGetUri($input)- (#echo(__LINE__)#)"); }
+		if ($this->event_handler !== NULL) { $this->event_handler->debug("#echo(__FILEPATH__)# -xml->nsGetUri($input)- (#echo(__LINE__)#)"); }
 		$return = "";
 
 		if (preg_match("#^(.+?):(\w+)$#", $input, $result_array))
